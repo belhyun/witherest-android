@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="2dp"
+    android:padding="3dip" >
+
+    <RelativeLayout
+        android:id="@+id/pop_list_contaniner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:clickable="true"
+        android:padding="2dip" 
+        android:gravity="center">
+
+        <LinearLayout
+            android:id="@+id/pop_list_thumbnail_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="10dip"
+            android:layout_centerVertical="true"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/pop_list_image"
+                android:layout_width="60dip"
+                android:layout_height="60dip"
+                android:scaleType="centerCrop"
+                 />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/pop_list_title_textview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/pop_list_thumbnail_container"
+            android:layout_toRightOf="@id/pop_list_thumbnail_container"
+            android:layout_toLeftOf="@+id/mycheck_row_right_contaniner"
+            android:text="함께 영어 단어 외워요"
+           
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:typeface="sans" />
+
+        <TextView
+            android:id="@+id/pop_list_purpose_textview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/pop_list_title_textview"
+            android:layout_below="@id/pop_list_title_textview"
+             android:layout_toLeftOf="@id/mycheck_row_right_contaniner"
+            android:layout_marginTop="1dip"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="하루에 해커스 토익 2장씩 외우기"
+            android:textColor="#444444"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:id="@+id/pop_list_term_container"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/pop_list_title_textview"
+            android:layout_toLeftOf="@id/mycheck_row_right_contaniner"
+            android:layout_below="@id/pop_list_purpose_textview"
+            android:layout_marginLeft="2dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/main_date_icon_bg" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/main_dot_bg" />
+
+            <TextView
+                android:id="@+id/pop_list_term_textview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="2010/3/5 ~ 2013/3/30"
+                android:textColor="#999999"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/pop_list_title_textview"
+            android:layout_toLeftOf="@id/mycheck_row_right_contaniner"
+            android:layout_below="@id/pop_list_term_container"
+            android:layout_marginLeft="2dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/main_people_icon_bg" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/main_dot_bg" />
+
+            <TextView
+                android:id="@+id/pop_list_joincount_textview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="10/30"
+                android:textColor="#999999"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@id/mycheck_row_right_contaniner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+   
+            android:layout_centerVertical="true"
+            android:layout_marginRight="6dp"
+            android:gravity="center"
+            android:padding="3dip" >
+
+            <ImageView
+                android:id="@+id/pop_list_btn_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/room_arrow_bg" >
+            </ImageView>
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,166 @@
+package com.teamteam.witherest;
+
+import java.io.File;
+import java.util.ArrayList;
+
+import com.teamteam.customComponent.LoginGuideDialogFragment;
+import com.teamteam.customComponent.SimpleProgressDialog;
+import com.teamteam.witherest.ProfileActivity.ProfileDialogFragment;
+import com.teamteam.witherest.model.Category;
+import com.teamteam.witherest.model.Session;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.AlertDialog.Builder;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.text.InputType;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
+public class Fragment_Bottom_Menu extends Fragment implements OnClickListener {
+
+	private Activity mActivity;
+
+    private Fragment fragment_mNotice = new Fragment_Notice();
+	private Fragment fragment_myCheck = new Fragment_MyCheck();
+	private Fragment fragment_checkRoom = new Fragment_CheckRoom();
+
+	private ImageView notice_Btn;
+	private ImageView myCheck_Btn;
+	private ImageView checkRoom_Btn;
+	
+	private ImageView currentSelectedButton; 
+	
+	SimpleProgressDialog dialog;
+
+	/* Fragment Life Cycle */
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		this.mActivity = activity;
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		View bottomMenuView = inflater.inflate(R.layout.fragment_bottom_menu,null);
+
+		notice_Btn = (ImageView) bottomMenuView.findViewById(R.id.bottommenu_notice_btn);
+		myCheck_Btn = (ImageView) bottomMenuView.findViewById(R.id.bottommenu_mycheck_btn);
+		checkRoom_Btn = (ImageView) bottomMenuView.findViewById(R.id.bottommenu_checkroom_btn);
+
+		notice_Btn.setOnClickListener(this);
+		myCheck_Btn.setOnClickListener(this);
+		checkRoom_Btn.setOnClickListener(this);
+		currentSelectedButton = notice_Btn;
+
+		return bottomMenuView;
+	}
+
+	/* /Fragment Life Cycle */
+
+	/* Change Fragment */
+
+	protected void changeFragment(Fragment chageFragment) {
+
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		ft.replace(R.id.activity_main_fragment, chageFragment);
+		// 프래그먼트의 교체를 애니메이션화 한다.
+		// 애니메이션을 할 경우, 빠르게 교체 할 경우, 프래그먼트 전환에 문제가 생길 수 있으므로 주석처리한다.
+		//ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		ft.commit();
+	}
+
+	/* /Change Fragment */
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		changeButtonState(notice_Btn.getId());
+		changeFragment(fragment_mNotice);
+	}
+
+	public void onClick(View v) {
+		if (currentSelectedButton == (ImageView)v) return;
+		switch (v.getId()) {
+		case R.id.bottommenu_notice_btn: {
+			currentSelectedButton = (ImageView)v;
+			changeButtonState(v.getId());
+			changeFragment(fragment_mNotice);
+			break;
+		}
+		case R.id.bottommenu_mycheck_btn: {
+			if (Session.getInstance().sessionStatus != Session.AUTHORIZED){
+				showLoginDialog();
+				return;
+			}
+			currentSelectedButton = (ImageView)v;
+			changeButtonState(v.getId());
+			changeFragment(fragment_myCheck);
+			break;
+		}
+		case R.id.bottommenu_checkroom_btn: {
+			currentSelectedButton = (ImageView)v;
+			changeButtonState(v.getId());
+			changeFragment(fragment_checkRoom);
+			break;
+		}
+		}
+	}
+
+	private void showLoginDialog() {
+		LoginGuideDialogFragment loginDialog = LoginGuideDialogFragment.newInstance();
+		FragmentManager fm = getFragmentManager(); 
+		loginDialog.show(fm, "dialog");
+	}
+
+	private void changeButtonState(int id) {
+		notice_Btn.setImageResource(R.drawable.main_notice_btn_off);
+		myCheck_Btn.setImageResource(R.drawable.main_mycheck_btn_off);
+		checkRoom_Btn.setImageResource(R.drawable.main_checkroom_btn_off);
+		
+		switch (id) {
+		case R.id.bottommenu_notice_btn: {
+			notice_Btn.setImageResource(R.drawable.main_notice_btn_on);
+			break;
+		}
+		case R.id.bottommenu_mycheck_btn: {
+			myCheck_Btn.setImageResource(R.drawable.main_mycheck_btn_on);
+			break;
+		}
+		case R.id.bottommenu_checkroom_btn: {
+			checkRoom_Btn.setImageResource(R.drawable.main_checkroom_btn_on);
+			break;
+		}
+	}	
+	}
+	
+	
+}

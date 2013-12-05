@@ -1,0 +1,52 @@
+package com.teamteam.witherest.service;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpRequestBase;
+
+import android.os.Message;
+import android.util.Log;
+
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.service.callback.UserServiceCallback;
+import com.teamteam.witherest.service.callback.VersionServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+
+public class VersionService extends Service{
+	public static final String tag = "version_check_reponse_text";
+	private ServiceHandler  handler;
+	private VersionServiceCallback callback;
+	
+	public VersionService(HttpClient httpClient, ServiceHandler  handler) {
+		super(httpClient, handler);
+	
+	}
+
+	@Override
+	public void finishedBackgroundProcess(String responseText) {
+		Log.v("response_version_check_text", responseText);
+		BaseResponseObject obj = ParsingService.parseJson(responseText);
+	
+		Message message = Message.obtain();
+		message.obj = obj ;
+		handler.sendMessage(message);
+	}
+	
+	
+	@Override
+	public void addHeaderSessionKey(HttpRequestBase request) {
+		String sessionKey = Session.getInstance().sessionKey;
+		if (sessionKey != null){
+			request.addHeader(ACC_TOKEN, sessionKey);
+		}
+	}
+	
+	public void setOnVersionCallback(VersionServiceCallback callback){
+		this.callback = callback;
+		handler.setVersionServiceCallback(callback);
+	}
+	
+
+	public void checkVersion(){
+		sendGet(VERSION_CHECK_URL+ "?"+REQUEST_TYPE_STRING+"="+Service.REQUEST_TYPE_CHECK_VERSION);
+	}
+}

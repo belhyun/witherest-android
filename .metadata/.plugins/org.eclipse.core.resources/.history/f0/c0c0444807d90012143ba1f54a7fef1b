@@ -1,0 +1,428 @@
+package com.teamteam.witherest;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+import com.teamteam.customComponent.SimpleProgressDialog;
+import com.teamteam.witherest.common.AndroUtils;
+import com.teamteam.witherest.common.CommonUtils;
+import com.teamteam.witherest.lazyload.ImageLoader;
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.service.RoomService;
+import com.teamteam.witherest.service.Service;
+import com.teamteam.witherest.service.ServiceManager;
+import com.teamteam.witherest.service.callback.RoomServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.callback.object.DateCheckedMembers;
+import com.teamteam.witherest.service.callback.object.RoomInfo;
+import com.teamteam.witherest.service.callback.object.RoomWithResponseObject;
+import com.teamteam.witherest.service.callback.object.RoomWithResponseObject.CheckRoomWith;
+import com.teamteam.witherest.service.callback.object.RoomWithResponseObject.CheckedMember;
+import com.viewpagerindicator.R.id;
+
+import android.app.ActionBar.LayoutParams;
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Align;
+import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.net.ParseException;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
+import android.widget.GridView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextSwitcher;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewSwitcher;
+
+public class RoomWithFragment extends Fragment implements OnClickListener, RoomServiceCallback{
+	private Activity activity;
+	private ImageButton dateDecreaseBtn;
+	private ImageButton dateIncreaseBtn;
+	private TextSwitcher dateSwitcher;
+	
+	private Date date;
+	private SimpleDateFormat dateFormat;
+	private Calendar cal = Calendar.getInstance();
+	
+	private ImageView roomImageView;
+	public TextView roomTitleView;
+	public TextView roomPurposeView;
+	public TextView periodView;
+	public TextView alarmTimeView;
+	public TextView publicLevelView;
+	public TextView memberJoinView;
+	public TextView achieveView;
+	
+	public View periodContainer;
+	public View alarmContainer;
+	public View publicContainer;
+
+	public GridView grid;
+	
+	private Animation anim1;
+	private Animation anim2;
+	private Animation anim3;
+	private Animation anim4;
+	
+	public SimpleProgressDialog waitProgressDialog;
+	
+	public RoomWithResponseObject roomWithResponse;
+	public GridImageAdapter  gridImageAdpater;
+	public RoomService roomService;
+	
+	public ImageLoader imageLoader;
+	/* Fragment Life Cycle */
+
+	public static RoomWithFragment newInstance(int roomId, int page){
+		RoomWithFragment fragment = new RoomWithFragment();
+	    Bundle args = new Bundle();
+        args.putInt("roomId",roomId);
+        fragment.setArguments(args);
+        return fragment;
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		this.activity = activity;
+		this.date = new Date();
+		this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		anim1 = AnimationUtils.loadAnimation(getActivity(),R.anim.textswitcher_animation_1);
+		anim2 = AnimationUtils.loadAnimation(getActivity(),R.anim.textswitcher_animation_2);
+		anim3 = AnimationUtils.loadAnimation(getActivity(),R.anim.textswitcher_animation_3);
+		anim4 = AnimationUtils.loadAnimation(getActivity(),R.anim.textswitcher_animation_4);
+		imageLoader = new ImageLoader(getActivity().getApplicationContext());
+		imageLoader.clearCache();
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		roomService = ServiceManager.getServiceManager().getRoomService();
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		LinearLayout rootView = (LinearLayout)inflater.inflate(R.layout.fragment_roomwith, null);
+		//roomImageView = (ImageView)rootView.findViewById(R.id.room_image);
+	   // roomTitleView = (TextView)rootView.findViewById(R.id.room_with_titleview);
+	    roomPurposeView = (TextView)rootView.findViewById(R.id.room_with_purview);
+	    periodView = (TextView)rootView.findViewById(R.id.room_with_periodview);
+	    alarmTimeView = (TextView)rootView.findViewById(R.id.room_with_alarmtime_view);
+	    publicLevelView = (TextView)rootView.findViewById(R.id.room_with_publiclevel_view);
+	    
+	    memberJoinView = (TextView)rootView.findViewById(R.id.room_with_memberjoinview);
+	    achieveView = (TextView)rootView.findViewById(R.id.room_with_achieveview);
+		dateDecreaseBtn = (ImageButton)rootView.findViewById(R.id.date_decrease_btn);
+		dateIncreaseBtn = (ImageButton)rootView.findViewById(R.id.date_increase_btn);
+		
+		periodContainer = rootView.findViewById(R.id.period_container);
+		alarmContainer  = rootView.findViewById(R.id.alarm_container);
+		publicContainer = rootView.findViewById(R.id.public_level_container);
+		toggleContainer(false);
+		
+		dateDecreaseBtn.setOnClickListener(this);
+		dateIncreaseBtn.setOnClickListener(this);
+		dateSwitcher = (TextSwitcher)rootView.findViewById(R.id.date_textswitcher);
+		dateSwitcher.setFactory(textFactory);
+		
+		setTextSwitcherDate(date);
+		grid = (GridView)rootView.findViewById(R.id.roomwith_gridview);
+		return rootView;
+	}
+	
+	private void setTextSwitcherDate(Date date) {
+		dateSwitcher.setText(Html.fromHtml("<b>" +dateFormat.format(date) + "</b>"));
+	}
+
+	public void onClick(View view) {
+		int id = view.getId();
+		try{
+			switch(id){
+			case R.id.date_decrease_btn:
+				cal.setTime(date);
+				cal.add(Calendar.DATE, -1);
+				Date startDate = dateFormat.parse(roomWithResponse.checkRoomWith.startDate);
+				Date date1 = cal.getTime();
+				//-1 한 날짜가 시작 날짜보다 작다면 리턴한다.
+				if (date1.compareTo(startDate) < 0 ) return;
+				date = date1;
+				
+				dateSwitcher.setInAnimation(anim4);
+				dateSwitcher.setOutAnimation(anim3);
+				setTextSwitcherDate(date1);
+				
+				getCheckedMembersByDate(roomWithResponse.checkRoomWith.roomId,date);
+				break;
+				
+			case R.id.date_increase_btn:
+				Date today = new Date();
+				cal.setTime(date);
+				cal.add(Calendar.DATE, 1);
+				Date date2 = cal.getTime(); 
+				if (date2.compareTo(today) > 0 ) return;
+				date = date2;
+				
+				dateSwitcher.setInAnimation(anim2);
+				dateSwitcher.setOutAnimation(anim1);
+				cal.setTime(date);
+				cal.add(Calendar.DATE, 1);
+	
+				setTextSwitcherDate(date2);
+				getCheckedMembersByDate(roomWithResponse.checkRoomWith.roomId,date);
+				break;
+			}
+		}catch (java.text.ParseException e) {}
+	}
+	
+	ViewSwitcher.ViewFactory textFactory = new ViewSwitcher.ViewFactory() {
+		public View makeView() {
+			TextView dateTextView = new TextView(getActivity());
+			dateTextView.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, getActivity().getResources().getDisplayMetrics()));
+			dateTextView.setTextColor(0xff7a7a7a);
+			dateTextView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 
+					FrameLayout.LayoutParams.MATCH_PARENT);
+			params.gravity = Gravity.CENTER;
+			dateTextView.setLayoutParams(params);
+			return dateTextView;
+		}
+	};
+	
+	private void toggleContainer(boolean flag) {
+		periodContainer.setVisibility(flag == false ? View.INVISIBLE : View.VISIBLE);
+		alarmContainer.setVisibility(flag == false ? View.INVISIBLE : View.VISIBLE);
+		publicContainer.setVisibility(flag == false ? View.INVISIBLE : View.VISIBLE);	
+	}
+	
+	private void updateUi(RoomWithResponseObject obj) {
+		
+		boolean isJoined = obj.checkRoomWith.isJoined;
+		int owner = obj.checkRoomWith.roomOwner;
+		int type =0; 
+		if (owner == Session.getInstance().user.userIndex){
+			type = RoomDetailActivity.OWNER;
+		}
+		
+		else if (owner != Session.getInstance().user.userIndex && Session.getInstance().sessionStatus == Session.AUTHORIZED &&
+				!isJoined){
+			type = RoomDetailActivity.MEMER_NOT_JOINED;
+		}
+		else if (owner != Session.getInstance().user.userIndex && Session.getInstance().sessionStatus == Session.AUTHORIZED && 
+				isJoined){
+			type = RoomDetailActivity.MEMBER_JOINED;
+		}
+		else if (Session.getInstance().sessionStatus == Session.NOT_AUTHORIZED){
+			type = RoomDetailActivity.NOT_MEMBER;
+		}
+		((RoomDetailActivity)getActivity()).changeBehaviorType(type);
+		
+		CheckRoomWith roomWith = obj.checkRoomWith;
+		String url = null;
+		//방수정하기에서 이미지를 수정하지 않으면, 다시 방화면으로 갔을 때 룸이미지 경로가 "0"으로 와서 아래코드를 삽입
+		if (!CommonUtils.isNullOrEmpty(roomWith.roomImagePath) && !"0".equals(roomWith.roomImagePath)){
+			url = Service.BASE_URL + roomWith.roomImagePath;
+		}
+		
+		/* 수정레이아웃에는 방이름을 나타내는 뷰는 타이를로 대체하고 
+		 * 방의 이미지는 보여주지 않기 때문에, 아래를 주석처리한다.
+		imageLoader.displayImage(url, roomImageView);
+		roomTitleView.setText(roomWith.roomTitle);
+		*/
+		
+		roomPurposeView.setText(roomWith.roomPurpose);
+		periodView.setText(roomWith.startDate + " ~" + roomWith.endDate);
+		
+		if (roomWith.alarmLevel == RoomInfo.ROOM_ALARM_NOT){
+			alarmTimeView.setText(R.string.no_alarm);
+		}else {
+			alarmTimeView.setText(roomWith.alarmTime);
+		}
+		
+		if (roomWith.publicLevel == RoomInfo.ROOM_PUBLIC_OK){
+			publicLevelView.setText(R.string.room_public_ok);
+		}else {
+			publicLevelView.setText(R.string.room_public_not);
+		}
+		
+		memberJoinView.setText(roomWith.curMemberCount + " / " + roomWith.maxMemberCount);
+		achieveView.setText(roomWith.achievementRate);
+		toggleContainer(true);
+		setAdapter(roomWith);
+	}
+	
+	private void setAdapter(CheckRoomWith roomWith) {
+		gridImageAdpater = new GridImageAdapter(getActivity(), R.layout.grid_item,roomWith,imageLoader);
+		grid.setAdapter(gridImageAdpater);
+		
+	}
+
+	private void updateDateCheckGrid(RoomWithResponseObject roomWithResponseObject) {
+		setAdapter(roomWithResponseObject.checkRoomWith);
+		refreshDateCheckGrid();
+	}
+
+	public void refreshDateCheckGrid(){
+		gridImageAdpater.notifyDataSetChanged();
+	}
+
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		imageLoader.clearCache();
+		Log.v("룸위드프래그먼트", "onResume() 호출");
+		//roomImageView.setImageBitmap(null);
+		if (roomWithResponse == null){
+			getRoomWith(getArguments().getInt("roomId"));
+		}else {
+			updateUi(roomWithResponse);
+		}
+	}
+
+	
+	private void getRoomWith(int roomId) {
+		waitProgressDialog = new SimpleProgressDialog(getActivity(), 
+				getString(R.string.wait_title),getString(R.string.wait_message));
+		waitProgressDialog.start();
+		roomService.setOnRoomCallback(this);
+		roomService.getRoomWith(roomId);
+	}
+	
+	private void getCheckedMembersByDate(int roomId, Date date) {
+		waitProgressDialog = new SimpleProgressDialog(getActivity(), 
+				getString(R.string.wait_title),getString(R.string.wait_message));
+		waitProgressDialog.start();
+		roomService.setOnRoomCallback(this);
+		roomService.getCheckedMembersByDate(roomId, date);
+	}
+	
+	public void onRoomServiceCallback(BaseResponseObject object) {
+		if (waitProgressDialog.isShowing()){
+			SimpleProgressDialog.stop(waitProgressDialog);
+		}
+		
+		if (object.resultCode == Service.RESULT_FAIL) {
+			AndroUtils.showToastMessage(getActivity(), object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);
+			return;
+		}
+		
+		switch(object.requestType){
+		case Service.REQUEST_TYPE_GET_ROOM_WITH:
+			AndroUtils.showToastMessage(getActivity(), object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);
+			roomWithResponse = (RoomWithResponseObject)object;
+			updateUi(roomWithResponse);
+			break;
+		case Service.REQUEST_TYPE_GET_CHECKED_MEMBER_BY_DATE:
+			RoomWithResponseObject roomwithResponseObject = (RoomWithResponseObject)object;
+			updateDateCheckGrid(roomwithResponseObject);
+			break;
+		}			
+	}	
+	
+
+	public class GridImageAdapter extends BaseAdapter{
+		
+		Context con;
+		int resId;
+		LayoutInflater inflater;
+		CheckRoomWith checkRoomWith;
+		ArrayList<CheckedMember> checkedMembers;
+		ImageLoader imageLoader;
+		Paint p;
+		
+		public GridImageAdapter(Context con, int resId,CheckRoomWith checkRoomWith, ImageLoader imageLoader){
+			this.con = con;
+			this.resId = resId;
+			this.checkRoomWith = checkRoomWith;
+			this.checkedMembers =checkRoomWith.checkedMembers;
+			this.inflater = (LayoutInflater) con.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			this.imageLoader = imageLoader;
+			p= new Paint();
+			p.setAntiAlias(true);
+		}
+		public int getCount() {
+			return checkRoomWith.curMemberCount;
+		}
+		
+		public Object getItem(int position) {
+			return position;
+		}
+		
+		public long getItemId(int position) {
+			return position;
+		}
+		
+		public View getView(int position, View convertView, ViewGroup parent) {
+			GridImageViewHolder viewHolder; 
+			if (convertView == null){
+				convertView = inflater.inflate(resId, parent, false);
+				viewHolder = new GridImageViewHolder();
+				viewHolder.imageView = (ImageView)convertView.findViewById(R.id.gridimageview);
+				convertView.setTag(viewHolder);
+			}else {
+				viewHolder = (GridImageViewHolder)convertView.getTag();
+			}
+			viewHolder.imageView.setImageBitmap(getIndexBitmap(position));
+			
+			if (checkedMembers.size() > position){
+				CheckedMember checkedMember = checkedMembers.get(position);
+				if (checkedMember != null){
+					String url= null; 
+					if (!CommonUtils.isNullOrEmpty(checkedMember.checkedUserProfileImage) && "0".equals(checkedMember.checkedUserProfileImage)){
+						url = Service.BASE_URL + checkedMember.checkedUserProfileImage;
+					}
+					imageLoader.displayImage(url,viewHolder.imageView);
+				}
+			}
+			return convertView;
+		}	
+		
+		public Bitmap getIndexBitmap(int index){
+			Bitmap bit2 = Bitmap.createBitmap(60,60,Bitmap.Config.ARGB_8888);
+			p.setColor(0xffaaaaaa);
+			p.setStyle(Paint.Style.STROKE);
+			
+			Canvas canvas = new Canvas(bit2);
+			Rect rect = new Rect(0,0,bit2.getWidth(), bit2.getHeight());
+			canvas.drawRect(rect, p);
+			p.setColor(Color.BLACK);
+			
+			p.setTextSize(30);
+			p.setColor(0xffaaaaaa);
+			p.setTextAlign(Align.CENTER);
+			p.setStyle(Paint.Style.FILL);
+			canvas.drawText(String.valueOf( index+1), bit2.getWidth()/2 , bit2.getHeight()/2+12, p);
+			return bit2;
+		}
+	}
+	
+	public class GridImageViewHolder{
+		public ImageView imageView;
+	}
+}

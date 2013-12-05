@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dip" >
+
+        <RelativeLayout
+            android:id="@+id/mycheck_row_left_contaniner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/mycheck_row_left_contaniner"
+            android:background="@drawable/mycheck_list_row_on_off"
+            android:padding="2dip" >
+
+            <LinearLayout
+                android:id="@+id/mycheck_row_thumbnail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dip"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/list_image"
+                    android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:src="@drawable/main_checkroom_img_bg" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/mycheck_room_title_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/mycheck_row_thumbnail"
+                android:layout_toRightOf="@id/mycheck_row_thumbnail"
+                android:text="함께 영어 단어 외워요"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:typeface="sans" />
+
+            <TextView
+                android:id="@+id/mycheck_room_purpose_textview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mycheck_room_title_textview"
+                android:layout_marginTop="1dip"
+                android:layout_toRightOf="@id/mycheck_row_thumbnail"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="하루에 해커스 토익 2장씩 외우기"
+                android:textColor="#444444"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:id="@+id/mycheck_term_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/mycheck_room_purpose_textview"
+                android:layout_toRightOf="@id/mycheck_row_thumbnail"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/main_date_icon_bg" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="3dp"
+                    android:src="@drawable/main_dot_bg" />
+
+                <TextView
+                    android:id="@+id/mycheck_room_team_textview"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="2010/3/5 ~ 2013/3/30"
+                    android:textColor="#999999"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/mycheck_term_container"
+                android:layout_toRightOf="@id/mycheck_row_thumbnail"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/main_people_icon_bg" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="3dp"
+                    android:src="@drawable/main_dot_bg" />
+
+                <TextView
+                    android:id="@+id/mycheck_room_joincount_textview"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="10/30"
+                    android:textColor="#999999"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@id/mycheck_row_left_contaniner"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/mycheck_row_left_contaniner"
+            android:layout_toRightOf="@id/mycheck_row_left_contaniner"
+         
+            android:gravity="center"
+            android:padding="3dip" >
+
+            <CheckBox
+                android:id="@+id/mycheck_check_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/mycheck_check_button_of_off"
+                android:button="@drawable/checkbox_bg" >
+            </CheckBox>
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:padding="2dip" >
+
+        <RelativeLayout
+            android:id="@+id/roomboard__contaniner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:clickable="true" >
+
+            <LinearLayout
+                android:id="@+id/roomboard_row_image_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/roomboard_row_image"
+                    android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:layout_gravity="clip_vertical"
+                    android:gravity="center"
+                    android:src="@drawable/notice_profileimg_bg" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/roomboard_textview1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/roomboard_row_image_container"
+                android:layout_toRightOf="@id/roomboard_row_image_container"
+                android:maxLines="1"
+                android:text="이지혜"
+                android:textColor="#51c3b7"
+                android:layout_marginLeft="10dp"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:typeface="sans" />
+
+            <TextView
+                android:id="@+id/roomboard_textview2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/roomboard_textview1"
+ 				android:layout_marginLeft="3dp"
+                android:layout_toRightOf="@id/roomboard_row_image_container"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="여러분 열심히 하고 계시나요?"
+                android:textColor="#444444"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/roomboard_textview3"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/roomboard_textview2"
+        		android:layout_marginLeft="3dp"
+                android:layout_toRightOf="@id/roomboard_row_image_container"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="15분전"
+                android:textColor="#999999"
+                android:textSize="12sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

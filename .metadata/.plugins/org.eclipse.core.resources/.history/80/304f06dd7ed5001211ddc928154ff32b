@@ -1,0 +1,34 @@
+package com.teamteam.witherest;
+
+public class WitheState {
+	
+	private static WitheState witheState = null;
+	public static final int INVALID_ID = -1;
+	
+	public  boolean mustAllLoaded;
+	public  boolean mustOneLoaded;
+	
+	public boolean mustAllDeleted;
+	public  int id;
+	
+	private int loadDateType; 
+	
+	private WitheState(){
+		mustAllLoaded = false;
+		mustOneLoaded = false;
+		id = INVALID_ID;
+	}
+	
+	public static WitheState getInstance(){
+		if (witheState == null){
+			witheState = new WitheState();
+		}
+		return witheState;
+	}
+		
+	public void init() {
+		mustAllLoaded = false;
+		mustOneLoaded = false;
+		id = INVALID_ID;
+	}
+}

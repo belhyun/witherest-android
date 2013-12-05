@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#e9e9e9" >
+    
+    <!-- Title Area  -->
+ 	    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="44dp" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/common_header_bar" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:text="@string/login_title"
+                android:textColor="#444444"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/common_header_shadow" />
+    <!-- /Title Area-->
+    
+    <!-- Title Logo -->
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="12dp">
+        
+        <ImageView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/login_logo" />
+        
+    </LinearLayout>
+    <!-- /Title Logo-->
+    
+    <!-- Title Message Start -->
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
+        
+        <TextView 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/common_welcome"
+            android:textColor="#3cc3c6"
+            android:textSize="10.66dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp" />
+        
+    </LinearLayout>
+    <!-- /Title Message -->
+    
+    <!-- Login Form -->
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="12dp">
+        
+        <EditText android:layout_width="fill_parent"
+	        android:layout_height="34dp"
+	        android:background="@drawable/login_write_bg"
+	        android:hint="@string/login_id_hint"
+	        android:textColorHint="#999999"
+	        android:textColor="#444444"
+	        android:textSize="12sp"
+	        android:layout_marginLeft="30dp"
+	        android:layout_marginRight="30dp"
+	        android:id="@+id/activity_login_id_edittext"
+	        android:imeOptions="actionNext"
+	        android:singleLine="true"
+	        android:inputType="textEmailAddress" />
+	    
+	    <EditText android:layout_width="fill_parent"
+	        android:layout_height="34dp"
+	        android:background="@drawable/login_write_bg"
+	        android:hint="@string/login_passwd_hint"
+	        android:textColorHint="#999999"
+	        android:textColor="#444444"
+	        android:textSize="12sp"
+	        android:layout_marginLeft="30dp"
+	        android:layout_marginTop="12dp"
+	        android:layout_marginRight="30dp"
+	        android:id="@+id/activity_login_passwd_edittext"
+	        android:imeOptions="actionDone"
+	        android:singleLine="true"
+	        android:inputType="textPassword" />
+	    
+	    <Button android:layout_width="fill_parent"
+	        android:layout_height="48dp"
+	        android:background="@drawable/activity_login_login_btn"
+	        android:text="@string/login_btn"
+	        android:textColor="#444444"
+	        android:textSize="18sp"
+	        android:layout_marginLeft="30dp"
+	        android:layout_marginTop="12dp"
+	        android:layout_marginRight="30dp"
+	        android:id="@+id/activity_login_login_btn" />
+	    
+	    <TextView 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/common_welcome"
+            android:textColor="#3cc3c6"
+            android:textSize="10.66dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp" />
+        
+    </LinearLayout>
+    <!-- /Login Form -->
+
+</LinearLayout>

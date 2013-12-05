@@ -1,0 +1,57 @@
+package com.example.gcmpush;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.android.gcm.server.Message;
+import com.google.android.gcm.server.MulticastResult;
+import com.google.android.gcm.server.Result;
+import com.google.android.gcm.server.Sender;
+
+public class GCMSender {
+
+	public static final String SERVER_KEY = "AIzaSyBxVOv5VE63ENm7YinR9q9sH72KMoQSS54";
+	public List<String> registrationIds = new ArrayList<String>();
+	public String registrationId1 = "APA91bHnCP7buCett7eZTm-DTh-lQkz4eSi0bA_U39dCQEMnZE88hLAa7Pr8IvLH0l4w1Ej3MMuq7dDLosjira42UkBeX65671YG3S9YijpJRfBzBVtlXB9tPpAT9gOvBJcbBzJWoF5EDhpUddiehLLV3PXAN_V77w";
+	public String registrationId2="APA91bEqLm753K7qh-v9Dzkda-7ZRFWEvNyWLezIFEJtLmPyz27z_SrllNBfbaiYKt6Y4DCMX_nLpt4ZWSSWtIleFnUHCvhRNgFS";
+	public static String JSON = null;
+
+	
+	public static String COLLAPSE_KEY = String.valueOf(Math.random() % 100 + 1);
+	public static boolean DELAY_WHILE_IDLE = true;
+	public static int TIME_TO_LIVE = 3;
+	public static int RETRY = 3;
+
+	public Sender sender;
+	public Message message;
+	public MulticastResult result;
+
+	public GCMSender() {
+		sender = new Sender(SERVER_KEY);
+		registrationIds.add(registrationId1);
+		registrationIds.add(registrationId2);
+	}
+
+	public void sendMessage(String pushCode, String message1) throws IOException {
+		message = new Message.Builder().collapseKey(COLLAPSE_KEY)
+				.delayWhileIdle(DELAY_WHILE_IDLE).timeToLive(TIME_TO_LIVE)
+				.addData("pushCode",pushCode)
+				.addData("message", message1).build();
+		
+
+		result = sender.send(message, registrationIds, RETRY);
+	}
+
+	public static void main(String[] arg){
+		GCMSender gcmSender = new GCMSender();
+		try {
+			gcmSender.sendMessage("1","안녕하세요.GCM 테스트입니다");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("GCM 메시지를 발송했습니다");
+
+	}
+
+}

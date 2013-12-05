@@ -1,0 +1,18 @@
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+
+public class Test {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		Calendar cal = Calendar.getInstance();
+		
+		System.out.println(format.format(cal.getTime()));
+
+	}
+
+}

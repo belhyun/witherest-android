@@ -1,0 +1,226 @@
+what,kind,bundleId,bundleVersion,description,time
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368684455781
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368684457640
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368684465406
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368684465406
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368684470640
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368684474046
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368684476281
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.text.contentAssist.proposals",1368684484593
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.text.contentAssist.proposals",1368684494703
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368684503093
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368684512093
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368684517468
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368684523671
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368684538921
+opened,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368684539187
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368684539296
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368684540468
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368684542218
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368684542875
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368684544593
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.text.contentAssist.proposals",1368684548000
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368684550781
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.text.contentAssist.proposals",1368684554046
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368684557234
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368684559343
+closed,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368684559343
+closed,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368684560187
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368684561390
+closed,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368684561390
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.text.contentAssist.proposals",1368684607218
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.text.contentAssist.proposals",1368684616343
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368684624359
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368684627546
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368684631781
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368684634531
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368684635843
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368684637453
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368684649140
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368684652093
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368684656421
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368684665296
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368684669062
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368684669140
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368684671671
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368684671671
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368684676093
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368684684953
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368684696421
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368684699531
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368684699609
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368684701593
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368684701609
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368684707515
+activated,view,org.eclipse.ui.console,3.5.0.v20100526,"org.eclipse.ui.console.ConsoleView",1368684721656
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368684723937
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368684733937
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368684736906
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368684737000
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368684739031
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368684739031
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368684739687
+activated,view,org.eclipse.ui.console,3.5.0.v20100526,"org.eclipse.ui.console.ConsoleView",1368684739703
+activated,view,com.android.ide.eclipse.ddms,21.1.0.v201302060044-569685,"com.android.ide.eclipse.ddms.views.LogCatView",1368684770562
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368684789890
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368684815625
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368684817046
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368684819171
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368684819265
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368684821562
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368684821562
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368684853359
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368684900421
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368684960640
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368684962750
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368684965546
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368684966484
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368684966546
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368684968125
+activated,view,com.android.ide.eclipse.ddms,21.1.0.v201302060044-569685,"com.android.ide.eclipse.ddms.views.LogCatView",1368684987015
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368685012796
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685022937
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685030343
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368685031203
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368685031234
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368685032937
+activated,view,com.android.ide.eclipse.ddms,21.1.0.v201302060044-569685,"com.android.ide.eclipse.ddms.views.LogCatView",1368685034781
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368685070906
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685080296
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368685081156
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368685081250
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368685083031
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368685117046
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.undo",1368685118921
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685119671
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368685125484
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368685128515
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368685141031
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368685145093
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368685148796
+executed,command,org.eclipse.wst.sse.ui,1.2.5.v201108191505,"org.eclipse.wst.sse.ui.format.document",1368685155421
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685156515
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.text.contentAssist.proposals",1368685159843
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368685163656
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368685167562
+executed,command,org.eclipse.wst.sse.ui,1.2.5.v201108191505,"org.eclipse.wst.sse.ui.format.document",1368685169109
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685169968
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368685172437
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368685172515
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368685174484
+activated,view,com.android.ide.eclipse.ddms,21.1.0.v201302060044-569685,"com.android.ide.eclipse.ddms.views.LogCatView",1368685198171
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368685229218
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685236812
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368685242281
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368685243765
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685250218
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.undo",1368685252046
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.undo",1368685252390
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685253171
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.text.contentAssist.proposals",1368685263984
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.text.contentAssist.proposals",1368685265890
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685266859
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368685268484
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368685268515
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368685270140
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368685306375
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685315171
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368685317609
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368685319906
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685320593
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368685325062
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368685325140
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368685326765
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368685364984
+executed,command,org.eclipse.wst.sse.ui,1.2.5.v201108191505,"org.eclipse.wst.sse.ui.format.document",1368685377515
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685378734
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368685429546
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368685432843
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368685435671
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368685437796
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685438484
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368685440062
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368685443453
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368685445187
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368685482250
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685491390
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368685493062
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368685493156
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368685494953
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685517671
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368685530218
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368685530234
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368685530296
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368685536750
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685544921
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368685549765
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368685549843
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368685551781
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368685614187
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368685624437
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368685626703
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685627640
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685631765
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368685632468
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368685632546
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368685634078
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368685688750
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.undo",1368685688984
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685690500
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368685691984
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368685691984
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368685692093
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368685724375
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368685725546
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368685725625
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368685727843
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368685764296
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368685769765
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368685772156
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685772859
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368685773703
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368685773781
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368685775906
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368685820812
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368685837437
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368685838531
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685839250
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685842125
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368685843421
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368685843453
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368685845171
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368685883062
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368685889156
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368685891312
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685891906
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368685892500
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368685892562
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368685894796
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368685903578
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368685946171
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368685974406
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1368685983125
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1368685985281
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368685987765
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368685989093
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368685989171
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368685990781
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368686022984
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.undo",1368686024015
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368686027453
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368686028765
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368686028843
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368686030578
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368686070187
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368686071765
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1368686073171
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1368686073218
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1368686074843
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1368686113484
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.undo",1368686113750
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1368686115406
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368686116359
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368686116359
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368686116437
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1368686247890
+activated,view,org.eclipse.ui.views,3.5.1.M20110202-0800,"org.eclipse.ui.views.ContentOutline",1368686255671

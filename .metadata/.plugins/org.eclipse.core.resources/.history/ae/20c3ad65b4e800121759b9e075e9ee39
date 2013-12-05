@@ -1,0 +1,48 @@
+package com.teamteam.witherest;
+
+import com.teamteam.witherest.cacheload.ImageLoader;
+import com.teamteam.witherest.common.WitherObject;
+import com.teamteam.witherest.service.internal.ServiceManager;
+
+import android.app.Application;
+import android.util.Log;
+
+public class Witherest extends Application {
+	private static final String TAG="Witherest Application";
+	private boolean mIsGCMReady = false;
+	private String GCMId;
+	
+	
+	public boolean isGCMReady() {
+		return mIsGCMReady;
+	}
+	public void setGCMReady(boolean isGCMReady) {
+		this.mIsGCMReady = isGCMReady;
+	}
+	public String getGCMId() {
+		return GCMId;
+	}
+	public void setGCMId(String gCMId) {
+		GCMId = gCMId;
+	}
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		Log.v(TAG,"onCreate() 호출됨");
+		WitherObject.setImageLoader(getApplicationContext());
+		/*ImageLoader 초기화 */
+		new ImageLoader(getApplicationContext()).clearCache();
+
+	}
+	
+	@Override
+	public void onTerminate() {
+		super.onTerminate();
+		Log.v(TAG,"onTerminate() 호출됨");
+	}
+	
+	
+	
+	
+	
+}

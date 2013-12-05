@@ -1,0 +1,29 @@
+package com.teamteam.witherest.service;
+
+import org.apache.http.impl.client.DefaultHttpClient;
+
+public class HttpClientFactory {
+	public static final int MAX_TOTAL_CONNECTION = 20;
+	public static final int MAX_CONNECTIONS_PER_ROUTE = 20;
+	public static final int TIMEOUT_CONNECT = 15000;
+	public static final int TIMEOUT_READ = 15000;
+	
+	private int connectTimeoutMilsec;
+	private int eadTimeoutMilsec;
+	private DefaultHttpClient client;
+	private DefaultHttpClient client;
+
+	
+	public HttpClientFactory(){
+		
+	}
+	
+	public HttpClientFactory(int connectTimeoutMilsec, int readTimeoutMilsec){
+		
+	}
+	
+	public synchronized static DefaultHttpClient getThreadSafeClient(){
+		return null;
+	}
+	
+}

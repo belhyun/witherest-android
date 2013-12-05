@@ -1,0 +1,61 @@
+package com.teamteam.witherest.service;
+
+import org.apache.http.conn.params.ConnManagerParams;
+import org.apache.http.conn.params.ConnPerRouteBean;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
+public class HttpClientFactory {
+	public static final int MAX_TOTAL_CONNECTION = 20;
+	public static final int MAX_CONNECTIONS_PER_ROUTE = 20;
+	public static final int TIMEOUT_CONNECT = 3000;
+	public static final int TIMEOUT_READ =3000;
+	
+	private int connectTimeoutMilsec;
+	private int readTimeoutMilsec;
+	
+	private DefaultHttpClient client;
+	
+	public HttpClientFactory(){
+		this.connectTimeoutMilsec = TIMEOUT_CONNECT;
+		this.readTimeoutMilsec = TIMEOUT_READ;
+	}
+	
+	public HttpClientFactory(int connectTimeoutMilsec, int readTimeoutMilsec){
+		this.connectTimeoutMilsec = connectTimeoutMilsec;
+		this.readTimeoutMilsec = readTimeoutMilsec;
+	}
+	
+	public  DefaultHttpClient getThreadSafeClient(){
+		 SchemeRegistry schemeRegistry = new SchemeRegistry();
+		 schemeRegistry.register(new Scheme( "http", PlainSocketFactory.getSocketFactory(), 80));
+		 
+		 HttpParams params = new BasicHttpParams();
+		 //커넥션풀을 설정한다.
+		 ConnManagerParams.setMaxTotalConnections(params, MAX_TOTAL_CONNECTION );
+		 //라우터 별 최대 연결 커넥션 갯수를 설정
+		 ConnManagerParams.setMaxConnectionsPerRoute( params, new ConnPerRouteBean(MAX_CONNECTIONS_PER_ROUTE) );  
+		 //연결 제한 시간 설정
+		 HttpConnectionParams.setConnectionTimeout(params, connectTimeoutMilsec);
+		 //읽기 제한 시간을 설정
+		 HttpConnectionParams.setSoTimeout(params, readTimeoutMilsec);
+		 //네이글 알고리즘 중지 
+		 HttpConnectionParams.setTcpNoDelay(params, true);
+
+		 ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager(params, schemeRegistry);
+		 client = new DefaultHttpClient(cm, null);
+		 
+		 return client;
+	}
+	
+	public DefaultHttpClient getThreadSafeSSLclient(){
+		return null;
+	}
+	
+}

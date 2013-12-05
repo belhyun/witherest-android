@@ -1,0 +1,35 @@
+package com.teamteam.witherest;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+public class WitherestPreference {
+
+	private Context context;
+	private SharedPreferences preferences; 
+	private SharedPreferences.Editor editor; 
+	
+	public static final String PREF_FILE_NAME = "witherest";
+	
+	public WitherestPreference(Context context){
+		this.context = context;
+		preferences = context.getSharedPreferences(PREF_FILE_NAME, 0);
+		editor = preferences.edit();
+	}
+	
+	public int getInt(String key){
+		return preferences.getInt(key, -1);
+	}
+	
+	public String getString(String key){
+		return preferences.getString(key, null);
+	}
+	
+	public boolean getBoolean(String key){
+		return preferences.getBoolean(key, false);
+	}
+	
+	public void put(String key, String value){
+		
+	}
+}

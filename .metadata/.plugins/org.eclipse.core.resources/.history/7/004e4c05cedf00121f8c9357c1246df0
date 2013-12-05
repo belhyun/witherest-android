@@ -1,0 +1,46 @@
+import com.google.android.gcm.server.Sender;
+
+
+public class GCMSender {
+	public static final String SERVER_KEY = "AIzaSyBxVOv5VE63ENm7YinR9q9sH72KMoQSS54";
+	public static final   String   registrationId = "이곳에 RegId를  입력하세요";
+	
+	private List<String>  registrationIds = new ArrayList<String>();
+	08.
+	//단일전송에 필요한 변수
+	09.
+	private  String     registrationId = "이곳에 RegId를  입력하세요";
+	10.
+	//DB에서 RegID를 가져오기 위해 만들어진 서버 페이지 주소
+	11.
+	private static  final String SELECT_PAGE = "http://자신의 서버  아이피/select_registration.php";
+	12.
+	//파싱하기 위해 데이터를 담을 변수
+	13.
+	private static  String JSON = null;
+	14.
+	//개발자 콘솔에서 발급받은 API Key
+	15.
+	private static String   API_KEY = "자신이 발급받은 API KEY를 입력하세요";
+	16.
+	//메세지의 고유 ID(?)정도로 생각하면 됩니다. 메세지의 중복수신을 막기 위해 랜덤값을 지정합니다
+	17.
+	private static String   COLLAPSE_KEY = String.valueOf(Math.random() % 100 + 1);
+	18.
+	//기기가 활성화 상태일 때  보여줄 것인지.
+	19.
+	private static boolean  DELAY_WHILE_IDLE = true;
+	20.
+	//기기가 비활성화  상태일 때 GCM Storage에 보관되는 시간
+	21.
+	private static int   TIME_TO_LIVE = 3;
+	22.
+	//메세지  전송 실패시 재시도할 횟수
+	23.
+	private static int    RETRY = 3;
+	
+	public static void main(String[] arg){
+		Sender sender = new Sender(SERVER_KEY);
+	}
+	
+}

@@ -1,0 +1,10 @@
+1371956432750	Rename field 'roomBoardList'
+1371956686687	Rename field 'roomBoardAdaper'
+1371972745000	Rename local variable 'roomBoardResponseObject2'
+1371976515343	Rename field 'replyListResponseObject'
+1372058167000	Rename method 'getCurPage'
+1372066400453	Delete element
+1372175734828	Rename package 'com.teamteam.witherest.service'
+1372222990656	Rename type 'EvernoteService'
+1372224839734	Rename local variable 'name'
+1372224849390	Rename local variable 'toomName'

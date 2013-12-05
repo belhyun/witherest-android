@@ -1,0 +1,29 @@
+package com.teamteam.witherest;
+
+public class WitheState {
+	
+	private static WitheState witheState = null;
+	
+	public  boolean mustAllLoading;
+	public  boolean mustOneLoading;
+	
+	private int loadDateType; 
+	public  int id;
+	
+	private WitheState(){}
+	public static WitheState getInstance(){
+		if (witheState == null){
+			witheState = new WitheState();
+		}
+		return witheState;
+	}
+	
+	public boolean isMustAllLoading() {return mustAllLoading;}
+	public void setMustAllLoading(boolean mustAllLoading) {this.mustAllLoading = mustAllLoading;}
+	public boolean isMustOneLoading() {return mustOneLoading;}
+	public void setMustOneLoading(boolean mustOneLoading) {this.mustOneLoading = mustOneLoading;}
+	public int getLoadDateType() {return loadDateType;}
+	public void setLoadDateType(int loadDateType) {this.loadDateType = loadDateType;}
+	public int getId() {return id;}
+	public void setId(int id) {this.id = id;}
+}

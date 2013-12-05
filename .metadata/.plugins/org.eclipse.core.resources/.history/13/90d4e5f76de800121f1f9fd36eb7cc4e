@@ -1,0 +1,260 @@
+package com.teamteam.customComponent;
+
+import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+
+import com.teamteam.customComponent.widget.RefreshListView;
+import com.teamteam.customComponent.widget.RefreshListView.OnRefreshListener;
+import com.teamteam.witherest.R;
+
+public class ScrollRefreshPager implements OnScrollListener {
+	public Context context;
+	public RefreshListView listView;
+
+	public LinearLayout headerView;
+	public LinearLayout footerView;
+
+	public ProgressBar loadHeader;
+	public ProgressBar loadFooter;
+
+	public int footerRes;
+	public int headerRes;
+
+	public boolean isPagingEnabled;
+
+	public int pagerActionType;
+	public static final int PAGER_ACTION_NON = 0;
+	public static final int PAGER_ACTION_REFRESH = 1;
+	public static final int PAGER_ACTION_MORE = 2;
+
+	public boolean isLoading;
+	public boolean isFooterExist = false;
+
+	public LayoutInflater inflater;
+
+	public OnScrollRefreshListener refreshListener;
+	public OnScrollPagingListener pagingListener;
+
+	public BaseAdapter adpater;
+	public Object data;
+
+	public PageInfo pageInfo;
+
+	public ScrollRefreshPager(Context context, RefreshListView listView) {
+		this.context = context;
+		this.listView = listView;
+		init();
+	}
+
+	private void init() {
+		pagerActionType = PAGER_ACTION_NON;
+		
+		inflater = (LayoutInflater) this.context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		footerRes = R.layout.roomboard_footer;
+		headerRes = R.layout.header;
+		headerView = (LinearLayout) inflater.inflate(headerRes, null);
+		footerView = (LinearLayout) inflater.inflate(footerRes, null);
+		loadFooter = (ProgressBar) footerView.findViewById(R.id.roomboard_list_footer_loading);
+		loadHeader = (ProgressBar) headerView.findViewById(R.id.iv_list_header_loading);
+
+		isLoading = false;
+		isPagingEnabled = true;
+
+		listView.setOnRefreshListener(refreshViewListener);
+		listView.setOnScrollListener(this);
+	}
+
+	OnRefreshListener refreshViewListener = new OnRefreshListener() {
+		public void onRefresh() {
+			isLoading = true;
+			ScrollRefreshPager.this.onScrollRefresh();
+		}
+	};
+
+	public void onScroll(AbsListView view, int firstVisibleItem,int visibleItemCount, int totalItemCount) {
+		if ((firstVisibleItem + visibleItemCount) == totalItemCount) { // /
+			if (isPagingEnabled) {
+				if (!isLoading) {
+					if (isFooterExist) {
+						isLoading = true;
+						onScrollPaging();
+					}
+				}
+			}
+		}
+	}
+
+	public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+	public void setSelection(int pos){
+		listView.setSelection(pos);
+	}
+	
+	public int getSelection(){
+		return listView.getFirstVisiblePosition();
+	}
+	
+	public PageInfo getPageInfo() {
+		return pageInfo;
+	}
+
+	public void setPageInfo(PageInfo pageInfo) {
+		this.pageInfo = pageInfo;
+	}
+
+	public void prepareFooter() {
+	
+		if (isPagingEnabled) {
+			if (pageInfo.totalRecordCount > pageInfo.getCurRecordCount()) {
+				if(!isFooterExist){
+					addFooter();
+					isFooterExist = true;
+				}
+			} else {
+				if (isFooterExist){
+					removeFooter();
+					isFooterExist = false;
+				}
+			}
+		}
+	}
+
+	public void setData(Object data) {
+		this.data = data;
+	}
+
+	public void notifyDataSetChanged() {
+		prepareFooter();
+		this.adpater.notifyDataSetChanged();
+		
+	}
+
+	public void setAdapter(BaseAdapter adapter) {
+		this.adpater = adapter;
+		prepareFooter();
+		listView.setAdapter(adapter);
+		
+	}
+
+	public void onScrollPaging() {
+		loadFooter.setVisibility(View.VISIBLE);
+		if (pagingListener != null)
+			pagingListener.onScrollPaging();
+	}
+
+	public void onScrollRefresh() {
+		if (refreshListener != null)
+			refreshListener.onScrollRefresh();
+	}
+
+	public void onPagingComplete(boolean isSucceded, int totalRecordCount) {
+		loadFooter.setVisibility(View.INVISIBLE);
+		
+		if (isSucceded) {
+			isLoading = false;
+			pageInfo.page = pageInfo.page + 1;
+			pageInfo.totalRecordCount = totalRecordCount;
+			Log.v("페이지 번호", pageInfo.page + "  번");
+		}else {
+			removePagingListener();
+			listView.setSelection(getSelection()-2);
+		}
+		
+		prepareFooter();
+		resetFooter();
+		setPagingListener(pagingListener);
+	}
+	
+	public void removePagingListener(){
+		setPagingListener(null);
+	}
+	
+	public boolean getIsLoding(){
+		return isLoading;
+	}
+	
+	public void setIsLoading(boolean isLoading){
+		this.isLoading = isLoading;
+	}
+	
+	public void onRefreshingComplete(boolean isSucceeded, int totalRecordCount) {
+		isLoading = false;
+		if (isSucceeded) {
+			pageInfo.page = 0;
+			this.pageInfo.totalRecordCount = totalRecordCount;
+		}
+		prepareFooter();
+		listView.onRefreshComplete();
+	}
+
+	public void addFooter() {
+		listView.addFooterView(footerView);
+		isFooterExist = true;
+	}
+
+	public void removeFooter() {
+		listView.removeFooterView(footerView);
+		isFooterExist = false;
+	}
+
+	private void resetFooter() {
+		loadFooter.setVisibility(View.INVISIBLE);
+	}
+
+	public int getCurrentPage() {
+			return pageInfo.getPage();
+	}
+
+	private void resetHeader() {
+	}
+
+	public boolean isLoading() {
+		return isLoading;
+	}
+
+	public void setLoading(boolean isLoading) {
+		this.isLoading = isLoading;
+	}
+
+	public OnScrollRefreshListener getRefreshListerner() {
+		return refreshListener;
+	}
+
+	public void setRefreshListerner(OnScrollRefreshListener refreshListerner) {
+		this.refreshListener = refreshListerner;
+	}
+
+	public OnScrollPagingListener getPagingListener() {
+		return pagingListener;
+	}
+
+	public void setPagingListener(OnScrollPagingListener pagingListener) {
+		this.pagingListener = pagingListener;
+	}
+
+	public interface OnScrollRefreshListener {
+		public void onScrollRefresh();
+	}
+
+	public interface OnScrollPagingListener {
+		public void onScrollPaging();
+	}
+
+	public void setPagingEnabled(boolean b) {
+		this.isPagingEnabled = false;
+
+	}
+	
+	public boolean isPagerSettingsCompleted(){
+		return this.pageInfo !=null? true:false;
+	}
+
+}

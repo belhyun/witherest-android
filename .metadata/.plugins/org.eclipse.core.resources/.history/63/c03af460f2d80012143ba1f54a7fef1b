@@ -1,0 +1,294 @@
+package com.teamteam.witherest.service;
+
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpRequestBase;
+
+import android.os.Message;
+import android.util.Log;
+
+import com.teamteam.witherest.common.AndroUtils;
+import com.teamteam.witherest.common.CommonUtils;
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.service.callback.RoomServiceCallback;
+import com.teamteam.witherest.service.callback.UserServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.callback.object.RoomInfo;
+
+public class RoomService extends Service{
+	
+	private static final String USER_ID = "user_id";
+	private static final String CATEGORY_ID = "category_id";
+	private static final String CHECK_ROOM_TITLE = "check_room_title";
+	private static final String PUBLISH_LEVEL="publish_level";
+	private static final String START_DATE="start_date";
+	private static final String END_DATE ="end_date";
+	private static final String PERIOD_TYPE="period_type";
+	private static final String MAX_MEMBER="max_member";
+	private static final String CONTENT="content";
+	private static final String IMAGE ="image";
+	private static final String ALARM_YN="alarm_yn";
+	private static final String ALARM_TIME ="alarm_time";
+	
+	private static final String ROOM_ID = "room_id";
+	
+	private static final String PAGE = "page";
+	
+	
+
+	private ServiceHandler  handler;
+	private RoomServiceCallback callback;
+	
+	
+	public RoomService(HttpClient httpClient, ServiceHandler  handler) {
+		super(httpClient);
+		this.handler = handler;
+	}
+
+	@Override
+	public void finishedBackgroundProcess(String responseText) {
+		Log.v("response_roomservice_text", responseText);
+		if (callback ==null) return;
+		BaseResponseObject obj = ParsingService.parseJson(responseText);
+		Message message = Message.obtain();
+		message.obj = obj ;
+		handler.sendMessage(message);
+	}
+	
+	@Override
+	public void addHeaderSessionKey(HttpRequestBase request) {
+		String sessionKey = Session.getInstance().sessionKey;
+		if (sessionKey != null){
+			request.addHeader(Service.ACC_TOKEN, sessionKey);
+		}
+	}
+	
+	public void setOnRoomCallback(RoomServiceCallback callback){
+		this.callback = callback;
+		handler.setRoomServiceCallback(callback);
+	}
+	
+	public void getMyCheckRooms(String id){
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put(USER_ID,id);
+		paramMap.put(REQUEST_TYPE_STRING,String.valueOf(REQUEST_TYPE_GET_MY_CHECKROOMS));
+		try {
+			sendPost(GET_MY_CHECKROOMS_URL, paramMap);
+		} catch (InterruptedException e) {
+			Log.v("getMyCheckRooms 요청 에러",e.getMessage());
+		 }
+	}
+	
+	
+	/*룸 개설 메서드 
+	 *룸이미지가 존재할 경우와 존재하지 않을 경우 알맞는 메서드를 호출한다.
+	*/
+	public void createRoom(RoomInfo roomInfo){
+		Log.v("룸이미지 패스" , "룸이미지 패스 ------>" + roomInfo.roomImagePath);
+		if (CommonUtils.isNullOrEmpty(roomInfo.roomImagePath)){
+			createRoomWithoutImage(roomInfo);
+		}else {
+			createRoomWithImage(roomInfo);
+		}
+	}
+	
+	//이미지가 존재할 경우 멀티파트방식의 방 개설 요청 메서드 
+	public void createRoomWithImage(RoomInfo roomInfo){
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put(USER_ID,CommonUtils.int2string(Session.getInstance().user.userIndex));
+		paramMap.put(CATEGORY_ID,CommonUtils.int2string(roomInfo.category.categoryId));
+		paramMap.put(CHECK_ROOM_TITLE,roomInfo.roomTitle);
+		paramMap.put(PUBLISH_LEVEL,CommonUtils.int2string(roomInfo.publicLevel));
+		paramMap.put(START_DATE,format.format(roomInfo.startDate));
+		paramMap.put(END_DATE,format.format(roomInfo.endDate));
+		paramMap.put(PERIOD_TYPE,roomInfo.periodType);
+		paramMap.put(MAX_MEMBER,CommonUtils.int2string(roomInfo.maxMemberCount));
+		paramMap.put(CONTENT, roomInfo.roomPurpose);
+		paramMap.put(ALARM_YN,CommonUtils.int2string(roomInfo.alarmLevel));
+		paramMap.put(ALARM_TIME, CommonUtils.int2string(roomInfo.alarmHour)+":"+ CommonUtils.int2string(roomInfo.alarmMin));
+		paramMap.put(REQUEST_TYPE_STRING,CommonUtils.int2string(REQUEST_TYPE_CREATE_CHECKROOM));
+		
+		sendMultipart(CREATE_CHECKROOM_URL, roomInfo.roomImagePath,paramMap);
+	}
+	
+	//이미지가 존재하지 않을 경우, 일반 포스트 방식의 방 개설 요청 메서드 
+	public void createRoomWithoutImage(RoomInfo roomInfo){
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put(USER_ID,CommonUtils.int2string(Session.getInstance().user.userIndex));
+		paramMap.put(CATEGORY_ID,CommonUtils.int2string(roomInfo.category.categoryId));
+		paramMap.put(CHECK_ROOM_TITLE,roomInfo.roomTitle);
+		paramMap.put(PUBLISH_LEVEL,CommonUtils.int2string(roomInfo.publicLevel));
+		paramMap.put(START_DATE,format.format(roomInfo.startDate));
+		paramMap.put(END_DATE,format.format(roomInfo.endDate));
+		paramMap.put(PERIOD_TYPE,roomInfo.periodType);
+		paramMap.put(MAX_MEMBER,CommonUtils.int2string(roomInfo.maxMemberCount));
+		paramMap.put(CONTENT, roomInfo.roomPurpose);
+		paramMap.put(ALARM_YN,CommonUtils.int2string(roomInfo.alarmLevel));
+		paramMap.put(ALARM_TIME, CommonUtils.int2string(roomInfo.alarmHour)+":"+ CommonUtils.int2string(roomInfo.alarmMin));
+		paramMap.put(REQUEST_TYPE_STRING,CommonUtils.int2string(REQUEST_TYPE_CREATE_CHECKROOM));
+		
+		try {
+			sendPost(CREATE_CHECKROOM_URL, paramMap);
+		} catch (InterruptedException e) {
+			Log.v("createCheckRoom요청 에러",e.getMessage());
+		 }
+	}
+	
+	public void modifyRoom(RoomInfo roomInfo) {
+		Log.v("룸이미지 패스" , "룸이미지 패스 ------>" + roomInfo.roomImagePath);
+		if (CommonUtils.isNullOrEmpty(roomInfo.roomImagePath) || roomInfo.roomImagePath.startsWith("/assets")){
+			modifyRoomWithoutImage(roomInfo);
+		}else {
+			modifyRoomWithImage(roomInfo);
+		}	
+	}
+	
+	public void modifyRoomWithoutImage(RoomInfo roomInfo){
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put(USER_ID,CommonUtils.int2string(Session.getInstance().user.userIndex));
+		paramMap.put(ROOM_ID, CommonUtils.int2string(roomInfo.roomId));
+		paramMap.put(CATEGORY_ID,CommonUtils.int2string(roomInfo.category.categoryId));
+		paramMap.put(CHECK_ROOM_TITLE,roomInfo.roomTitle);
+		paramMap.put(PUBLISH_LEVEL,CommonUtils.int2string(roomInfo.publicLevel));
+		paramMap.put(START_DATE,format.format(roomInfo.startDate));
+		paramMap.put(END_DATE,format.format(roomInfo.endDate));
+		paramMap.put(PERIOD_TYPE,roomInfo.periodType);
+		paramMap.put(MAX_MEMBER,CommonUtils.int2string(roomInfo.maxMemberCount));
+		paramMap.put(CONTENT, roomInfo.roomPurpose);
+		paramMap.put(ALARM_YN,CommonUtils.int2string(roomInfo.alarmLevel));
+		paramMap.put(ALARM_TIME, CommonUtils.int2string(roomInfo.alarmHour)+":"+ CommonUtils.int2string(roomInfo.alarmMin));
+		paramMap.put(REQUEST_TYPE_STRING,CommonUtils.int2string(REQUEST_TYPE_MODIFY_ROOM));
+		
+		try {
+			sendPost(MODIFY_ROOM_URL,paramMap);
+		} catch (InterruptedException e) {
+			Log.v("modify_Room요청 에러",e.getMessage());
+		 }
+	}
+	
+	public void modifyRoomWithImage(RoomInfo roomInfo){
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put(USER_ID,CommonUtils.int2string(Session.getInstance().user.userIndex));
+		paramMap.put(ROOM_ID, CommonUtils.int2string(roomInfo.roomId));
+		paramMap.put(CATEGORY_ID,CommonUtils.int2string(roomInfo.category.categoryId));
+		paramMap.put(CHECK_ROOM_TITLE,roomInfo.roomTitle);
+		paramMap.put(PUBLISH_LEVEL,CommonUtils.int2string(roomInfo.publicLevel));
+		paramMap.put(START_DATE,format.format(roomInfo.startDate));
+		paramMap.put(END_DATE,format.format(roomInfo.endDate));
+		paramMap.put(PERIOD_TYPE,roomInfo.periodType);
+		paramMap.put(MAX_MEMBER,CommonUtils.int2string(roomInfo.maxMemberCount));
+		paramMap.put(CONTENT, roomInfo.roomPurpose);
+		paramMap.put(ALARM_YN,CommonUtils.int2string(roomInfo.alarmLevel));
+		paramMap.put(ALARM_TIME, CommonUtils.int2string(roomInfo.alarmHour)+":"+ CommonUtils.int2string(roomInfo.alarmMin));
+		paramMap.put(REQUEST_TYPE_STRING,CommonUtils.int2string(REQUEST_TYPE_MODIFY_ROOM));
+		
+		sendMultipart(MODIFY_ROOM_URL, roomInfo.roomImagePath,paramMap);
+	}
+	
+	public void checkRoom(int roomId){
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put(USER_ID,CommonUtils.int2string(Session.getInstance().user.userIndex));
+		paramMap.put(ROOM_ID,CommonUtils.int2string(roomId));
+		paramMap.put(REQUEST_TYPE_STRING,CommonUtils.int2string(REQUEST_TYPE_CHECK_ROOM));
+		try {
+			sendPost(CHECK_ROOM_URL, paramMap);
+		} catch (InterruptedException e) {
+			Log.v("CheckRoom요청 에러",e.getMessage());
+		 }
+	}
+	
+	public void cancelCheckRoom(int roomId){
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put(USER_ID,CommonUtils.int2string(Session.getInstance().user.userIndex));
+		paramMap.put(ROOM_ID,CommonUtils.int2string(roomId));
+		paramMap.put(REQUEST_TYPE_STRING,CommonUtils.int2string(REQUEST_TYPE_CANCEL_CHECK));
+		try {
+			sendPost(CANCEL_CHECK_URL, paramMap);
+		} catch (InterruptedException e) {
+			Log.v("cancel check 요청 에러",e.getMessage());
+		 }
+	}
+	
+	public void getRoomWith(int roomId){
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put(USER_ID,CommonUtils.int2string(Session.getInstance().user.userIndex));
+		paramMap.put(ROOM_ID,CommonUtils.int2string(roomId));
+		paramMap.put(REQUEST_TYPE_STRING,CommonUtils.int2string(REQUEST_TYPE_GET_ROOM_WITH));
+		try {
+			sendPost(GET_ROOM_WITH_URL, paramMap);
+		} catch (InterruptedException e) {
+			Log.v("get_room_with  요청 에러",e.getMessage());
+		 }
+	}
+	
+	public void getRoomBoard(int roomId, int pageNo){
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put(USER_ID,CommonUtils.int2string(Session.getInstance().user.userIndex));
+		paramMap.put(ROOM_ID,CommonUtils.int2string(roomId));
+		paramMap.put(PAGE,CommonUtils.int2string(pageNo));
+		paramMap.put(REQUEST_TYPE_STRING,CommonUtils.int2string(REQUEST_TYPE_GET_ROOM_BOARD));
+		try {
+			sendPost(GET_ROOM_BOARD_URL, paramMap);
+		} catch (InterruptedException e) {
+			Log.v("get_room_with  요청 에러",e.getMessage());
+		 }
+	}
+	
+	public void joinRoom(int roomId) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put(USER_ID,CommonUtils.int2string(Session.getInstance().user.userIndex));
+		paramMap.put(ROOM_ID,CommonUtils.int2string(roomId));
+		paramMap.put(REQUEST_TYPE_STRING,CommonUtils.int2string(REQUEST_TYPE_JOIN_ROOM));
+		try {
+			sendPost(JOIN_ROOM_URL, paramMap);
+		} catch (InterruptedException e) {
+			Log.v("get_room_with  요청 에러",e.getMessage());
+		 }		
+	}
+
+	public void leaveRoom(int roomId) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put(USER_ID,CommonUtils.int2string(Session.getInstance().user.userIndex));
+		paramMap.put(ROOM_ID,CommonUtils.int2string(roomId));
+		paramMap.put(REQUEST_TYPE_STRING,CommonUtils.int2string(REQUEST_TYPE_LEAVE_ROOM));
+		try {
+			sendPost(LEAVE_ROOM_URL, paramMap);
+		} catch (InterruptedException e) {
+			Log.v("get_room_with  요청 에러",e.getMessage());
+		 }	
+		
+	}
+	
+	public void getRoomInfo(int roomId){
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put(USER_ID,CommonUtils.int2string(Session.getInstance().user.userIndex));
+		paramMap.put(ROOM_ID,CommonUtils.int2string(roomId));
+		paramMap.put(REQUEST_TYPE_STRING,CommonUtils.int2string(REQUEST_TYPE_GET_ROOMINFO));
+		try {
+			sendPost(GET_ROOMINFO_URL, paramMap);
+		} catch (InterruptedException e) {
+			Log.v("get_room_with  요청 에러",e.getMessage());
+		 }
+	}
+	
+	public void deleteRoom(int roomId){
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put(USER_ID,CommonUtils.int2string(Session.getInstance().user.userIndex));
+		paramMap.put(ROOM_ID,CommonUtils.int2string(roomId));
+		paramMap.put(REQUEST_TYPE_STRING,CommonUtils.int2string(REQUEST_TYPE_DELETE_ROOM));
+		try {
+			sendPost(DELETE_ROOM_URL, paramMap);
+		} catch (InterruptedException e) {
+			Log.v("get_room_with  요청 에러",e.getMessage());
+		 }
+	}
+
+	
+}

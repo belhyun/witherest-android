@@ -1,0 +1,6 @@
+package com.teamteam.witherest.service;
+
+public class Service {
+	public static final String BASE_URL = "special.or.kr/api ";
+	public static final String LOGIN_URL ="/login";
+}

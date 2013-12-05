@@ -1,0 +1,22 @@
+1368976228187	Rename field 'des'
+1368976329296	Rename field 'myCategories'
+1368976340312	Rename local variable 'myCategories'
+1368976373125	Rename field 'isApplyNotice'
+1369115295796	Delete elements
+1369156979578	Move compilation units
+1369158941640	Delete element
+1369397396734	Move compilation units
+1369397464968	Rename local variable 'resultMsg'
+1369398440375	Rename field 'REQUEST_LOGIN'
+1369398449750	Rename field 'REQUET_TYPE__LOGIN'
+1369398469328	Rename field 'REQUEST_LOGOUT'
+1369398485343	Rename field 'REQUEST_DUPL_CHECK'
+1369398502437	Rename field 'REQUEST_JOIN'
+1369398538125	Rename field 'REQUEST_ALL_CATEGORIES'
+1369400059593	Delete element
+1369402615328	Rename field 'minerVersion'
+1369402628296	Rename local variable 'minerVersion'
+1369505638578	Rename type 'FragmentNoticeAdapter'
+1369505865328	Rename field 'noticeList'
+1369505876578	Rename field 'categoryList'
+1369505889250	Rename field 'roomList'

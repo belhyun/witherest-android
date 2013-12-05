@@ -1,0 +1,44 @@
+package com.example.gcmpush;
+
+import java.io.IOException;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
+public class MainActivity extends Activity {
+
+	Button gcmButton;
+	
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        gcmButton = (Button)findViewById(R.id.gcm_btn);
+        gcmButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				GCMSender sender = new GCMSender();
+				new Thread(){
+					public void run(){
+						sender.sendMessage("1","안녕하세요.GCM 테스트입니다");
+					}
+				}.start();
+		
+				Toast.makeText(MainActivity.this, "GCM 메시지 발송 완료", Toast.LENGTH_SHORT).show();
+			}
+		});
+        
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
+}

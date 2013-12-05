@@ -1,0 +1,158 @@
+package com.teamteam.customComponent;
+
+import com.teamteam.witherest.R;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+
+public class ScrollRefreshPager implements OnScrollListener, OnTouchListener {
+	private Context context;
+	private ListView listView;
+
+	private LinearLayout headerView;
+	private LinearLayout footerView;
+
+	private ProgressBar loadHeader;
+	private ProgressBar loadFooter;
+
+	private int footerRes;
+	private int headerRes;
+
+	private boolean isLoading;
+	private boolean isHeader;
+
+	private LayoutInflater inflater;
+
+	private OnRefreshListener refreshListener;
+	private OnPagingListener pagingListener;
+
+	public ScrollRefreshPager(Context context, ListView listView) {
+		this.context = context;
+		this.listView = listView;
+		init();
+	}
+
+	private void init() {
+		inflater = (LayoutInflater) this.context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		footerRes = R.layout.footer;
+		headerRes = R.layout.header;
+		headerView = (LinearLayout) inflater.inflate(headerRes, null);
+		footerView = (LinearLayout) inflater.inflate(footerRes, null);
+		loadFooter = (ProgressBar) footerView
+				.findViewById(R.id.iv_list_footer_loading);
+		loadHeader = (ProgressBar) headerView
+				.findViewById(R.id.iv_list_header_loading);
+
+		isLoading = false;
+		isHeader = false;
+		listView.setOnScrollListener(this);
+		listView.setOnTouchListener(this);
+	}
+
+	public void onScroll(AbsListView view, int firstVisibleItem,
+		int visibleItemCount, int totalItemCount) {
+
+		if ((firstVisibleItem + visibleItemCount) == totalItemCount) { // footer
+			if (!isLoading) {
+				isLoading = true;
+				if ( pagingListener != null)
+					pagingListener.onPaging();
+				
+			}
+		} else if ((firstVisibleItem == 0)) { // / header
+			if (!isLoading) {
+				isLoading = true;
+				isHeader = true;
+			}
+		} else {
+			// justOnce = false;
+			isHeader = false;
+		}
+	}
+
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+	}
+
+	public boolean onTouch(View arg0, MotionEvent event) {
+		 if (event.getAction() == MotionEvent.ACTION_UP) {
+             if (isHeader) {
+                     System.out.println("onTouch() entered! event : " + event);
+                     if (refreshListener !=null)
+                    	refreshListener.onRefresh();
+                     isHeader = false;
+             }
+     }
+     return false;
+ 
+	}
+	
+	public void onPagingComplete() {
+		isLoading = false;
+		resetHeader();
+	}
+
+	public void onRefreshingComplete() {
+		isLoading = false;
+		resetFooter();
+	}
+
+	public void removeFooter() {
+		listView.removeFooterView(footerView);
+	}
+
+	public void removeHeader() {
+		listView.removeHeaderView(headerView);
+	}
+	
+	private void resetFooter() {
+		// TODO Auto-generated method stub
+	}
+
+	private void resetHeader() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean isLoading() {
+		return isLoading;
+	}
+
+	public void setLoading(boolean isLoading) {
+		this.isLoading = isLoading;
+	}
+
+	public OnRefreshListener getRefreshListerner() {
+		return refreshListener;
+	}
+
+	public void setRefreshListerner(OnRefreshListener refreshListerner) {
+		this.refreshListener = refreshListerner;
+	}
+
+	public OnPagingListener getPagingListener() {
+		return pagingListener;
+	}
+
+	public void setPagingListener(OnPagingListener pagingListener) {
+		this.pagingListener = pagingListener;
+	}
+
+	public interface OnRefreshListener {
+		public void onRefresh();
+	}
+
+	public interface OnPagingListener {
+		public void onPaging();
+	}
+
+}

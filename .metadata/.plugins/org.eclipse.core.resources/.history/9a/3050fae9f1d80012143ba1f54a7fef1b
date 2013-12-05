@@ -1,0 +1,5 @@
+package com.teamteam.witherest.service.callback.object;
+
+public class DateCheckedMembers extends BaseResponseObject {
+
+}

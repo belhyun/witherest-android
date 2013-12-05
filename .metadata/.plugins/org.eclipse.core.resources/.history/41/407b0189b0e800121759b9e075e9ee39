@@ -1,0 +1,186 @@
+package com.teamteam.witherest;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.teamteam.customComponent.LoginGuideDialogFragment;
+import com.teamteam.customComponent.SimpleProgressDialog;
+import com.teamteam.customComponent.popup.ActionItem;
+import com.teamteam.customComponent.popup.QuickAction;
+import com.teamteam.witherest.common.AndroUtils;
+import com.teamteam.witherest.model.AppCache;
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.model.User;
+import com.teamteam.witherest.service.callback.UserServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.internal.Service;
+import com.teamteam.witherest.service.internal.ServiceManager;
+import com.teamteam.witherest.service.internal.UserService;
+
+public class Fragment_Top_Menu extends Fragment implements UserServiceCallback{
+
+	private Activity activity;
+	
+	private static final int ID_ADD     = 1;
+	private static final int ID_SEARCH   = 2;
+	private static final int ID_SETTINGS = 3;
+	private static final int ID_LOGIN = 4;
+	private static final int ID_LOGOUT = 5;
+
+	private ImageButton open_Btn;
+    public View topMenuView;
+	QuickAction quickAction;
+	private SimpleProgressDialog waitProgressDialog;
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		this.activity = activity;
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		topMenuView = inflater.inflate(R.layout.fragment_top_bar,null);  
+        setActionItem();
+    
+		open_Btn = (ImageButton) topMenuView.findViewById(R.id.btn_open);
+		open_Btn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				quickAction.show(v);	
+			}
+		});	
+		
+		return topMenuView;
+	}
+	
+	
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+	}
+	
+	
+
+	private void setActionItem() {
+		ActionItem addItem 	= new ActionItem(ID_ADD, getActivity().getResources().getString(R.string.create_check_room), 
+				getResources().getDrawable(R.drawable.popup_roommake_icon));
+		ActionItem serachItem 	= new ActionItem(ID_SEARCH , getActivity().getResources().getString(R.string.search_check_room), 
+				getResources().getDrawable(R.drawable.popup_search_icon));
+        ActionItem settingsItem 	= new ActionItem(ID_SETTINGS, getActivity().getResources().getString(R.string.settings), 
+        		getResources().getDrawable(R.drawable.popup_setting_icon));
+      
+    	quickAction = new QuickAction(activity, QuickAction.VERTICAL);
+        quickAction.addActionItem(addItem);
+		//quickAction.addActionItem(serachItem);
+		quickAction.addActionItem(settingsItem);
+		
+		if (Session.getInstance().sessionStatus == Session.AUTHORIZED){
+			ActionItem logoutItems 	= new ActionItem(ID_LOGOUT, getActivity().getResources().getString(R.string.logout), getResources().getDrawable(R.drawable.popup_setting_icon));
+			quickAction.addActionItem(logoutItems );
+		}else {
+			 ActionItem loginItems 	= new ActionItem(ID_LOGIN, getActivity().getResources().getString(R.string.login), getResources().getDrawable(R.drawable.popup_setting_icon));
+			 quickAction.addActionItem(loginItems);
+		}
+        
+        quickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {			
+			public void onItemClick(QuickAction source, int pos, int actionId) {				
+				ActionItem actionItem = quickAction.getActionItem(pos);
+				if (actionId == ID_ADD) {
+					if (Session.getInstance().sessionStatus == Session.NOT_AUTHORIZED){
+						showLoginDialog();
+						return;
+					}
+					Intent i = new Intent(activity, MakeRoomActivity.class);
+					getActivity().startActivityForResult(i,ActConstants.CREATE_ROOM);
+					
+				} else if (actionId == ID_SEARCH) {
+					Intent i = new Intent(activity, SignupActivity.class);
+					getActivity().startActivity(i);
+				} else if(actionId == ID_SETTINGS){
+					if (Session.getInstance().sessionStatus == Session.NOT_AUTHORIZED){
+						showLoginDialog();
+						return;
+					}
+					Intent i = new Intent(activity, SettingsActivity.class);
+					getActivity().startActivity(i);
+				}else if(actionId == ID_LOGIN){
+					Intent i = new Intent(activity, LoginActivity.class);
+					getActivity().startActivity(i);
+				}else if(actionId == ID_LOGOUT){
+					logout();
+				}	
+			}
+
+		});
+	}
+	
+	private void showLoginDialog() {
+		LoginGuideDialogFragment loginDialog = LoginGuideDialogFragment.newInstance();
+		FragmentManager fm = getFragmentManager(); 
+		loginDialog.show(fm, "dialog");
+	}
+	
+	private void logout() {
+		waitProgressDialog = new SimpleProgressDialog(getActivity(), 
+				getActivity().getString(R.string.wait_title),getString(R.string.wait_message));
+		waitProgressDialog.start();
+		
+		ServiceManager manager = ServiceManager.getServiceManager();
+		User user = Session.getInstance().user; 
+		UserService userService = manager.getUserService();
+		userService.setOnUserCallback(this);
+		userService.logout(user.userIndex,(user.gcmId == null? "test":user.gcmId));
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		//탑바 프래그먼트가 등록순/인기순 룸리스트액티비티에 부착될 때 모양을 변경한다.
+		//탑바 프래그먼트가 등록순/인기순 룸리스트액티비에 부착되지 않을 때는 기존의 모양을 표시하게 된다.
+		if (getActivity() instanceof CheckRoomListActivity){
+			View viewToHide2 = topMenuView.findViewById(R.id.top_view);
+			TextView viewToShow = (TextView)topMenuView.findViewById(R.id.title);
+			viewToHide2.setVisibility(View.INVISIBLE);
+			viewToShow.setVisibility(View.VISIBLE);
+			int categoryId = ((CheckRoomListActivity)getActivity()).categoryId;
+			String categoryName = AppCache.getInstance().getAppCategory().get(categoryId - 1).categoryName;
+			viewToShow.setText(categoryName);
+		}
+	}
+
+	public void onUserServiceCallback(BaseResponseObject object) {
+		if (waitProgressDialog.isShowing()){
+			SimpleProgressDialog.end(waitProgressDialog);
+		}
+		
+		if (object.resultCode == Service.RESULT_FAIL) {
+			return;
+		}
+		
+		switch(object.requestType){
+		case Service.REQUEST_TYPE_LOGOUT:
+			Session.getInstance().initialize();
+			
+			Intent i = new Intent(getActivity(), MainActivity.class);
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			getActivity().startActivity(i);
+			break;
+		}
+	}
+}

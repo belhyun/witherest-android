@@ -1,0 +1,15 @@
+import java.io.File;
+
+
+public class Test {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		String file = "C:/a/b/c/d/jpg";
+		File f = new File(file);
+		Syste.out.println(f.getPath());
+	}
+
+}

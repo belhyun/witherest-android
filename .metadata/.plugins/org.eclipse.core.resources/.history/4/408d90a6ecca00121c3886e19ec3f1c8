@@ -1,0 +1,66 @@
+package com.teamteam.witherest;
+
+import android.app.Activity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+
+import com.teamteam.witherest.service.callback.object.CategoryRoomListResponseObject;
+import com.viewpagerindicator.IconPagerAdapter;
+
+
+public class CheckRoomViewPagerAdapter extends FragmentPagerAdapter implements IconPagerAdapter {
+    public static final int ROOM_LIST_POPULATE =0; 
+	public static final int ROOM_LIST_NEW = 1;
+	
+	public String[] roomListClass;
+	
+	private int mCount = 2;
+	private Activity activity;
+	
+	public CheckRoomListFragment[] fragments = new CheckRoomListFragment[2];
+	
+	protected static final int[] ICONS = new int[] {
+        R.drawable.perm_group_calendar,
+        R.drawable.perm_group_camera,
+        R.drawable.perm_group_device_alarms,
+        R.drawable.perm_group_location};
+	
+	public CheckRoomViewPagerAdapter (FragmentManager fm,Activity activity,CheckRoomListFragment[] fragments) {
+	        super(fm);
+	        this.fragments = fragments;
+	        this.activity= activity;
+	        
+	        this.roomListClass = new String[fragments.length];
+	        for (int i = 0; i < roomListClass.length; i++){
+	        	this.roomListClass[i] = this.fragments[i].title;
+	        }
+	    }
+
+	public int getIconResId(int position) {
+		  return ICONS[position];
+	}
+
+	@Override
+	public Fragment getItem(int position) {
+		  return fragments[position];
+	
+	}
+	
+	@Override
+    public CharSequence getPageTitle(int position) {
+      return roomListClass[position];
+    }
+
+	@Override
+	public int getCount() {
+		return 2;
+	}
+	
+	 public void setCount(int count) {
+	        if (count > 0 && count <= 10) {
+	            mCount = count;
+	            notifyDataSetChanged();
+	        }
+	    }
+}

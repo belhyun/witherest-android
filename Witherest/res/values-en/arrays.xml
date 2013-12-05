@@ -1,0 +1,59 @@
+<resources>
+    <string-array name="category">
+        <item >game</item>
+        <item >공부</item>
+        <item >독서</item>
+        <item >모임</item>
+        <item >습관</item>
+        <item >미용&amp;다이어트</item>
+        <item >건강&amp;운동</item>
+        <item >기타</item>
+    </string-array>
+    <string-array name="profile_imget_get_mthod">
+        <item >Image Gallery</item>
+        <item >Camera</item>
+    </string-array>
+    <string-array name="public_array">
+        <item >public</item>
+        <item >non public</item>
+    </string-array>
+    <string-array name="alarm_array">
+        <item >I want room_time notice</item>
+        <item >I don`t want room_time notice</item>
+    </string-array>
+    <string-array name="makeroom_period_array">
+        <item >7 days</item>
+        <item >14 days</item>
+        <item >21 days</item>
+        <item >28 days</item>
+    </string-array>
+    <string-array name="makeroom_period_int_array">
+        <item >7</item>
+        <item >14</item>
+        <item >21</item>
+        <item >28</item>
+    </string-array>
+    <string-array name="makeroom_periodtype_array">
+        <item >daily</item>
+        <item >select date</item>
+    </string-array>
+    <string-array name="makeroom_weekends_array">
+        <item >Monday</item>
+        <item >Tuesday</item>
+        <item >Wednesday</item>
+        <item >Thursday</item>
+        <item >Friday</item>
+        <item >Saturday</item>
+        <item >Sunday</item>
+    </string-array>
+    <string-array name="makeroom_simple_weekends_array">
+      	 <item >Monday</item>
+        <item >Tuesday</item>
+        <item >Wednesday</item>
+        <item >Thursday</item>
+        <item >Friday</item>
+        <item >Saturday</item>
+        <item >Sunday</item>
+    </string-array>
+    
+</resources>

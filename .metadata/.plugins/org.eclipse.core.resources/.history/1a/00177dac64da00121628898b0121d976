@@ -1,0 +1,20 @@
+package com.example.test1;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+
+public class CopyOfFooter extends Activity {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.ui_listview2);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.ui_listview2, menu);
+        return true;
+    }
+}

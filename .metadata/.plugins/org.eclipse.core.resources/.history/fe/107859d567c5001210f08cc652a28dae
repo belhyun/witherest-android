@@ -1,0 +1,186 @@
+package com.teamteam.witherest;
+
+
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class Fragment_Notice extends Fragment implements OnCheckedChangeListener {
+	private Activity activity;
+	private RadioGroup segmentRadioGroup;
+	private ListView witherestNewsList;
+	private ListView categoryNewsList;
+	private ListView roomNewsList;
+
+	/* Fragment Life Cycle */
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		this.activity = activity;
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		View view= inflater.inflate(R.layout.fragment_notice, null);
+		
+		segmentRadioGroup = (RadioGroup)view.findViewById(R.id.segment_radio_group);
+		segmentRadioGroup.setOnCheckedChangeListener(this);
+		witherestNewsList = (ListView)view.findViewById(R.id.witherest_news_list);
+		categoryNewsList = (ListView)view.findViewById(R.id.categoty_news_list);
+		roomNewsList = (ListView)view.findViewById(R.id.room_news_list);
+		
+		categoryNewsList.setAdapter(new  FragmentCategoryNewsAdapter(getActivity(), R.layout.fragment_notice_list_row));
+		roomNewsList.setAdapter(new  FragmentRoomNewsAdapter(getActivity(), R.layout.fragment_notice_list_row));
+	
+
+		return view;
+	}
+	
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onViewCreated(view, savedInstanceState);
+		segmentRadioGroup.check(R.id.notice_radio_btn);
+		mainContentToggle(R.id.notice_radio_btn);	
+	}
+	
+	private void mainContentToggle(int id) {
+		
+		witherestNewsList.setVisibility(View.INVISIBLE);
+		categoryNewsList.setVisibility(View.INVISIBLE);
+		roomNewsList.setVisibility(View.INVISIBLE);
+		
+		if (id == R.id.notice_radio_btn){
+			witherestNewsList.setVisibility(View.VISIBLE);
+		}
+		if (id == R.id.categoty_radio_btn){
+			categoryNewsList.setVisibility(View.VISIBLE);
+		}
+		if (id == R.id.room_radio_btn){
+			roomNewsList.setVisibility(View.VISIBLE);
+		}
+		
+	}
+
+	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		if (group == segmentRadioGroup) {
+			mainContentToggle(checkedId);
+		}	
+	}
+
+
+	public class FragmentWitherestNoticeAdapter extends BaseAdapter{
+			Context  context ; 
+			int resId ;
+			LayoutInflater inflate;
+			public  FragmentWitherestNoticeAdapter (Activity act, int layoutRes){
+				this.context = act;
+				this.resId = layoutRes;
+				inflate = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			}
+			public int getCount() {
+				return 20;
+			}
+
+			public Object getItem(int position) {
+				return position;
+			}
+
+			public long getItemId(int position) {
+				return position;
+			}
+
+			public View getView(int position, View convertView, ViewGroup parent) {
+				if (convertView == null){
+					convertView = inflate.inflate(resId,parent, false);
+				}
+
+				return convertView;
+				
+			}
+	}
+	
+	public class FragmentCategoryNewsAdapter extends BaseAdapter{
+		Context  context ; 
+		int resId ;
+		LayoutInflater inflate;
+		public  FragmentCategoryNewsAdapter(Activity act, int layoutRes){
+			this.context = act;
+			this.resId = layoutRes;
+			inflate = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
+		public int getCount() {
+			return 20;
+		}
+
+		public Object getItem(int position) {
+			return position;
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			if (convertView == null){
+				convertView = inflate.inflate(resId,parent, false);
+			}
+
+			return convertView;
+			
+		}
+	}
+	
+	public class FragmentRoomNewsAdapter extends BaseAdapter{
+		Context  context ; 
+		int resId ;
+		LayoutInflater inflate;
+		public  FragmentRoomNewsAdapter(Activity act, int layoutRes){
+			this.context = act;
+			this.resId = layoutRes;
+			inflate = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
+		public int getCount() {
+			return 20;
+		}
+
+		public Object getItem(int position) {
+			return position;
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			if (convertView == null){
+				convertView = inflate.inflate(resId,parent, false);
+			}
+
+			return convertView;
+			
+		}
+	}
+
+
+	
+}

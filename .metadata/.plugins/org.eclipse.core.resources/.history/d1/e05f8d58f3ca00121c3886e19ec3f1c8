@@ -1,0 +1,144 @@
+package com.teamteam.witherest;
+
+import java.util.Random;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
+import android.view.Window;
+import android.widget.Toast;
+
+import com.teamteam.customComponent.WaitProgressDialog;
+import com.teamteam.witherest.common.AndroUtils;
+import com.teamteam.witherest.service.CategoryService;
+import com.teamteam.witherest.service.Service;
+import com.teamteam.witherest.service.ServiceManager;
+import com.teamteam.witherest.service.callback.CategoryServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.callback.object.CategoryRoomCountResponseObject;
+import com.teamteam.witherest.service.callback.object.CategoryRoomListResponseObject;
+import com.viewpagerindicator.PageIndicator;
+import com.viewpagerindicator.TitlePageIndicator;
+
+
+public class CheckRoomListActivity extends FragmentActivity implements OnPageChangeListener , CategoryServiceCallback {
+		
+	   public static int DEFALUT_PAGE= 1;
+	   public static int ROOMLIST_ORDER_NOT = 0;
+	   public static int ROOMLIST_ORDER_REGISTER_DATE = 1;
+	   public static int ROOMLIST_ORDER_PUPULATE = 2;
+	   public static int ROOMLIST_ORDER_ALL = 3;
+	  
+	   public CheckRoomViewPagerAdapter mAdapter;
+	   public CheckRoomListFragment[] checkRoomFragements  = new CheckRoomListFragment[2];
+	   public ViewPager mPager;
+	   public PageIndicator mIndicator;
+	   private WaitProgressDialog waitProgressDialog;
+	   public int reqRoomListType;
+	     
+	   public CategoryService categoryService;
+	   
+	   public CategoryRoomListResponseObject regRoomListResponse;
+	   public CategoryRoomListResponseObject popRoomListResponse;
+	   
+	   public int categoryId;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+	    requestWindowFeature(Window.FEATURE_NO_TITLE);
+	    setContentView(R.layout.activity_roomlist);
+	    initInstance();
+	    initView();
+	    getCheckRooms(reqRoomListType);
+       
+	}
+	
+	public void initInstance(){
+		 waitProgressDialog = new WaitProgressDialog(this, getResources().getString(R.string.wait_title),
+	    			getString(R.string.wait_message));   
+		categoryService = ServiceManager.getServiceManager().getCategoryService();
+		categoryService.setOnCategoryCallback(this);
+		
+		checkRoomFragements[0] = CheckRoomListFragment.newInstance(getResources().getString(R.string.populate),ROOMLIST_ORDER_PUPULATE,1);
+		checkRoomFragements[1] = CheckRoomListFragment.newInstance(getResources().getString(R.string.recent),ROOMLIST_ORDER_REGISTER_DATE,1);	
+		
+		reqRoomListType = ROOMLIST_ORDER_ALL;
+	    
+		Intent i = getIntent();
+        categoryId = i.getIntExtra("categoryId", DEFALUT_PAGE);
+	}
+	
+	public void initView(){
+
+	}
+	
+	public void getCheckRooms(int type){
+        if (!waitProgressDialog.isShowing()){
+        	waitProgressDialog.start();;
+        }
+	    categoryService.getRoomsByCategory(categoryId,ROOMLIST_ORDER_REGISTER_DATE );
+	}
+	
+	public void onPageScrollStateChanged(int state) {}
+	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+	public void onPageSelected(int position) {
+		  /*Toast.makeText(CheckRoomListActivity.this, "Changed to page " + position, Toast.LENGTH_SHORT).show();	*/
+	}
+
+	public void setCheckRoomList(){
+		mAdapter = new CheckRoomViewPagerAdapter(getSupportFragmentManager(), this, checkRoomFragements);
+	    Log.v("어댑터", "어댑터 생성");
+	    
+		if (regRoomListResponse !=null){
+		checkRoomFragements[0].setRoomList(regRoomListResponse);
+		}
+		if (popRoomListResponse !=null){
+		checkRoomFragements[1].setRoomList(popRoomListResponse);
+		}
+	    
+        mPager = (ViewPager)findViewById(R.id.pager);
+        mPager.setAdapter(mAdapter);
+        mIndicator = (TitlePageIndicator)findViewById(R.id.indicator);
+        mIndicator.setViewPager(mPager);
+        mIndicator.setOnPageChangeListener(this);
+	}
+	public void onCategoryServiceCallback(BaseResponseObject object) {		
+		if (object.resultCode == Service.RESULT_FAIL) {
+			AndroUtils.showToastMessage(this, object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);
+			return;
+		}
+		
+		switch(object.requestType){
+		case Service.REQUEST_TYPE_GET_ROOMS_BY_CATEGORY:
+			if (reqRoomListType == ROOMLIST_ORDER_ALL){
+				regRoomListResponse =  (CategoryRoomListResponseObject)object;
+				Log.v("등록순 리스트", " 받아오기 성공");	
+				reqRoomListType = ROOMLIST_ORDER_PUPULATE;
+				getCheckRooms(ROOMLIST_ORDER_PUPULATE);
+			}
+			else if (reqRoomListType == ROOMLIST_ORDER_REGISTER_DATE){
+				if (waitProgressDialog != null && waitProgressDialog.isShowing()){
+					WaitProgressDialog.stop(waitProgressDialog);
+				}
+				Log.v("등록순 리스트", " 가져오기  성공");
+				regRoomListResponse =  (CategoryRoomListResponseObject)object;
+
+			}
+			else if (reqRoomListType == ROOMLIST_ORDER_PUPULATE){
+				if (waitProgressDialog != null && waitProgressDialog.isShowing()){
+					WaitProgressDialog.stop(waitProgressDialog);
+				}
+				Log.v("인기도순 리스트", " 가져오기  성공");
+				popRoomListResponse =  (CategoryRoomListResponseObject)object;
+			}
+			
+			AndroUtils.showToastMessage(this, object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);
+		break;
+		}
+		setCheckRoomList();
+	}
+}

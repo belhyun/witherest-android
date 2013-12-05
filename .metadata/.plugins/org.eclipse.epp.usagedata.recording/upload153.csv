@@ -1,0 +1,251 @@
+what,kind,bundleId,bundleVersion,description,time
+started,bundle,org.eclipse.cdt.debug.core,7.0.0.201102110609,"org.eclipse.cdt.debug.core",1369660555109
+started,bundle,org.eclipse.cdt.debug.ui,7.0.0.201102110609,"org.eclipse.cdt.debug.ui",1369660555140
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1369660556265
+started,bundle,org.eclipse.cdt.dsf,2.1.1.201102110609,"org.eclipse.cdt.dsf",1369660556468
+started,bundle,org.eclipse.cdt.dsf.gdb,3.0.0.201102110609,"org.eclipse.cdt.dsf.gdb",1369660556484
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369660556500
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660569250
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660569281
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660569375
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660570953
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660572093
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660572125
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660572171
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660619156
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1369660624000
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369660634890
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1369660640250
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1369660642281
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369660651500
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1369660662203
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1369660664671
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369660680750
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369660702531
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369660704687
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660711875
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660716421
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369660716453
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369660720218
+activated,view,org.eclipse.ui.views,3.5.1.M20110202-0800,"org.eclipse.ui.views.ContentOutline",1369660730484
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369660741328
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369660742437
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1369660751781
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1369660758328
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1369660762171
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369660762765
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369660763703
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1369660766843
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1369660766937
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1369660769687
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660772000
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660772015
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660772093
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660775546
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369660785203
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1369660823531
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.copy",1369660835343
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.paste",1369660837468
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369660847671
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369660849796
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369660863625
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369660865000
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1369660870578
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1369660870609
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1369660872390
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.text.contentAssist.proposals",1369660889375
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.text.contentAssist.proposals",1369660895562
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.text.contentAssist.proposals",1369660897656
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.text.contentAssist.proposals",1369660908734
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369660911140
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369660912734
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1369660915171
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1369660915281
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1369660917390
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369660932078
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660959406
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369660960421
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1369660973906
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369660977203
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1369660978671
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1369660978750
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1369660981250
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1369661021656
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369661024906
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1369661032531
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1369661032609
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1369661034578
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369661085468
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369661085562
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369661085562
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369661202328
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1369661204171
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.text.contentAssist.proposals",1369661220265
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.text.contentAssist.proposals",1369661226203
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369661232234
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369661233953
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369661241937
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369661243390
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369661249500
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369661250500
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369661257890
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369661259062
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1369661263781
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1369661263875
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1369661266015
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369661280687
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369661321984
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369661322062
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369661322171
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369661339968
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1369661341406
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369661345234
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369661346562
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1369661349000
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1369661349093
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1369661351000
+error,log,,,"check_room_list_item.xml: Paint.setShadowLayer is not supported.",1369661365609
+activated,editor,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.editors.CommonXmlEditor",1369661446953
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.save",1369661450640
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1369661452468
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1369661452562
+executed,command,,,"com.android.ide.eclipse.adt.debug.launching.LaunchShortcut.run",1369661454781
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369661574562
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369661575937
+closed,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1369661576156
+stopped,bundle,org.eclipse.jst.j2ee.xdoclet.runtime,1.1.300.v201004280700,"org.eclipse.jst.j2ee.xdoclet.runtime",1369661576515
+stopped,bundle,org.eclipse.jst.j2ee.ejb.annotations.xdoclet,1.2.100.v201003112036,"org.eclipse.jst.j2ee.ejb.annotations.xdoclet",1369661576515
+stopped,bundle,org.eclipse.jst.server.generic.jboss,1.6.1.v200904151730,"org.eclipse.jst.server.generic.jboss",1369661576515
+stopped,bundle,org.eclipse.jst.server.generic.jonas,1.5.205.v200805140145,"org.eclipse.jst.server.generic.jonas",1369661576515
+stopped,bundle,org.eclipse.jst.server.generic.oc4j,1.5.206.v20090812,"org.eclipse.jst.server.generic.oc4j",1369661576515
+stopped,bundle,org.eclipse.jst.server.websphere.core,1.0.302.v20080620,"org.eclipse.jst.server.websphere.core",1369661576515
+stopped,bundle,org.eclipse.jst.server.generic.ui,1.0.505.v20100428,"org.eclipse.jst.server.generic.ui",1369661576515
+stopped,bundle,org.eclipse.jst.server.generic.core,1.0.606.v20100512,"org.eclipse.jst.server.generic.core",1369661576515
+stopped,bundle,org.eclipse.datatools.connectivity.oda.template.ui,3.2.1.v201004090942,"org.eclipse.datatools.connectivity.oda.template.ui",1369661576515
+stopped,bundle,org.eclipse.pde.api.tools.ui,1.0.201.v20100820_r361,"org.eclipse.pde.api.tools.ui",1369661576515
+stopped,bundle,org.eclipse.pde.ds.ui,1.0.100.v20100601,"org.eclipse.pde.ds.ui",1369661576515
+stopped,bundle,org.eclipse.pde.runtime,3.4.200.v20100601,"org.eclipse.pde.runtime",1369661576531
+stopped,bundle,org.eclipse.pde.ua.ui,1.0.100.v20100504,"org.eclipse.pde.ua.ui",1369661576531
+stopped,bundle,org.eclipse.pde.ui.templates,3.4.200.v20100601,"org.eclipse.pde.ui.templates",1369661576531
+stopped,bundle,org.eclipse.pde.ui,3.6.1.v20110210_r362,"org.eclipse.pde.ui",1369661576531
+stopped,bundle,org.eclipse.mylyn.ide.ant,3.7.1.v20120425-0100,"org.eclipse.mylyn.ide.ant",1369661576531
+stopped,bundle,org.eclipse.ant.ui,3.5.0.v20100427,"org.eclipse.ant.ui",1369661576562
+stopped,bundle,org.eclipse.ant.launching,1.0.1.v20101020_r362,"org.eclipse.ant.launching",1369661576562
+stopped,bundle,org.eclipse.compare.win32,1.0.101.R36x_v20101103-0618,"org.eclipse.compare.win32",1369661576562
+stopped,bundle,org.eclipse.equinox.p2.ui.sdk,1.0.100.v20100513,"org.eclipse.equinox.p2.ui.sdk",1369661576562
+stopped,bundle,org.eclipse.jst.server.tomcat.ui,1.1.200.v20100418,"org.eclipse.jst.server.tomcat.ui",1369661576562
+stopped,bundle,org.eclipse.jst.server.ui,1.1.102.v20110406,"org.eclipse.jst.server.ui",1369661576562
+stopped,bundle,org.eclipse.mylyn.java.tasks,3.7.1.v20120425-0100,"org.eclipse.mylyn.java.tasks",1369661576562
+stopped,bundle,org.eclipse.mylyn.java.ui,3.7.1.v20120425-0100,"org.eclipse.mylyn.java.ui",1369661576562
+stopped,bundle,com.android.ide.eclipse.ndk,21.1.0.v201302060044-569685,"com.android.ide.eclipse.ndk",1369661576562
+stopped,bundle,overlay.com.android.ide.eclipse.adt.overlay,21.1.0.v201302060044-569685,"overlay.com.android.ide.eclipse.adt.overlay",1369661576562
+stopped,bundle,com.android.ide.eclipse.adt,21.1.0.v201302060044-569685,"com.android.ide.eclipse.adt",1369661576562
+stopped,bundle,org.eclipse.jdt.junit,3.6.1.r361_v20100825-0800,"org.eclipse.jdt.junit",1369661576562
+stopped,bundle,org.eclipse.jpt.eclipselink.ui,1.3.0.v201004280001,"org.eclipse.jpt.eclipselink.ui",1369661576562
+stopped,bundle,org.eclipse.jpt.eclipselink.core,1.3.2.v201102072310,"org.eclipse.jpt.eclipselink.core",1369661576578
+stopped,bundle,org.eclipse.jpt.jaxb.ui,1.0.1.v201006300000,"org.eclipse.jpt.jaxb.ui",1369661576578
+stopped,bundle,org.eclipse.jpt.ui,2.3.2.v201008252310,"org.eclipse.jpt.ui",1369661576578
+stopped,bundle,org.eclipse.jpt.core,2.3.3.v201102172310,"org.eclipse.jpt.core",1369661576578
+stopped,bundle,org.eclipse.jpt.db,1.2.202.v201010192330,"org.eclipse.jpt.db",1369661576578
+stopped,bundle,org.eclipse.datatools.enablement.jdt.classpath,1.0.1.v201004070709,"org.eclipse.datatools.enablement.jdt.classpath",1369661576578
+stopped,bundle,org.eclipse.jdt.apt.ui,3.3.300.v20100513-0845,"org.eclipse.jdt.apt.ui",1369661577328
+activated,perspective,org.eclipse.jdt.ui,,"org.eclipse.jdt.ui.JavaPerspective",1369717218593
+started,bundle,org.eclipse.osgi,3.6.2.R36x_v20110210,"org.eclipse.osgi",1369717218593
+started,bundle,org.eclipse.equinox.simpleconfigurator,1.0.200.v20100503,"org.eclipse.equinox.simpleconfigurator",1369717218593
+started,bundle,com.ibm.icu,4.2.1.v20100412,"com.ibm.icu",1369717218593
+started,bundle,org.eclipse.compare,3.5.101.R36x_v20100929-0800,"org.eclipse.compare",1369717218609
+started,bundle,org.eclipse.compare.core,3.5.101.R36x_v20100929-0800,"org.eclipse.compare.core",1369717218609
+started,bundle,org.eclipse.core.contenttype,3.4.100.v20100505-1235,"org.eclipse.core.contenttype",1369717218609
+started,bundle,org.eclipse.core.databinding.observable,1.3.0.I20100601-0800,"org.eclipse.core.databinding.observable",1369717218609
+started,bundle,org.eclipse.core.expressions,3.4.200.v20100505,"org.eclipse.core.expressions",1369717218609
+started,bundle,org.eclipse.core.filebuffers,3.5.100.v20100520-0800,"org.eclipse.core.filebuffers",1369717218609
+started,bundle,org.eclipse.core.filesystem,1.3.1.R36x_v20100727-0745,"org.eclipse.core.filesystem",1369717218625
+started,bundle,org.eclipse.core.jobs,3.5.1.R36x_v20100824,"org.eclipse.core.jobs",1369717218625
+started,bundle,org.eclipse.core.net,1.2.100.I20100511-0800,"org.eclipse.core.net",1369717218625
+started,bundle,org.eclipse.core.resources,3.6.1.R36x_v20110131-1630,"org.eclipse.core.resources",1369717218625
+started,bundle,org.eclipse.core.runtime,3.6.0.v20100505,"org.eclipse.core.runtime",1369717218625
+started,bundle,org.eclipse.core.runtime.compatibility,3.2.100.v20100505,"org.eclipse.core.runtime.compatibility",1369717218625
+started,bundle,org.eclipse.core.runtime.compatibility.auth,3.2.200.v20100517,"org.eclipse.core.runtime.compatibility.auth",1369717218625
+started,bundle,org.eclipse.debug.core,3.6.0.v20100519,"org.eclipse.debug.core",1369717218625
+started,bundle,org.eclipse.debug.ui,3.6.3.v20101201_r362,"org.eclipse.debug.ui",1369717218671
+started,bundle,org.eclipse.emf.common,2.6.0.v20100914-1218,"org.eclipse.emf.common",1369717218687
+started,bundle,org.eclipse.emf.ecore,2.6.1.v20100914-1218,"org.eclipse.emf.ecore",1369717218781
+started,bundle,org.eclipse.epp.usagedata.gathering,1.3.1.R201102081640,"org.eclipse.epp.usagedata.gathering",1369717218796
+started,bundle,org.eclipse.epp.usagedata.recording,1.3.1.R201102081640,"org.eclipse.epp.usagedata.recording",1369717218796
+started,bundle,org.eclipse.equinox.app,1.3.1.R36x_v20100803,"org.eclipse.equinox.app",1369717218796
+started,bundle,org.eclipse.equinox.common,3.6.0.v20100503,"org.eclipse.equinox.common",1369717218796
+started,bundle,org.eclipse.equinox.ds,1.2.1.R36x_v20100803,"org.eclipse.equinox.ds",1369717218796
+started,bundle,org.eclipse.equinox.event,1.2.0.v20100503,"org.eclipse.equinox.event",1369717218796
+started,bundle,org.eclipse.equinox.p2.core,2.0.3.R36x_v20110111,"org.eclipse.equinox.p2.core",1369717218796
+started,bundle,org.eclipse.equinox.p2.directorywatcher,1.0.203.R36x_v20101220,"org.eclipse.equinox.p2.directorywatcher",1369717218796
+started,bundle,org.eclipse.equinox.p2.engine,2.0.1.R36x_v20110201,"org.eclipse.equinox.p2.engine",1369717218796
+started,bundle,org.eclipse.equinox.p2.metadata,2.0.1.R36x_v20101202,"org.eclipse.equinox.p2.metadata",1369717218796
+started,bundle,org.eclipse.equinox.p2.metadata.repository,1.1.0.v20100513,"org.eclipse.equinox.p2.metadata.repository",1369717218796
+started,bundle,org.eclipse.equinox.p2.operations,2.0.0.v20100510,"org.eclipse.equinox.p2.operations",1369717218796
+started,bundle,org.eclipse.equinox.p2.reconciler.dropins,1.1.2.R36x_v20110114,"org.eclipse.equinox.p2.reconciler.dropins",1369717218812
+started,bundle,org.eclipse.equinox.p2.repository,2.0.2.R36x_v20110111-1500,"org.eclipse.equinox.p2.repository",1369717218812
+started,bundle,org.eclipse.equinox.p2.ui.sdk.scheduler,1.0.0.v20100507-1815,"org.eclipse.equinox.p2.ui.sdk.scheduler",1369717218812
+started,bundle,org.eclipse.equinox.p2.updatechecker,1.1.101.R36x_v20100823,"org.eclipse.equinox.p2.updatechecker",1369717218812
+started,bundle,org.eclipse.equinox.preferences,3.3.0.v20100503,"org.eclipse.equinox.preferences",1369717218812
+started,bundle,org.eclipse.equinox.registry,3.5.0.v20100503,"org.eclipse.equinox.registry",1369717218812
+started,bundle,org.eclipse.equinox.security,1.0.200.v20100503,"org.eclipse.equinox.security",1369717218921
+started,bundle,org.eclipse.equinox.util,1.0.200.v20100503,"org.eclipse.equinox.util",1369717218937
+started,bundle,org.eclipse.help,3.5.0.v20100524,"org.eclipse.help",1369717218953
+started,bundle,org.eclipse.jdt.core,3.6.2.v_A76_R36x,"org.eclipse.jdt.core",1369717218953
+started,bundle,org.eclipse.jdt.core.manipulation,1.3.0.v20100520-0800,"org.eclipse.jdt.core.manipulation",1369717218953
+started,bundle,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui",1369717219031
+started,bundle,org.eclipse.jface,3.6.2.M20110210-1200,"org.eclipse.jface",1369717219031
+started,bundle,org.eclipse.jsch.core,1.1.200.I20100505-1245,"org.eclipse.jsch.core",1369717219031
+started,bundle,org.eclipse.jst.common.project.facet.core,1.4.102.v201008182136,"org.eclipse.jst.common.project.facet.core",1369717219046
+started,bundle,org.eclipse.jst.ws.jaxws.utils,1.0.0.v201004171919,"org.eclipse.jst.ws.jaxws.utils",1369717219046
+started,bundle,org.eclipse.ltk.core.refactoring,3.5.101.r362_v20101117-0800,"org.eclipse.ltk.core.refactoring",1369717219046
+started,bundle,org.eclipse.ltk.ui.refactoring,3.5.0.v20100526-0800,"org.eclipse.ltk.ui.refactoring",1369717219046
+started,bundle,org.eclipse.pde.launching,3.6.0.v20100601,"org.eclipse.pde.launching",1369717219046
+started,bundle,org.eclipse.pde.ui,3.6.1.v20110210_r362,"org.eclipse.pde.ui",1369717219093
+started,bundle,org.eclipse.search,3.6.0.v20100520-0800,"org.eclipse.search",1369717219093
+started,bundle,org.eclipse.team.core,3.5.101.R36x_v20110203-1036,"org.eclipse.team.core",1369717219109
+started,bundle,org.eclipse.team.cvs.core,3.3.301.R36x_v20110119-0815,"org.eclipse.team.cvs.core",1369717219109
+started,bundle,org.eclipse.team.ui,3.5.102.R36x_v20110203-1036,"org.eclipse.team.ui",1369717219140
+started,bundle,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui",1369717219156
+started,bundle,org.eclipse.ui.console,3.5.0.v20100526,"org.eclipse.ui.console",1369717219156
+started,bundle,org.eclipse.ui.editors,3.6.1.r361_v20100825-0800,"org.eclipse.ui.editors",1369717219156
+started,bundle,org.eclipse.ui.forms,3.5.2.r36_v20100702,"org.eclipse.ui.forms",1369717219156
+started,bundle,org.eclipse.ui.ide,3.6.2.M20101201-0800,"org.eclipse.ui.ide",1369717219187
+started,bundle,org.eclipse.ui.net,1.2.100.I20100505-1245,"org.eclipse.ui.net",1369717219187
+started,bundle,org.eclipse.ui.views,3.5.1.M20110202-0800,"org.eclipse.ui.views",1369717219187
+started,bundle,org.eclipse.ui.views.log,1.0.100.v20110210_r362,"org.eclipse.ui.views.log",1369717219187
+started,bundle,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"org.eclipse.ui.workbench",1369717219187
+started,bundle,org.eclipse.ui.workbench.texteditor,3.6.1.r361_v20100714-0800,"org.eclipse.ui.workbench.texteditor",1369717219187
+started,bundle,org.eclipse.update.scheduler,3.2.300.v20100512,"org.eclipse.update.scheduler",1369717219187
+started,bundle,org.eclipse.wst.common.emf,1.2.3.v201012100400,"org.eclipse.wst.common.emf",1369717219187
+started,bundle,org.eclipse.wst.common.project.facet.core,1.4.102.v201008170019,"org.eclipse.wst.common.project.facet.core",1369717219187
+started,bundle,org.eclipse.wst.common.uriresolver,1.1.401.v201004280700,"org.eclipse.wst.common.uriresolver",1369717219187
+started,bundle,org.eclipse.wst.dtd.ui,1.0.500.v201004290328,"org.eclipse.wst.dtd.ui",1369717219187
+started,bundle,org.eclipse.wst.xsl.core,1.1.0.v201004290328,"org.eclipse.wst.xsl.core",1369717219187
+started,bundle,org.eclipse.wst.xsl.exslt.core,1.0.0.v201005240426,"org.eclipse.wst.xsl.exslt.core",1369717219203
+started,bundle,org.eclipse.wst.xsl.ui,1.1.1.v201009091745,"org.eclipse.wst.xsl.ui",1369717219203
+started,bundle,org.eclipse.jst.jsp.core,1.2.308.v201109202150,"org.eclipse.jst.jsp.core",1369717219203
+started,bundle,org.eclipse.jst.jsp.ui,1.1.505.v201110211728,"org.eclipse.jst.jsp.ui",1369717219203
+started,bundle,org.eclipse.wst.common.frameworks,1.2.1.v201107271600,"org.eclipse.wst.common.frameworks",1369717219203
+started,bundle,org.eclipse.wst.sse.core,1.1.506.v201110201853,"org.eclipse.wst.sse.core",1369717219203
+started,bundle,org.eclipse.wst.sse.ui,1.2.5.v201108191505,"org.eclipse.wst.sse.ui",1369717219203
+started,bundle,org.eclipse.wst.validation,1.2.204.v201109220700,"org.eclipse.wst.validation",1369717219203
+started,bundle,org.eclipse.wst.web,1.1.403.v201103081400,"org.eclipse.wst.web",1369717219203
+started,bundle,org.eclipse.wst.xml.core,1.1.505.v201109271810,"org.eclipse.wst.xml.core",1369717219218
+started,bundle,org.eclipse.wst.xml.ui,1.1.105.v201106142156,"org.eclipse.wst.xml.ui",1369717219234
+started,bundle,org.eclipse.jst.ws.jaxrs.core,1.0.202.v201108180247,"org.eclipse.jst.ws.jaxrs.core",1369717219234
+started,bundle,org.eclipse.mylyn.bugzilla.core,3.7.1.v20120425-0100,"org.eclipse.mylyn.bugzilla.core",1369717219250
+started,bundle,org.eclipse.mylyn.bugzilla.ui,3.7.1.v20120425-0100,"org.eclipse.mylyn.bugzilla.ui",1369717219250
+started,bundle,org.eclipse.mylyn.commons.core,3.7.1.v20120425-0100,"org.eclipse.mylyn.commons.core",1369717219265
+started,bundle,org.eclipse.mylyn.commons.net,3.7.1.v20120425-0100,"org.eclipse.mylyn.commons.net",1369717219265
+started,bundle,org.eclipse.mylyn.commons.notifications.core,0.9.1.v20120425-0100,"org.eclipse.mylyn.commons.notifications.core",1369717219265
+started,bundle,org.eclipse.mylyn.commons.notifications.feed,0.9.1.v20120425-0100,"org.eclipse.mylyn.commons.notifications.feed",1369717219281
+started,bundle,org.eclipse.mylyn.commons.ui,3.7.1.v20120425-0100,"org.eclipse.mylyn.commons.ui",1369717219281
+started,bundle,org.eclipse.mylyn.commons.workbench,3.7.1.v20120425-0100,"org.eclipse.mylyn.commons.workbench",1369717219281
+started,bundle,org.eclipse.mylyn.context.core,3.7.1.v20120425-0100,"org.eclipse.mylyn.context.core",1369717219281
+started,bundle,org.eclipse.mylyn.context.tasks.ui,3.7.1.v20120425-0100,"org.eclipse.mylyn.context.tasks.ui",1369717219281
+started,bundle,org.eclipse.mylyn.monitor.ui,3.7.1.v20120425-0100,"org.eclipse.mylyn.monitor.ui",1369717219281
+started,bundle,org.eclipse.mylyn.tasks.ui,3.7.1.v20120425-0100,"org.eclipse.mylyn.tasks.ui",1369717219328
+started,bundle,com.collabnet.subversion.merge,3.0.13,"com.collabnet.subversion.merge",1369717219328
+started,bundle,org.tigris.subversion.clientadapter,1.8.3,"org.tigris.subversion.clientadapter",1369717219328
+started,bundle,org.tigris.subversion.subclipse.core,1.8.16,"org.tigris.subversion.subclipse.core",1369717219343

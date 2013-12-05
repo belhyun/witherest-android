@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e9e9e9"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:background="#e9e9e9"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/roomwith_bg1_top"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="6dp"
+                android:padding="2dip" >
+
+                <RelativeLayout
+                    android:id="@+id/notice_contaniner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="2dp"
+                    android:clickable="true"
+                    android:padding="2dip" >
+
+                    <LinearLayout
+                        android:id="@+id/notice_row_image_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center" >
+
+                        <ImageView
+                            android:id="@+id/notice_row_image"
+                            android:layout_width="55dip"
+                            android:layout_height="55dip"
+                            android:layout_gravity="clip_vertical"
+                            android:gravity="center"
+                            android:src="@drawable/notice_profileimg_bg" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/notice_textview1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@id/notice_row_image_container"
+                        android:layout_toRightOf="@id/notice_row_image_container"
+                        android:maxLines="1"
+                        android:text="함께 영어 단어 외워요"
+                        android:textColor="#333333"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                    <TextView
+                        android:id="@+id/check_textview2"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/notice_textview1"
+                        android:layout_marginTop="1dip"
+                        android:layout_toRightOf="@id/notice_row_image_container"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="하루에 해커스 토익 보카책  2장씩 외우기"
+                        android:textColor="#333333"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/check_textview2"
+                        android:layout_marginTop="1dip"
+                        android:layout_toRightOf="@id/notice_row_image_container"
+                        android:orientation="horizontal" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="2dp"
+                            android:gravity="center"
+                            android:src="@drawable/healthroom_date_icon_bg" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="2dp"
+                            android:src="@drawable/healthroom_dot_bg" />
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="2dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="2012/1/4~2012/1/30 (수,목,금)"
+                            android:textColor="#999999"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/roomwith_bg1_bottom_left"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical"
+                android:padding="1dip" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="24/25"
+                    android:textColor="#444444"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="People"
+                    android:textColor="#999999"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/roomwith_bg1_bottom_right"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical"
+                android:padding="1dip" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="60%"
+                    android:textColor="#444444"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="People"
+                    android:textColor="#999999"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:orientation="horizontal"
+            android:padding="0dp" >
+
+            <ImageButton
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+
+                android:background="@drawable/roomwith_left_arrow_btn_on_off"
+                android:src="@drawable/roomwith_bg2_left_arrow_bg" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="2012-1-17"
+                android:textColor="#999999"
+                android:textSize="25sp"
+                android:textStyle="bold" 
+                android:background="@drawable/roomwith_bg2_center"/>
+
+            <ImageButton
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/roomwith_right_arrow_btn_on_off"
+                android:src="@drawable/roomwith_bg2_right_arrow_bg" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

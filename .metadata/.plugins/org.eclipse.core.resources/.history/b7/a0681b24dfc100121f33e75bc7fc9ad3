@@ -1,0 +1,172 @@
+package com.teamteam.witherest.service;
+
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+import android.os.Message;
+import android.util.Log;
+
+import com.teamteam.witherest.Fragment_Top_Menu;
+import com.teamteam.witherest.R;
+
+import com.teamteam.witherest.model.Category;
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.service.callback.UserServiceCallback;
+import com.teamteam.witherest.vo.BaseResponseObject;
+import com.teamteam.witherest.vo.IdDuplicateResponseObject;
+import com.teamteam.witherest.vo.LoginResponseObject;
+
+public class UserService extends Service{
+	private static final String USER_ID = "userId";
+	private static final String USER_PW ="userPw";
+	private static final String USER_GCM_ID ="gcmId";
+	private static final String USER_CATEGORY = "interestCategory";
+	private static final String USER_NICKNAME = "userName";
+	
+	private ServiceHandler  handler;
+	private UserServiceCallback callback;
+	
+	public UserService(HttpClient httpClient, ServiceHandler  handler) {
+		super(httpClient);
+		this.handler = handler;
+	}
+
+	@Override
+	public void finishedBackgroundProcess(String responseText) {
+		if (callback ==null) return;
+		BaseResponseObject obj = pasreJson(responseText);
+		
+		Message message = Message.obtain();
+		message.obj = obj ;
+		handler.sendMessage(message);
+	}
+	
+	private BaseResponseObject pasreJson(String responseText) {
+		JSONObject json = null; 
+		BaseResponseObject response = null;
+		ObjectMapper mapper = new ObjectMapper();
+
+		if (responseText == null){
+			Log.v("아이디 중복 결과","널입니다");
+			return new BaseResponseObject(1000,1,((Fragment_Top_Menu)callback).getActivity().getResources().getString(R.string.server_error)/*"서버에 문제가 발생했습니다"*/);
+		}
+		try {
+			json = new JSONObject(responseText);
+			int requestType = json.getInt("requestType");
+			int  resultCode = json.getInt("resultCode");
+			String  resultMsg = json.getString("resultMsg");
+			
+			switch (requestType){
+			case REQUEST_LOGIN:
+				//Jackson Mapper 를 이용한 Json 데이타 바인딩 코드 
+				//이것을 사용하는 것이 수월함 
+				try {
+					response = mapper.readValue(responseText, LoginResponseObject.class);
+				} catch (JsonParseException e) {
+					// TODO Auto-generated catch block
+					Log.v("Jacson", e.getMessage());
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					// TODO Auto-generated catch block
+					Log.v("Jacson", e.getMessage());
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					Log.v("Jacson", e.getMessage());
+					e.printStackTrace();
+				}
+				
+				// 직접 파싱해서 바인딩하는 코드
+				/*String token = json.getString("token");
+				response = new LoginResponseObject(requestType, resultCode, resultMsg, token);*/
+				break;
+			case REQUEST_DUPL_CHECK:
+				boolean isDuplication = json.getBoolean("isDuplication");
+				response = new IdDuplicateResponseObject(requestType, resultCode, resultMsg, isDuplication);
+				break;
+			case REQUEST_LOGOUT:
+				response = new BaseResponseObject(requestType, resultCode, resultMsg);
+			case REQUEST_JOIN:
+				response = new BaseResponseObject(requestType, resultCode, resultMsg);
+			break;	
+			}
+		} catch (JSONException e) {
+		}
+		
+		return response;
+	}
+
+	public void setOnUserCallback(UserServiceCallback callback){
+		this.callback = callback;
+		handler.setUserServiceCallback(callback);
+	}
+	
+	public void login(String id, String pw, String gcmId){
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put(USER_ID,id);
+		paramMap.put(USER_PW, pw);
+		paramMap.put(USER_GCM_ID, gcmId);
+		try {
+			sendPost(LOGIN_URL, paramMap);
+		} catch (InterruptedException e) {
+		}
+	}
+	
+	public void logout(){
+		sendDelete(LOGOUT_URL,null);
+	}
+	
+	public void checkIdDuplicated(String id){
+		String param = null;
+		try {
+			param = USER_ID+"="+URLEncoder.encode(id,"utf-8");
+		} catch (UnsupportedEncodingException e) {
+		}
+		String url = DUPL_CHECK_URL + "?" + param;
+		sendGet(url);
+	}
+	
+	public void join(String id, String nickName, String pw, Category myCategory){
+		 Map<String, String> paramMap = new HashMap<String, String>();
+		try {
+		paramMap.put(USER_ID,URLEncoder.encode(id,"utf-8"));
+		paramMap.put(USER_PW, pw);
+		paramMap.put(USER_NICKNAME, URLEncoder.encode(nickName,"utf-8"));
+		paramMap.put(USER_CATEGORY, String.valueOf(myCategory.id));
+		
+			sendPost(JOIN_URL, paramMap);
+		} catch (InterruptedException e) {
+		} catch (UnsupportedEncodingException e) {
+	
+		}
+	}
+	
+	public void withDraw(){
+		
+	}
+
+	@Override
+	public void addHeaderSessionKey(HttpRequestBase request) {
+	
+		String sessionKey = Session.getInstance().sessionKey;
+		if (sessionKey != null){
+			request.addHeader(TOKEN, sessionKey);
+		}
+	}
+
+	
+
+}

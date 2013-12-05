@@ -1,0 +1,129 @@
+package com.teamteam.witherest;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
+public class Fragment_Bottom_Menu extends Fragment implements OnClickListener {
+
+	private Activity activity;
+
+	public static Fragment fragment_notice = new Fragment_Notice();
+	public static Fragment fragment_myCheck = new Fragment_MyCheck();
+	public static Fragment fragment_checkRoom = new Fragment_CheckRoom();
+
+	private ImageView notice_Btn;
+	private ImageView myCheck_Btn;
+	private ImageView checkRoom_Btn;
+	
+	private ImageView currentSelectedButton; 
+
+	/* Fragment Life Cycle */
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		this.activity = activity;
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		View bottomMenuView = inflater.inflate(R.layout.fragment_bottom_menu,
+				null);
+
+		notice_Btn = (ImageView) bottomMenuView
+				.findViewById(R.id.bottommenu_notice_btn);
+		myCheck_Btn = (ImageView) bottomMenuView
+				.findViewById(R.id.bottommenu_mycheck_btn);
+		checkRoom_Btn = (ImageView) bottomMenuView
+				.findViewById(R.id.bottommenu_checkroom_btn);
+
+		notice_Btn.setOnClickListener(this);
+		myCheck_Btn.setOnClickListener(this);
+		checkRoom_Btn.setOnClickListener(this);
+		currentSelectedButton = notice_Btn;
+
+		return bottomMenuView;
+	}
+
+	/* /Fragment Life Cycle */
+
+	/* Change Fragment */
+
+	protected void changeFragment(Fragment chageFragment) {
+
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		ft.replace(android.R.id.content, chageFragment);
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		ft.commit();
+	}
+
+	/* /Change Fragment */
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		changeButtonState(notice_Btn.getId());
+		changeFragment(fragment_notice);
+	}
+
+	public void onClick(View v) {
+		if (currentSelectedButton == (ImageView)v) return;
+		switch (v.getId()) {
+		case R.id.bottommenu_notice_btn: {
+			currentSelectedButton = (ImageView)v;
+			changeButtonState(v.getId());
+			changeFragment(fragment_notice);
+			break;
+		}
+		case R.id.bottommenu_mycheck_btn: {
+			currentSelectedButton = (ImageView)v;
+			changeButtonState(v.getId());
+			changeFragment(fragment_myCheck);
+			break;
+		}
+		case R.id.bottommenu_checkroom_btn: {
+			currentSelectedButton = (ImageView)v;
+			changeButtonState(v.getId());
+			changeFragment(fragment_checkRoom);
+			break;
+		}
+		}
+	}
+
+	private void changeButtonState(int id) {
+		notice_Btn.setImageResource(R.drawable.main_notice_btn_off);
+		myCheck_Btn.setImageResource(R.drawable.main_mycheck_btn_off);
+		checkRoom_Btn.setImageResource(R.drawable.main_checkroom_btn_off);
+		
+		switch (id) {
+		case R.id.bottommenu_notice_btn: {
+			notice_Btn.setImageResource(R.drawable.main_notice_btn_on);
+			break;
+		}
+		case R.id.bottommenu_mycheck_btn: {
+			myCheck_Btn.setImageResource(R.drawable.main_mycheck_btn_on);
+			break;
+		}
+		case R.id.bottommenu_checkroom_btn: {
+			checkRoom_Btn.setImageResource(R.drawable.main_checkroom_btn_on);
+			break;
+		}
+		}
+		
+	}
+}

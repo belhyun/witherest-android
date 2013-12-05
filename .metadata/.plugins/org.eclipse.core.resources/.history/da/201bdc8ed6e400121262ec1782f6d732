@@ -1,0 +1,457 @@
+package com.teamteam.witherest.alarm;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.teamteam.witherest.AlarmTimeReceiver;
+import com.teamteam.witherest.common.CommonUtils;
+import com.teamteam.witherest.model.Session;
+
+public class WitherestAlarms {
+
+	public static class Alarm {
+		public int _id;
+		public String userId;
+		public int roomId;
+		public String roomName;
+		public String roomPurpse;
+		public String alarmTime;
+		public int alarmCode;
+		public int alarmEnabled; // 방자체의 방 시간 알림 설정 1이면 활성, 0이면 비활성
+		public int userRoomTimeOption; // 유저 자체의 방 시간 알림 설정 1: 알림 받음 0 : 알림 받지
+										// 않음
+
+		public Alarm() {
+		}
+
+		public Alarm(int id, String userId, int roomId, String roomName,
+				String roomPurpse, String alarmTime, int alarmCode,
+				int alarmEnabled, int userRoomTimeOption) {
+			this.userId = userId;
+			this.roomId = roomId;
+			this.roomName = roomName;
+			this.roomPurpse = roomPurpse;
+			this.alarmTime = alarmTime;
+			this.alarmCode = alarmCode;
+			this.alarmEnabled = alarmEnabled;    // 0: 방 알림을 받습니다, 1: 방알림을 받지 않습니다.
+			this.userRoomTimeOption = userRoomTimeOption;
+		}
+	}
+
+	/* 알람을 해제시 디비의 정보 제거를 판단하기 위한 enum */
+	public static enum AlarmCancelAction {
+		CANCEL_AFTER_NOT_DELETE, // 알람을 취소하고 해당 알람을 디비에서 제거하지 않음
+		CANCEL_AFTER_DELETE, // 알람을 취소한 후 해당 알람을 디비에서도 제거함
+	}
+
+	public static enum AlarmRegisterAction {
+		INSERT_AFTER_ALARM_NOT_START, // 디비에 등록하나, 알람을 시작하지 않음
+		INSERT_AFTER_ALARM_START
+		// 디비에 등록후 ,알람 시작
+	}
+
+	private String userId;
+	private String password;
+
+	private Context context;
+	private AlarmDBHelper alarmDBHelper;
+	private SQLiteDatabase readDatabase;
+	private SQLiteDatabase writeDatabase;
+
+	private AlarmManager alarmManager;
+	public static long SECOND_FOR_DAY = 24 * 60 * 60;
+
+	public static final String INTENT_ALARM_KEY_USER_ID = "userId";
+	public static final String INTENT_ALARM_KEY_PASSWORD = "password";
+	public static final String INTENT_ALARM_KEY_ROOM_ID = "roomId";
+	public static final String INTENT_ALARM_KEY_ROOM_NAME = "roomName";
+	public static final String INTENT_ALARM_KEY_ROOM_PURPOSE = "roomPurpose";
+	public static final String INTENT_ALARM_KEY_TIME = "alarmTime";
+
+
+	// 아이디에 구분없이 등록된 모든 알람에 대한 컨트롤을 위한 생성자
+	public WitherestAlarms(Context context, String notUsedFlag){
+		this.context = context;
+		alarmDBHelper = new AlarmDBHelper(context);
+		readDatabase = alarmDBHelper.getReadableDatabase();
+		writeDatabase = alarmDBHelper.getWritableDatabase();
+
+		alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+	}
+
+	public WitherestAlarms(Context context) {
+		this(context, Session.getInstance().user.id,
+				Session.getInstance().user.password);
+	}
+	
+	public WitherestAlarms(Context context, String userId, String password) {
+		this.context = context;
+		this.userId = userId;
+		this.password = password;
+
+		alarmDBHelper = new AlarmDBHelper(context);
+		readDatabase = alarmDBHelper.getReadableDatabase();
+		writeDatabase = alarmDBHelper.getWritableDatabase();
+
+		alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+	}
+
+	/*
+	 * 앱에서 사용자가 방 시간 알림 설정을 변경하였을 때 호출되는 메서드로, 전달된 매개 인자 값을 판단하여, 해당 사용자의 알람 전체를
+	 * 취소하고나 , 시작한다.
+	 */
+	public void userOptionChanged(boolean userRoomTimeOption1) {
+		int userRoomTimeOption  = userRoomTimeOption1 ? 1 : 0;
+		Cursor cursor = readDatabase.rawQuery("select * from "
+				+ AlarmDBHelper.TABLE_NAME + " WHERE user_id = '" + userId
+				+ "';", null);
+		
+		while(cursor.moveToNext()){
+			Alarm alarm = getAlarmFromCursor(cursor);
+			alarm.userRoomTimeOption =userRoomTimeOption;
+			
+			if (alarm.userRoomTimeOption == 1){   
+				if (alarm.alarmEnabled == 0){
+					updateAlarmToDB(alarm);
+					setRepeateAlarm(alarm);
+					
+				}
+			}else if (alarm.userRoomTimeOption == 0){
+				if (alarm.alarmEnabled == 0){
+					updateAlarmToDB(alarm);
+					cancelRepeatAlarm(alarm);
+				}
+			}
+		}
+	}
+  
+	/*사용자 구분없이 등록된 모든 알람에 대해서 초기화 작업을 한다.
+	 * 이 메서드는 AlarmInitReceiver 에서 주로 호출된다.
+	 */
+	public void intializeAllRegisteredAlarm() {
+		Cursor cursor = readDatabase.rawQuery("select * from "
+				+ AlarmDBHelper.TABLE_NAME + "';", null);
+		if (cursor.getCount() <= 0) {
+			Toast.makeText(context, "등록된 알람이 없습니다", Toast.LENGTH_LONG).show();
+			cursor.close();
+			return;
+		}
+		
+		while (cursor.moveToNext()) {
+			Alarm alarm = getAlarmFromCursor(cursor);
+			if (alarm.alarmEnabled == 0 && alarm.userRoomTimeOption == 1)
+				setRepeateAlarm(alarm);
+		}
+		cursor.close();
+		
+	}
+	
+	/*
+	 * 데이타 베이스에 저장된  사용자별 알람을 모두 시작한다 
+	 */
+	public void registerAllAlarm() {
+		Cursor cursor = readDatabase.rawQuery("select * from "
+				+ AlarmDBHelper.TABLE_NAME + " WHERE user_id = '" + userId
+				+ "';", null);
+		if (cursor.getCount() <= 0) {
+			Toast.makeText(context, "등록된 알람이 없습니다", Toast.LENGTH_LONG).show();
+			cursor.close();
+			return;
+		}
+
+		while (cursor.moveToNext()) {
+			Alarm alarm = getAlarmFromCursor(cursor);
+			if (alarm.alarmEnabled == 0 && alarm.userRoomTimeOption == 1)
+				setRepeateAlarm(alarm);
+		}
+		cursor.close();
+	}
+
+	/*
+	 * 데이타베이스에 저장된 알람을 모두 취소 일괄 취소 및 일괄 삭제는 해당 아이디의 알람을 대상으로 한다.
+	 */
+	public void unregisterAllAlarm(AlarmCancelAction action) {
+		Cursor cursor = readDatabase.rawQuery("select * from "
+				+ AlarmDBHelper.TABLE_NAME + " WHERE user_id = '" + userId
+				+ "';", null);
+		if (cursor.getCount() <= 0) {
+			cursor.close();
+			return;
+		}
+
+		while (cursor.moveToNext()) {
+			Alarm alarm = getAlarmFromCursor(cursor);
+			if (alarm.alarmEnabled == 0 && alarm.userRoomTimeOption == 1)
+				cancelRepeatAlarm(alarm);
+		}
+		cursor.close();
+		if (action == AlarmCancelAction.CANCEL_AFTER_DELETE) {
+			deleteAllAlarmsFromDB();
+		}
+	}
+
+	/* 해당 방의 알람 시간을 변경한다. */
+	public void modifyAlarm(int roomId, String alarmTime) {
+		Alarm alarm = getAlarmById(roomId);
+		cancelRepeatAlarm(alarm);
+		
+		alarm.alarmTime = alarmTime;
+		updateAlarmToDB(alarm);
+		setRepeateAlarm(alarm);
+	}
+
+	/*
+	 * 매개인자로 전달된 Alarm 를 서버에 등록하고, 활성화 여부에 따라 알람을 시작한다 이 메서드는 앱 처음 설치시 서버로 받아오
+	 * 알람 정보를 통하여 알람을 일괄 등록하는데 사용된다.
+	 */
+	public void registerAlarms(ArrayList<Alarm> alarms,
+			AlarmRegisterAction action) {
+		for (Alarm alarm : alarms) {
+			registerAlarm(alarm, action);
+		}
+	}
+
+	/* 해당 방의 알람을 등록한다. */
+	public void registerAlarm(Alarm alarm, AlarmRegisterAction action) {
+		insertAlarmToDB(alarm);
+		
+		/* 사용자가 알림 자체를 받지 않기로 한 것이기 때문에 알람을 시작하지 않고 바로 리턴한다. */
+		if (alarm.userRoomTimeOption == 0)
+			return;
+		if (action == AlarmRegisterAction.INSERT_AFTER_ALARM_START) {
+			if (alarm.alarmEnabled == 0) {
+				setRepeateAlarm(alarm);
+				Log.v("witherest info", alarm.roomId + " 방의 알람[" + alarm.alarmTime + "] 을 등록합니다");
+			}
+		}
+	}
+
+	/* 해당 방의 알람을 등록한다. */
+	public void registerAlarm(int roomId, String roomName, String roomPurpose,
+			String alarmTime, int alarmEnabled, AlarmRegisterAction action) {
+		Alarm alarm = new Alarm();
+		alarm.userId = userId;
+		alarm.roomId = roomId;
+		alarm.roomName = roomName;
+		alarm.roomPurpse = roomPurpose;
+		alarm.alarmTime = alarmTime;
+		alarm.alarmEnabled = alarmEnabled;
+
+		insertAlarmToDB(alarm);
+
+		/* 사용자가 알림 자체를 받지 않기로 한 것이기 때문에 알람을 시작하지 않고 바로 리턴한다. */
+		if (alarm.userRoomTimeOption == 0)
+			return;
+
+		if (action == AlarmRegisterAction.INSERT_AFTER_ALARM_START) {
+			if (alarm.alarmEnabled == 0) {
+				setRepeateAlarm(alarm);
+			}
+		}
+	}
+
+	/* 해당 방의 알람을 취소한다. */
+	public void unregisterlAlarm(int roomId, AlarmCancelAction action) {
+		Alarm alarm = getAlarmById(roomId);
+		if (alarm.alarmEnabled == 0 && alarm.userRoomTimeOption == 1) {
+			cancelRepeatAlarm(alarm);
+		}
+
+		if (action == AlarmCancelAction.CANCEL_AFTER_DELETE) {
+			deleteAlarmFromDB(alarm.roomId);
+		}
+	}
+
+	/* 해당 방의 알람을 취소한다. */
+	public void unregisterAlarm(Alarm alarm, AlarmCancelAction action) {
+		Alarm alarm1 = getAlarmById(alarm.roomId);
+		if (alarm.alarmEnabled == 0 && alarm.userRoomTimeOption == 1) {
+			cancelRepeatAlarm(alarm);
+		}
+
+		if (action == AlarmCancelAction.CANCEL_AFTER_DELETE) {
+			deleteAlarmFromDB(alarm1.roomId);
+		}
+	}
+
+	/*알람을 업데이트한다.*/
+	public void updateAlarm(Alarm alarm){
+		unregisterAlarm(alarm, AlarmCancelAction.CANCEL_AFTER_NOT_DELETE);
+		updateAlarmToDB(alarm);
+		if (alarm.alarmEnabled ==0 && alarm.userRoomTimeOption ==1){
+			setRepeateAlarm(alarm);
+		}
+		
+	}
+	
+	/* 반복알람을 등록 */
+	public void setRepeateAlarm(Alarm alarm) {
+		int hour = CommonUtils.str2int(alarm.alarmTime.split(":")[0]);
+		int minute = CommonUtils.str2int(alarm.alarmTime.split(":")[1]);
+
+		Calendar toDay = Calendar.getInstance();
+		Calendar alarmDay = Calendar.getInstance();
+		alarmDay.set(Calendar.HOUR_OF_DAY, hour);
+		alarmDay.set(Calendar.MINUTE, minute);
+
+		Calendar insertRealAlarm = null;
+		if (alarmDay.compareTo(toDay) >= 0) {
+			insertRealAlarm = alarmDay;
+		} else {
+			alarmDay.add(Calendar.DATE, 1);
+			insertRealAlarm = alarmDay;
+		}
+
+		PendingIntent sender = getAlarmBroadcastPendingIntent(alarm);
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+				insertRealAlarm.getTimeInMillis(), SECOND_FOR_DAY, sender);
+	}
+
+	/* 반복알람 취소 */
+	private void cancelRepeatAlarm(Alarm alarm) {
+		Intent i = new Intent(context, AlarmTimeReceiver.class);
+		alarmManager.cancel(PendingIntent.getBroadcast(context,
+				alarm.alarmCode, i, 0));
+	}
+
+	/* 디비의 알람정보를 삭제 */
+	private void deleteAlarmFromDB(int roomId) {
+		writeDatabase.execSQL("DELETE from " + AlarmDBHelper.TABLE_NAME
+				+ " where ='" + userId + "' AND roomId =" + roomId + ";");
+	}
+
+	/* 디비의 모든 알람 정보 삭제 */
+	private void deleteAllAlarmsFromDB() {
+		writeDatabase.execSQL("DELETE from " + AlarmDBHelper.TABLE_NAME
+				+ " where ='" + userId + "';");
+	}
+
+	/*
+	 * 기본 정보로 구성된 알람 정보를 디비에 등록하고, 알람 행 등록시 행 고유 증가 번호(rowId) 를 알람의 리퀘스트 코드로 설정
+	 */
+	private void insertAlarmToDB(Alarm alarm) {
+		ContentValues row = new ContentValues();
+		row.put(AlarmDBHelper.USER_ID, alarm.userId);
+		row.put(AlarmDBHelper.ROOM_ID, alarm.roomId);
+		row.put(AlarmDBHelper.ROOM_NAME, alarm.roomName);
+		row.put(AlarmDBHelper.ROOM_PURPOSE, alarm.roomPurpse);
+		row.put(AlarmDBHelper.ALARM_TIME, alarm.alarmTime);
+		row.put(AlarmDBHelper.ALARM_ENABLED, alarm.alarmEnabled);
+		row.put(AlarmDBHelper.USER_ROOMTIME_OPTION, alarm.userRoomTimeOption);
+
+		
+		/* 기본 알람 정보를 데이타 베이스에 쓰고 행 ID 값을 가져옴 */
+		int rowId = (int) writeDatabase.insert(AlarmDBHelper.TABLE_NAME, null,
+				row);
+
+		/* 가져온 행 아이디 값으로 alarm_code 필드를 설정 */
+		writeDatabase.execSQL("UPDATE " + AlarmDBHelper.TABLE_NAME
+				+ " SET alarm_code =" + rowId + " WHERE room_id ="
+				+ alarm.roomId + " AND user_id ='" + alarm.userId + "';");
+		alarm.alarmCode = rowId;
+	}
+
+	/* 디비의 알람 정보를 업데이트 */
+	private void updateAlarmToDB(Alarm alarm) {
+/*		writeDatabase.execSQL("UPDATE " + AlarmDBHelper.TABLE_NAME
+				+ " SET alarm_time ='" + alarm.alarmTime + "' WHERE room_id ="
+				+ alarm.roomId + " AND user_id ='" + alarm.userId + "';");*/
+		
+		ContentValues row = new ContentValues();
+		row.put(AlarmDBHelper.ALARM_TIME, alarm.alarmTime);
+		row.put(AlarmDBHelper.ALARM_ENABLED, alarm.alarmEnabled);
+		row.put(AlarmDBHelper.USER_ROOMTIME_OPTION, alarm.userRoomTimeOption);
+		writeDatabase.update(AlarmDBHelper.TABLE_NAME, row, "user_id='"+ userId + "' AND room_id =" + alarm.roomId+";" , null);
+		
+	}
+
+	/* 알람 서비스를 종료, 알람 서비스 사용을 마친 후 반드시 호출해야 함 */
+	public void close() {
+		alarmDBHelper.close();
+	}
+
+	/* curosr로 부터 Alarm데이타를 생성 */
+	public Alarm getAlarmFromCursor(Cursor cursor) {
+		int id = cursor.getInt(cursor.getColumnIndex(AlarmDBHelper.ID));
+		String userId = cursor.getString(cursor.getColumnIndex(AlarmDBHelper.USER_ID));
+		int roomId = cursor.getInt(cursor.getColumnIndex(AlarmDBHelper.ROOM_ID));
+		String roomName = cursor.getString(cursor.getColumnIndex(AlarmDBHelper.ROOM_NAME));
+		String roomPurpose = cursor.getString(cursor.getColumnIndex(AlarmDBHelper.ROOM_PURPOSE));
+		String alarmTime = cursor.getString(cursor.getColumnIndex(AlarmDBHelper.ALARM_TIME));
+		int alarmCode = cursor.getInt(cursor.getColumnIndex(AlarmDBHelper.ALARM_CODE));
+		int alarmEnabled = cursor.getInt(cursor.getColumnIndex(AlarmDBHelper.ALARM_ENABLED));
+		int userRoomTimeOption = cursor.getInt(cursor.getColumnIndex(AlarmDBHelper.USER_ROOMTIME_OPTION));
+		
+		return new Alarm(id, userId, roomId, roomName, roomPurpose, alarmTime,
+				alarmCode, alarmEnabled, userRoomTimeOption);
+	}
+
+	private PendingIntent getAlarmBroadcastPendingIntent(Alarm alarm) {
+		Intent i = new Intent(context, AlarmTimeReceiver.class);
+		i.putExtra(INTENT_ALARM_KEY_USER_ID, alarm.userId);
+		i.putExtra(INTENT_ALARM_KEY_PASSWORD, password);
+		i.putExtra(INTENT_ALARM_KEY_ROOM_ID, alarm.roomId);
+		i.putExtra(INTENT_ALARM_KEY_ROOM_PURPOSE, alarm.roomPurpse);
+		i.putExtra(INTENT_ALARM_KEY_ROOM_NAME, alarm.roomName);
+		i.putExtra(INTENT_ALARM_KEY_TIME, alarm.alarmTime);
+		return PendingIntent.getBroadcast(context, alarm.alarmCode, i, 0);
+	}
+
+	/* 룸아이디로 Alarm 객체를 생성 */
+	public Alarm getAlarmById(int roomId) {
+		Cursor cursor = readDatabase.rawQuery("select * from "
+				+ AlarmDBHelper.TABLE_NAME + " where user_id = '" + userId
+				+ "' room_id = " + roomId + ";", null);
+		if (cursor.getCount() <= 0) {
+			cursor.close();
+			return null;
+		}
+		Alarm alarm = getAlarmFromCursor(cursor);
+		cursor.close();
+		return alarm;
+	}
+
+	/* 등록된 알람이 있는지 없는지 boolean 으로 리턴 */
+	public boolean isEmpty() {
+		Cursor cursor = readDatabase.rawQuery("select * from "
+				+ AlarmDBHelper.TABLE_NAME + " WHERE user_id='"+ userId+ "';", null);
+		if (cursor.getCount() <= 0) {
+			cursor.close();
+			return true;
+		} else {
+			cursor.close();
+			return false;
+		}
+	}
+
+	/* 등록된 알람의 갯수를 반환 */
+	public int getCount() {
+		Cursor cursor = readDatabase.rawQuery("select * from "
+				+ AlarmDBHelper.TABLE_NAME + " WHERE user_id='"+ userId+ "';", null);
+		int count = cursor.getCount();
+		cursor.close();
+		return count;
+	}
+	
+	/*방의 알람이 이미 등록되어 있는지 반환*/
+	public boolean isRegistered(int roomId){
+		Cursor cursor = readDatabase.rawQuery("select * from "
+				+ AlarmDBHelper.TABLE_NAME + " where user_id = '" + userId
+				+ "' room_id = " + roomId + ";", null);
+		if (cursor.getCount() == 1 )
+			return true;
+		else 
+			return false;
+	}
+	
+}

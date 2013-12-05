@@ -1,0 +1,30 @@
+package com.teamteam.witherest;
+
+import com.teamteam.witherest.alarm.WitherestAlarms;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.widget.Toast;
+
+/**
+ * 폰이 부팅이 끝났을 때 호출되는 리시버로 
+ * 이 리시버에서 등록된 알람을 다시 모두 등록한다(폰이 꺼지면 알람이 취소되기 때문임)
+ *
+ */
+public class AlarmInitReceiver extends BroadcastReceiver {
+
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		String action = intent.getAction();
+		if (action.equals(Intent.ACTION_BOOT_COMPLETED)) {
+			/*사용자 구분없이 디비에 등록된 모든 알람을 재 시작한다.
+			이 경우 생성자의 2번째 파라미터에 널을 주어야 하며, 이 상태에서의 객체는 
+			intializeAllRegisteredAlarm()만 호출해야 만 한다.*/
+			WitherestAlarms alarms = new WitherestAlarms(context, null);
+			alarms.intializeAllRegisteredAlarm();
+			alarms.close();
+		}
+	}
+
+}

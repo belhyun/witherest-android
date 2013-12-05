@@ -1,0 +1,230 @@
+package com.teamteam.witherest;
+
+import java.util.ArrayList;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.teamteam.customComponent.SimpleProgressDialog;
+import com.teamteam.witherest.alarm.WitherestAlarms;
+import com.teamteam.witherest.alarm.WitherestAlarms.Alarm;
+import com.teamteam.witherest.alarm.WitherestAlarms.AlarmRegisterAction;
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.service.callback.RoomServiceCallback;
+import com.teamteam.witherest.service.callback.UserServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.callback.object.LoginResponseObject;
+import com.teamteam.witherest.service.callback.object.MyCheckResponseObject;
+import com.teamteam.witherest.service.callback.object.MyCheckResponseObject.CheckRoom;
+import com.teamteam.witherest.service.internal.RoomService;
+import com.teamteam.witherest.service.internal.Service;
+import com.teamteam.witherest.service.internal.ServiceManager;
+import com.teamteam.witherest.service.internal.UserService;
+
+public class LoginActivity extends Activity implements OnClickListener,UserServiceCallback,RoomServiceCallback{
+	
+	private SimpleProgressDialog waitProgressDialog;
+	
+	private EditText id_edittext;
+	private EditText passwd_edittext;
+	private Button login_btn;
+	private TextView memberJoinBtn;
+	
+	private String id;
+	private String passwd;
+	private String gcmId;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+	    requestWindowFeature(Window.FEATURE_NO_TITLE);
+	    setContentView(R.layout.activity_login);
+	    
+	    id_edittext = (EditText) findViewById(R.id.activity_login_id_edittext);
+	    passwd_edittext = (EditText) findViewById(R.id.activity_login_passwd_edittext);
+	    
+	    //GCM 아이디는 앱 실행시 초기에 받아오기 때문에, 스플래쉬 액티비티 이후에는 언제나 사용할 수 있다.
+	    
+	    gcmId = ((Witherest)getApplication()).getGCMId();
+	    //회원 가입화면에서 넘어온 경우, 가입한 아이디를 아이디 입력창에 세팅해주고, 포커스를 이동한다.
+	    Intent i = getIntent();
+	    String userId = i.getStringExtra("userId");
+	    id_edittext.setText(userId);
+	    if (userId != null && userId.trim().length() >0){
+	    	id_edittext.setText(userId);
+	    	passwd_edittext.requestFocus();
+	    }
+	    
+	    login_btn = (Button) findViewById(R.id.activity_login_login_btn);
+	    login_btn.setOnClickListener(this);
+	    memberJoinBtn = (TextView)findViewById(R.id.activity_login_memeber_join_btn);
+	    memberJoinBtn.setOnClickListener(this);
+	    
+	}
+    
+	public void onClick(View v) {
+		switch(v.getId()) {
+		case R.id.activity_login_login_btn: {
+			
+			id = id_edittext.getText().toString();
+			passwd = passwd_edittext.getText().toString();
+			
+			/* id form value check */
+			if(id == null || id.length() == 0) {
+				Toast.makeText(LoginActivity.this, getString(R.string.login_insert_id_empty), Toast.LENGTH_SHORT).show();
+				break;
+			}
+			
+			/* passwd form value check */
+			if(passwd == null || passwd.length() == 0) {
+				Toast.makeText(LoginActivity.this, getString(R.string.login_insert_passwd_empty), Toast.LENGTH_SHORT).show();
+				break;
+			} 
+				
+		/*	 Progress Dialog Start */
+			waitProgressDialog = new SimpleProgressDialog(LoginActivity.this, getString(R.string.login_dialog_title),getString(R.string.login_dialog_message));
+			waitProgressDialog.start();
+
+	
+			ServiceManager serviceManager = ServiceManager.getServiceManager();
+			UserService userService = serviceManager.getUserService();
+			userService.setOnUserCallback(this);
+			userService.login(id, passwd, gcmId);
+			break;
+			}
+		
+		case R.id.activity_login_memeber_join_btn:
+			Intent i = new Intent(LoginActivity.this, SignupActivity.class);
+			LoginActivity.this.startActivity(i);
+			break;
+		}
+	}
+
+	private void getMyCheckRooms(String userIndex) {
+		RoomService roomService = ServiceManager.getServiceManager().getRoomService();
+		roomService.setOnRoomCallback(this);
+		roomService.getMyCheckRooms(userIndex);
+	}
+	
+	private void registerAlarm(ArrayList<CheckRoom> roomList) {
+		ArrayList<Alarm> alarmList = new ArrayList<Alarm>();
+		for (CheckRoom myCheckRoom : roomList){
+			Alarm alarm = new Alarm();
+			alarm.userId = Session.getInstance().user.id;
+			alarm.roomId = myCheckRoom.roomId;
+			alarm.roomName = myCheckRoom.roomTitle;
+			alarm.roomPurpse = myCheckRoom.roomPurpose;
+			alarm.alarmTime = myCheckRoom.alarmTime;
+			alarm.alarmEnabled = myCheckRoom.alarmLevel;
+			alarm.userRoomTimeOption = Session.getInstance().user.isRoomTimeNotice ? 1:0;
+			alarmList.add(alarm);
+		}
+		
+		WitherestAlarms alarms = new WitherestAlarms(this);
+		alarms.registerAlarms(alarmList, AlarmRegisterAction.INSERT_AFTER_ALARM_START);
+		alarms.close();
+	}
+	
+	
+	public void onUserServiceCallback(BaseResponseObject object) {
+		if (object.resultCode == Service.RESULT_FAIL) {
+			id_edittext.requestFocus();
+			showMessageToast(object.resultMsg);
+			return;
+		}
+		
+		switch(object.requestType){
+		case Service.REQUEST_TYPE_LOGIN:
+			LoginResponseObject obj = (LoginResponseObject)object;
+			Log.v("프로필 이미지", obj.user.profileImagePath + "  !");
+			Log.v("카테고리 ", obj.user.myCategoris+ "  !");
+			Log.v("닉네임", obj.user.nickName + "  !");
+			Log.v("목표 문구", obj.user.purpose + "  !");
+			
+			obj.user.id = id;
+			obj.user.password = passwd;
+			Session.getInstance().user = obj.user;
+			Session.getInstance().user.gcmId = gcmId;
+			Session.getInstance().sessionStatus = Session.AUTHORIZED;
+			Session.getInstance().sessionKey = obj.token;	
+			
+			WitherestPreference pref = new WitherestPreference(this);
+			pref.putString(WitherestPreference.KEY_EMAIL, obj.user.id);
+			pref.putString(WitherestPreference.KEY_PASSWORD, obj.user.password);
+			pref.commit();
+			
+			boolean isFirstRunning = pref.getBoolean(Session.getInstance().user.id+ 
+					WitherestPreference.LEY_FIRST_RUNNING_SUFFIX, true);
+			WitherestAlarms alarms = new WitherestAlarms(this);
+			if (isFirstRunning){
+				pref.putBoolean(Session.getInstance().user.id+"_isFirstRunning", false);
+				pref.commit();
+				if (alarms.isEmpty()){
+					getMyCheckRooms(String.valueOf(Session.getInstance().user.userIndex));
+				}
+			}else {
+				if (waitProgressDialog.isShowing()){
+					SimpleProgressDialog.stop(waitProgressDialog);
+				}
+				
+				finish();
+				Intent i = new Intent(this, MainActivity.class);
+				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(i);
+				Toast.makeText(this, obj.resultMsg + " : " + obj.token, Toast.LENGTH_LONG).show();
+			}
+			break;
+			
+		case Service.REQUEST_TYPE_DUPL_CHECK:
+			break;
+			
+		case Service.REQUEST_TYPE_JOIN:
+			break;
+			
+		case Service.REQUEST_TYPE_LOGOUT:
+			break;
+		}
+	}
+
+	public void onRoomServiceCallback(BaseResponseObject object) {
+		if (waitProgressDialog.isShowing()){
+			SimpleProgressDialog.stop(waitProgressDialog);
+		}
+		
+		if (object.resultCode == Service.RESULT_FAIL) {
+			showMessageToast(object.resultMsg);
+			return;
+		}
+		
+		switch(object.requestType){
+		case Service.REQUEST_TYPE_GET_MY_CHECKROOMS:
+			MyCheckResponseObject myCheckResponse = (MyCheckResponseObject)object;
+			ArrayList<CheckRoom> roomList = myCheckResponse.roomList;
+			if (!roomList.isEmpty()) 
+				registerAlarm(roomList);
+			
+			finish();
+			Intent i = new Intent(this, MainActivity.class);
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(i);
+			break;
+		}
+	}
+
+	private void showMessageToast(String resultMsg) {
+		Toast.makeText(this,resultMsg, Toast.LENGTH_LONG).show();
+	}
+
+	
+
+}

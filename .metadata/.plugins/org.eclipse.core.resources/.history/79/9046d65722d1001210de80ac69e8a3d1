@@ -1,0 +1,190 @@
+package com.teamteam.witherest;
+
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.ListFragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.teamteam.witherest.common.CommonUtils;
+import com.teamteam.witherest.lazyload.ImageLoader;
+import com.teamteam.witherest.service.Service;
+import com.teamteam.witherest.service.callback.object.CategoryRoomListResponseObject;
+import com.teamteam.witherest.service.callback.object.MyCheckResponseObject.CheckRoom;
+
+
+public class CheckRoomListFragment extends ListFragment{
+	private static final String KEY_CONTENT = "Fragment:Content";
+	public int listType;;
+	public int page;
+	public String  title;
+	public Activity act;
+	
+	public CategoryRoomListResponseObject mRoomListResponse;
+	public View fragmentView;
+	public CheckRoomListFragmentAdapter adapter;
+	
+	
+	public static CheckRoomListFragment newInstance(String title, int listType, int page){
+		CheckRoomListFragment fragment = new CheckRoomListFragment();
+	    Bundle args = new Bundle();
+	    args.putString("title", title);
+        args.putInt("type", listType);
+        args.putInt("page", page);
+        fragment.setArguments(args);
+        return fragment;
+	}
+	
+	
+    @Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+		this.act = activity;
+	     Log.v("리스트프래그먼트 " + getArguments().getInt("type"),"onAttach) 호출");
+	}
+
+
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        listType = getArguments().getInt("listType");
+        page = getArguments().getInt("type");
+        title = getArguments().getString("title");
+        Log.v("리스트프래그먼트 " + getArguments().getInt("type"),"onCreate() 호출");
+    }
+    
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		 Log.v("리스트프래그먼트 " + getArguments().getInt("type"),"onCreateView() 호출");
+		fragmentView= inflater.inflate(R.layout.fragment_checkroom_list, null);
+		return fragmentView;
+		
+	}
+
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		/*Intent i = new Intent(getActivity(), RoomDetailActivity.class);
+		getActivity().startActivity(i);*/
+	}
+
+	@Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+	
+	
+	
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		 Log.v("리스트프래그먼트 " + getArguments().getInt("type"),"onActivityCreated() 호출");
+		super.onActivityCreated(savedInstanceState);
+	}
+	
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		 Log.v("리스트프래그먼트 " + getArguments().getInt("type"),"onResume() 호출");
+		super.onResume();	
+	}
+
+	public void setRoomListObject(CategoryRoomListResponseObject object){
+		Log.v("룸리스트  세팅 " , getArguments().getInt("type") + " ");
+		this.mRoomListResponse = object;
+		setListAdapter(new CheckRoomListFragmentAdapter(getActivity(), R.layout.checkroom_list_item_row, mRoomListResponse));
+	}
+	
+	public class CheckRoomListFragmentAdapter extends BaseAdapter{
+		public Context  context ; 
+		public int resId ;
+		public LayoutInflater inflate;
+		public CategoryRoomListResponseObject roomListRespose;
+		public ImageLoader imageLoader; 
+	
+		
+		public CheckRoomListFragmentAdapter (Activity act, int layoutRes,CategoryRoomListResponseObject roomListRespose){
+			this.context = act;
+			this.resId = layoutRes;
+			this.roomListRespose = roomListRespose;
+			if (context == null){
+				Log.v("컨텍스트", "널입니다");
+			}
+			inflate = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			imageLoader=new ImageLoader(getActivity().getApplicationContext());
+			Log.v("룸리스트 갯수", roomListRespose.roomList.size() + "개");
+			for (CheckRoom room : roomListRespose.roomList){
+				String tmp;
+				if (CommonUtils.isNullOrEmpty(room.roomImagePath)){
+				tmp ="이미지가 없습니다.";
+				}
+				else {
+					tmp = room.roomImagePath;
+				}
+				Log.v(room.roomId +":" +  room.roomTitle, tmp );
+			}
+		}
+		public int getCount() {
+			return roomListRespose.roomList.size();
+		}
+
+		public Object getItem(int position) {
+			return position;
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			final int pos = position;
+			if (convertView == null){
+				convertView = inflate.inflate(resId,parent, false);
+			}
+		
+			ImageView roomImage = (ImageView)convertView.findViewById(R.id.list_image);
+			roomImage.setImageResource(R.drawable.stub);
+			
+			TextView roomTitle = (TextView)convertView.findViewById(R.id.mycheck_room_title_textview);
+			TextView roomPurpose = (TextView)convertView.findViewById(R.id.mycheck_room_purpose_textview);
+			TextView roomTerm = (TextView)convertView.findViewById(R.id.mycheck_room_team_textview);
+			TextView rooJoinState = (TextView)convertView.findViewById(R.id.mycheck_room_joincount_textview);
+			
+			if ( !CommonUtils.isNullOrEmpty(roomListRespose.roomList.get(position).roomImagePath)){
+				   imageLoader.displayImage(Service.BASE_URL+roomListRespose.roomList.get(position).roomImagePath, roomImage);
+			}else {
+				
+			}
+			
+			roomTitle.setText(roomListRespose.roomList.get(position).roomTitle);
+			roomPurpose.setText(roomListRespose.roomList.get(position).roomPurpose);
+			roomTerm.setText(roomListRespose.roomList.get(position).startDate + " ~ " + roomListRespose.roomList.get(position).endDate);
+			rooJoinState.setText(roomListRespose.roomList.get(position).curMemberCount + " / " + roomListRespose.roomList.get(position).maxMemberCount );
+			
+			convertView.findViewById(R.id.mycheck_row_contaniner).setOnClickListener(new View.OnClickListener() {
+				public void onClick(View arg0) {
+					Intent i = new Intent(context, RoomDetailActivity.class);
+					i.putExtra("roomId",roomListRespose.roomList.get(pos).roomId );
+					i.putExtra("roomTitle", roomListRespose.roomList.get(pos).roomTitle);
+					context.startActivity(i);	
+				}
+			});
+			return convertView;
+		}
+	}
+
+}

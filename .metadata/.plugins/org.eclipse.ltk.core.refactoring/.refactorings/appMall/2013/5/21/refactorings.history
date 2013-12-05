@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete 2 elements from project &apos;appMall&apos;&#x0D;&#x0A;- Original project: &apos;appMall&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     com.owl.app.mapOverlay.java&#x0D;&#x0A;     com.owl.app.owlMap.java" description="Delete elements" element1="/src&lt;com.owl.app{mapOverlay.java" element2="/src&lt;com.owl.app{owlMap.java" elements="2" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1369162811109" subPackages="false" version="1.0"/>
+</session>

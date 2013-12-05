@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:padding="2dip" >
+
+        <RelativeLayout
+            android:id="@+id/roomboard_contaniner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/makeroom_selector"
+            android:clickable="true"
+            android:paddingTop="5dp" >
+
+            <ImageView
+                android:id="@+id/rooomboard_reply_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:padding="1dp"
+                android:src="@drawable/comment_line_bg"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/roomboard_row_image_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_toRightOf="@id/rooomboard_reply_img"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/roomboard_row_image"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip"
+                    android:layout_gravity="clip_vertical"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:src="@drawable/notice_profileimg_bg" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/roomboard_textview1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="4dp"
+                android:layout_toLeftOf="@+id/roomboard_textview3"
+                android:layout_toRightOf="@id/roomboard_row_image_container"
+                android:maxLines="1"
+                android:text="이지혜"
+                android:textColor="#51c3b7"
+                android:textSize="14sp"
+                android:typeface="sans" />
+
+            <TextView
+                android:id="@+id/roomboard_textview2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/roomboard_textview1"
+                android:layout_below="@id/roomboard_textview1"
+                android:layout_toLeftOf="@+id/roomboard_textview3"
+                android:layout_toRightOf="@id/roomboard_row_image_container"
+                android:text="여러분 열심히 하고 계시나요?"
+                android:textColor="#444444"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:id="@+id/reply_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/roomboard_textview1"
+                android:layout_below="@id/roomboard_textview2"
+                android:layout_toLeftOf="@+id/roomboard_textview3"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/roomboard_comment_icon" />
+
+                <TextView
+                    android:id="@+id/reply_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:text="10"
+                    android:textColor="#a1a1a1"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@id/roomboard_textview3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/roomboard_textview1"
+                android:layout_marginRight="5dp"
+                android:text="15분전"
+                android:textColor="#999999"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_alignBaseline="@id/roomboard_contaniner"
+                android:layout_marginTop="3dp"
+                android:layout_alignParentLeft="true"
+                android:background="#cccccc" >
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

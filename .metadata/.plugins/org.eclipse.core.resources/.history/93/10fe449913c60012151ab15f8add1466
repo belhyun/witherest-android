@@ -1,0 +1,57 @@
+package com.teamteam.witherest.service;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpRequestBase;
+
+import android.os.Message;
+import android.util.Log;
+
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.service.callback.RoomServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+
+public class RoomService extends Service{
+	
+	private static final String USER_ID = "user_id";
+	
+	private ServiceHandler  handler;
+	private RoomServiceCallback callback;
+	
+	
+	public RoomService(HttpClient httpClient, ServiceHandler  handler) {
+		super(httpClient);
+		this.handler = handler;
+	}
+
+	@Override
+	public void finishedBackgroundProcess(String responseText) {
+		Log.v("response_roomservice_text", responseText);
+		if (callback ==null) return;
+		BaseResponseObject obj = ParsingService.parseJson(responseText);
+		Message message = Message.obtain();
+		message.obj = obj ;
+		handler.sendMessage(message);
+	}
+	
+	@Override
+	public void addHeaderSessionKey(HttpRequestBase request) {
+		String sessionKey = Session.getInstance().sessionKey;
+		if (sessionKey != null){
+			request.addHeader(Service.ACC_TOKEN, sessionKey);
+		}
+	}
+	
+	public void getMyCheckRooms(String id){
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put(USER_ID,id);
+		paramMap.put(REQUEST_TYPE_STRING,String.valueOf(REQUEST_TYPE_GET_MY_CHECKROOMS));
+		try {
+			sendPost(GET_MY_CHECKROOMS_URL, paramMap);
+		} catch (InterruptedException e) {
+			Log.v("요청 에러",e.getMessage());
+		 }
+	}
+}

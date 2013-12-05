@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <com.teamteam.customComponent.radiogroup.SegmentedRadioGroup
+            android:id="@+id/segment_radio_group"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:checkedButton="@+id/notice_radio_btn"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@id/notice_radio_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:minHeight="33dip"
+                android:text="Witherest"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/radio_colors" 
+                />
+
+            <RadioButton
+                android:id="@+id/categoty_radio_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:minHeight="33dip"
+                android:text="Category"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/radio_colors" 
+                />
+
+            <RadioButton
+                android:id="@+id/room_radio_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:minHeight="33dip"
+                android:text="Room"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/radio_colors" />
+        </com.teamteam.customComponent.radiogroup.SegmentedRadioGroup>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ListView
+            android:id="@+id/witherest_news_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="8dp"
+            android:background="#e9e9e9"
+            android:cacheColorHint="#00000000"
+            android:divider="@color/tranparent"
+            android:dividerHeight="1dip"
+            android:drawSelectorOnTop="false"
+            android:listSelector="@android:color/transparent"
+            android:focusable="false" >
+        </ListView>
+
+        <ListView
+            android:id="@+id/categoty_news_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="8dp"
+            android:background="#e9e9e9"
+            android:dividerHeight="1dip"
+            android:drawSelectorOnTop="false" 
+            android:cacheColorHint="#00000000"
+            android:divider="@color/tranparent"
+            android:listSelector="@android:color/transparent"
+            android:focusable="false">
+        </ListView>
+
+        <ListView
+            android:id="@+id/room_news_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="8dp"
+            android:background="#e9e9e9"
+            android:cacheColorHint="#00000000"
+            android:divider="@color/tranparent"
+            android:dividerHeight="1dip"
+            android:drawSelectorOnTop="false"
+            android:listSelector="@android:color/transparent" 
+            android:focusable="false">
+        </ListView>
+    </FrameLayout>
+
+</LinearLayout>

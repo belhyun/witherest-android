@@ -1,0 +1,33 @@
+package com.teamteam.witherest.service.internal;
+
+import com.teamteam.witherest.R;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+
+interface BaseErrorHandler{
+	public static final int NETWORK_DISABLE = 1000;
+	public static final int READ_TIMEOUT = 1001;
+	public static final int CONNECTION_TIMEOUT= 1002;
+	public static final int PARSING_ERROR = 1003;
+	public static final int COMMON_ERROR = 1004; 
+	
+	public void handleError(int errorcode, int requestType);
+}
+
+
+public class ErrorHandler implements BaseErrorHandler {
+	
+	public static final String NETWORK_DISABLE_STIRNG ="network_disable";
+	public static final String READ_TIMEOUT_STIRNG = "readtimeout";
+	public static final String CONNECTION_TIMEOUT_STIRNG= "connectiontimeout";
+	public static final String PARSING_ERROR_STIRNG ="parsingerror";
+	public static final String COMMON_ERROR_STRING = "commonerror";
+	
+	public void handlerError(int errorCode, int requestType){
+		
+	}
+}

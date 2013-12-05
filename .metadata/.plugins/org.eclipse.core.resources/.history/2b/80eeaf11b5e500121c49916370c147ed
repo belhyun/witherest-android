@@ -1,0 +1,5 @@
+package com.teamteam.witherest.service.internal;
+
+public class ConnectionErrorHandler {
+
+}

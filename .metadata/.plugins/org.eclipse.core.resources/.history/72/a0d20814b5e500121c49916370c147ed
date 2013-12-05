@@ -1,0 +1,9 @@
+package com.teamteam.witherest.service.internal;
+
+public class ConnectionErrorHandler {
+	public static final int NETWORK_DISABLE = 1000;
+	public static final int READ_TIMEOUT = 1001;
+	public static final int CONNECTION_TIMEOUT= 1002;
+	public static final int PARSING_ERROR = 1003;
+	
+}

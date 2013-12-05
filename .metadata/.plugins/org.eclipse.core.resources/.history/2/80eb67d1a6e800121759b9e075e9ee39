@@ -1,0 +1,48 @@
+package com.teamteam.witherest.service.internal;
+
+import com.teamteam.witherest.R;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+
+interface IErrorHandler{
+	public static final int NETWORK_DISABLE = 1000;
+	public static final int READ_TIMEOUT = 1001;
+	public static final int CONNECTION_TIMEOUT= 1002;
+	public static final int PARSING_ERROR = 1003;
+	public static final int COMMON_ERROR = 1004; 
+	
+	public static final String NETWORK_DISABLE_STIRNG ="network_disable";
+	public static final String READ_TIMEOUT_STIRNG = "readtimeout";
+	public static final String CONNECTION_TIMEOUT_STIRNG= "connectiontimeout";
+	public static final String PARSING_ERROR_STIRNG ="parsingerror";
+	public static final String COMMON_ERROR_STRING = "commonerror";
+	
+	public void handleError(int errorcode, int requestType);
+	public void handleErrorLog();
+}
+
+abstract class ErrorTransaction {
+	public abstract void transactionError();
+}
+
+public class ErrorHandler implements IErrorHandler {
+	
+	private Context context;
+	private ErrorTransaction errorTransaction;
+	public ErrorHandler(Context context, ErrorTransaction){
+		
+	}
+	public void handleError(int errorCode, int requestType){
+		//errorCode와 requestType 에 따라 적적할 에러 핸들러 구문을 작성
+		//일단은  소스상에서 직접
+	}
+	
+	public void handleErrorLog(){
+		//에러 핸들러 처리 인스턴스에 따라 적절하게 처리
+	}
+	
+}

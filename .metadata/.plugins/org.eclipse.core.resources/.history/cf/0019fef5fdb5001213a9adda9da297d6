@@ -1,0 +1,342 @@
+package com.teamteam.witherest;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.text.InputType;
+import android.view.View;
+import android.view.Window;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.teamteam.witherest.common.AndroUtils;
+
+public class ProfileActivity extends Activity implements View.OnClickListener {
+
+	// 카메라 및 갤러리에서 이미지를 가져올 때 해당 이미지의 경로가 저장됨
+	private String galleryImagePath;
+	private String cameraImagePath;
+	private String cameraCropImagePath;
+	
+	private String nickName ="홍길동";
+	private String purpose ="술과 담배를 끊어야만 산다";
+	private String email ="topayc@naver.com";
+	private String myCategories ="게임,공부,독서,습관";
+	private boolean[] selectedCategories = { false,false,false,false,false,false,false,false};
+	
+	private String[] defaultCategories;
+
+	private static final int PICK_FROM_ALBUM = 0;
+	private static final int PICK_FROM_CAMERA = 1;
+	private static final int CROP_FROM_CAMERA = 2;
+	
+	private TextView nickNameView;
+	private TextView emailView;
+	private TextView purposeView;
+	private TextView myCategoryView;
+
+	Uri mImageCaptureUri;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.activity_profile);
+		
+		initInstance();
+		initForm();
+		initListener();
+	}
+
+	
+	private void initInstance() {
+		String[] myCategoriesArray =  myCategories.split(",");
+		defaultCategories  = getResources().getStringArray(R.array.category_array);
+		for (int i = 0; i <defaultCategories.length; i++){
+			for (int j = 0; j<myCategoriesArray.length; j ++){
+				if (defaultCategories[i].equals(myCategoriesArray[j])){
+					selectedCategories[i] = true;
+					break;
+				}
+			}
+		}
+	}
+
+
+	private void initForm() {
+		nickNameView = (TextView)findViewById(R.id.activity_profile_nickname);
+		emailView = (TextView)findViewById(R.id.activity_profile_email);
+		purposeView = (TextView)findViewById(R.id.activity_profile_purpose);
+		myCategoryView = (TextView)findViewById(R.id.activity_profile_mycatefories);
+		
+		nickNameView.setText(nickName);
+		emailView.setText(email);
+		purposeView.setText(purpose);
+		myCategoryView.setText(myCategories);
+	}
+
+
+	private void initListener() {
+		findViewById(R.id.activity_profile_image_get_btn).setOnClickListener(this);
+		findViewById(R.id.activity_profile_nickname_btn).setOnClickListener(this);
+		findViewById(R.id.activity_profile_email_btn).setOnClickListener(this);
+		findViewById(R.id.activity_profile_target_btn).setOnClickListener(this);
+		findViewById(R.id.activity_profile_mycategory_btn).setOnClickListener(this);
+	}
+
+	public void onClick(View view) {
+		int id = view.getId();
+		switch (id) {
+		case R.id.activity_profile_image_get_btn:
+			showProfileImageDialog();
+			break;
+		case R.id.activity_profile_nickname_btn:
+			showProfileNickNameDialog();
+			break;
+		case R.id.activity_profile_email_btn:
+			showProfileEmailDialog();
+			break;
+		case R.id.activity_profile_target_btn:
+			showProfileTargetDialog();
+			break;
+		case R.id.activity_profile_mycategory_btn:
+			showProfileMyCategoriesDialog();
+			break;
+		}
+	}
+
+	private void showProfileMyCategoriesDialog() {
+	
+		new AlertDialog.Builder(ProfileActivity.this)
+		.setTitle(R.string.activity_profile_input_category_text)
+		.setIcon(android.R.drawable.ic_input_add)
+		.setMultiChoiceItems(R.array.category_array,selectedCategories, new DialogInterface.OnMultiChoiceClickListener() {
+			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+				selectedCategories[which] = isChecked;
+			}
+		})
+		.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				StringBuffer buffer = new StringBuffer();
+				for (int i = 0; i < selectedCategories.length; i++){
+					if (selectedCategories[i]){
+						buffer.append(defaultCategories[i]);
+						if ( i != selectedCategories.length){
+							buffer.append(",");
+						}
+					}
+				}
+				myCategories = buffer.toString();
+				changeProfile();
+			}
+		})
+		.setNegativeButton(R.string.cancel,null)
+		.show();
+	
+		
+	}
+
+	private void showProfileTargetDialog() {
+		final LinearLayout linear  = (LinearLayout)View.inflate(this,R.layout.common_modify, null);
+		EditText modifyEditText = (EditText)linear.findViewById(R.id.common_edittext);
+		modifyEditText.setText(purpose);
+		
+		new AlertDialog.Builder(ProfileActivity.this)
+		.setTitle(R.string.activity_profile_input_purpose_text)
+		.setIcon(android.R.drawable.ic_input_add)
+		.setView(linear)
+		.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				EditText emailEdit = (EditText)linear.findViewById(R.id.common_edittext);
+				purpose = emailEdit.getText().toString();
+				changeProfile();		
+			}
+		})
+		.setNegativeButton(R.string.cancel, null)
+		.show();
+	}
+		
+
+	private void showProfileEmailDialog() {
+		final LinearLayout linear  = (LinearLayout)View.inflate(this,R.layout.common_modify, null);
+		EditText modifyEditText = (EditText)linear.findViewById(R.id.common_edittext);
+		modifyEditText.setText(email);
+		
+		modifyEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+		
+		new AlertDialog.Builder(ProfileActivity.this)
+		.setTitle(R.string.activity_profile_input_email_text)
+		.setIcon(android.R.drawable.ic_dialog_email)
+		.setView(linear)
+		.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				EditText emailEdit = (EditText)linear.findViewById(R.id.common_edittext);
+				email = emailEdit.getText().toString();
+				changeProfile();		
+			}
+		})
+		.setNegativeButton(R.string.cancel, null)
+		.show();
+	}
+
+	private void showProfileNickNameDialog() {
+		final LinearLayout linear  = (LinearLayout)View.inflate(this,R.layout.common_modify, null);
+		EditText modifyEditText = (EditText)linear.findViewById(R.id.common_edittext);
+		modifyEditText.setText(nickName);
+
+		new AlertDialog.Builder(ProfileActivity.this)
+		.setTitle(R.string.activity_profile_input_nick_text)
+		.setIcon(android.R.drawable.ic_input_add)
+		.setView(linear)
+		.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				EditText emailEdit = (EditText)linear.findViewById(R.id.common_edittext);
+				nickName = emailEdit.getText().toString();
+				changeProfile();		
+			}
+		})
+		.setNegativeButton(R.string.cancel, null)
+		.show();
+		
+	}
+
+	
+	private void showProfileImageDialog() {
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.selectimage)
+				.setIcon(android.R.drawable.ic_input_add)
+				.setItems(R.array.profile_imget_get_mthod,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								if (which == ProfileActivity.PICK_FROM_ALBUM) {
+									getImageFromAlbum();
+								} else if (which == ProfileActivity.PICK_FROM_CAMERA) {
+									getImageFromCamera();
+								}
+							}
+						}).show();
+	}
+
+	private void changeProfile(){
+		
+		nickNameView.setText(nickName);
+		emailView.setText(email);
+		purposeView.setText(purpose);
+		myCategoryView.setText(myCategories);
+	}
+	
+	private void getImageFromCamera() {
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		cameraImagePath = "tmp_" + String.valueOf(System.currentTimeMillis())+ ".jpg";
+		mImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), cameraImagePath));
+		intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,mImageCaptureUri);
+		startActivityForResult(intent, PICK_FROM_CAMERA);
+	}
+
+	private void getImageFromAlbum() {
+		Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+		i.setType("image/*");
+		startActivityForResult(i, ProfileActivity.PICK_FROM_ALBUM);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode != RESULT_OK)
+			return;
+
+		switch (requestCode) {
+		case CROP_FROM_CAMERA:
+			final Bundle extras = data.getExtras();
+			if (extras != null) {
+				//Crop 된 이미지는 sdcard에 저장되지 않고, 해당 크랍된 영역의 이미지 데이타를 intent 로 되돌려준다.
+				//그래서 Crop된 비트맵을 서버에 전송하기 위해서는 스트림으로 변환을 해야 한다.
+				Bitmap photo = extras.getParcelable("data");
+				((ImageView) findViewById(R.id.activity_profile_thumb_image)).setImageBitmap(photo);
+			}
+		
+			File f = new File(mImageCaptureUri.getPath());
+			//촬영된 원본 이미지를 삭제한다. 만약 이 촬영이미지를 서버에 업로드 하는 경우 삭제하면 안된다.
+			//혹은 삭제한다면 생성된 촬영 비트맵이나 crop된 이미지를 스트림으로 변환해야 한다.
+			if (f.exists())
+				f.delete();
+			break;
+			
+		case PICK_FROM_ALBUM:
+			mImageCaptureUri = data.getData();
+			galleryImagePath = AndroUtils.getRealImagePath(this, mImageCaptureUri);
+			File file = new File(galleryImagePath);
+			Toast.makeText(this, "이미지 경로 " + galleryImagePath, Toast.LENGTH_LONG).show();
+			if (!file.exists()) {
+				Toast.makeText(this, "파일을 찾을 수가 없습니다", Toast.LENGTH_LONG).show();
+				return;
+			}
+
+			Bitmap bit = decodeFile(file);
+			((ImageView) findViewById(R.id.activity_profile_thumb_image)).setImageBitmap(bit);
+			break;
+
+		case PICK_FROM_CAMERA:
+			Intent intent = new Intent("com.android.camera.action.CROP");
+			intent.setDataAndType(mImageCaptureUri, "image/*");
+
+			intent.putExtra("outputX", 90);
+			intent.putExtra("outputY", 90);
+			intent.putExtra("aspectX", 1);
+			intent.putExtra("aspectY", 1);
+			intent.putExtra("scale", true);
+			intent.putExtra("return-data", true);
+			startActivityForResult(intent, CROP_FROM_CAMERA);
+			break;
+		}
+	}
+
+	// 이미지 파일을 스케일링해서 혹시 모를 OutofMemey 를 방지한다.
+	private Bitmap decodeFile(File f) {
+		try {
+			BitmapFactory.Options o = new BitmapFactory.Options();
+			o.inJustDecodeBounds = true;
+			FileInputStream stream1 = new FileInputStream(f);
+			BitmapFactory.decodeStream(stream1, null, o);
+			stream1.close();
+
+			final int REQUIRED_SIZE = 70;
+			int width_tmp = o.outWidth, height_tmp = o.outHeight;
+			int scale = 1;
+			while (true) {
+				if (width_tmp / 2 < REQUIRED_SIZE|| height_tmp / 2 < REQUIRED_SIZE)
+					break;
+				width_tmp /= 2;
+				height_tmp /= 2;
+				scale *= 2;
+			}
+
+			BitmapFactory.Options o2 = new BitmapFactory.Options();
+			o2.inSampleSize = scale;
+			FileInputStream stream2 = new FileInputStream(f);
+			Bitmap bitmap = BitmapFactory.decodeStream(stream2, null, o2);
+			stream2.close();
+			return bitmap;
+		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+}

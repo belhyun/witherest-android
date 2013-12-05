@@ -1,0 +1,31 @@
+package com.teamteam.witherest.service;
+
+import java.util.ArrayList;
+
+import org.apache.http.NameValuePair;
+
+public class Service {
+	public static final String BASE_URL = "http://special.or.kr/api ";
+	
+	public static final String LOGIN_URL =BASE_URL + "/login";
+	public static final String LOGOUT_URL = BASE_URL + "/delete";
+	public static final String JOIN_URL = BASE_URL + "/user";
+	public static final String DUPL_CHECK_URL = BASE_URL + "/user/duplCheck";
+	
+	
+	
+	public static final int REQUEST_LOGIN = 1000;
+	public static final int REQUEST_LOGOUT = 1001;
+	public static final int REQUEST_JOIN = 1002;
+	public static final int REQUEST_DUPL_CHECK = 1003;
+	
+	protected 	class ConnectionThread extends Thread{
+		String url;
+		String requestMethod;
+		ArrayList<NameValuePair> paramList;
+		public ConnectionThread(String url,String requestMethod , ArrayList<NameValuePair> paramList){
+			this.url = url;
+			this.paramList= paramList;
+			this.requestMethod = requestMethod ;
+		}
+}

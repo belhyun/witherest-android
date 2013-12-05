@@ -1,0 +1,7 @@
+package com.teamteam.customComponent;
+
+import android.widget.LinearLayout;
+
+public class EventCaptureLinearLayout extends LinearLayout {
+
+}

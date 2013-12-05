@@ -1,0 +1,463 @@
+package com.teamteam.witherest;
+
+import java.util.ArrayList;
+
+import com.teamteam.customComponent.ReplyDialogFragment;
+import com.teamteam.customComponent.SimpleProgressDialog;
+import com.teamteam.customComponent.WriteNoticeDialogFragment;
+import com.teamteam.customComponent.popup.ActionItem;
+import com.teamteam.customComponent.popup.QuickAction;
+
+import com.teamteam.witherest.common.AndroUtils;
+import com.teamteam.witherest.common.CommonUtils;
+import com.teamteam.witherest.lazyload.ImageLoader;
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.service.ArticleService;
+import com.teamteam.witherest.service.RoomService;
+import com.teamteam.witherest.service.Service;
+import com.teamteam.witherest.service.ServiceManager;
+import com.teamteam.witherest.service.callback.ArticleServiceCallback;
+import com.teamteam.witherest.service.callback.RoomServiceCallback;
+import com.teamteam.witherest.service.callback.object.ArticleActionResponseObject;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.callback.object.RoomBoardResponseObject;
+import com.teamteam.witherest.service.callback.object.RoomWithResponseObject;
+import com.teamteam.witherest.service.callback.object.RoomBoardResponseObject.Message;
+
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class RoomBoardFragment extends Fragment implements RoomServiceCallback, ArticleServiceCallback{
+	private Activity activity;
+	private int roomId;
+	private int page;                                // 페이지 번호
+	private int pagingSize;                        // 페이징 사이즈
+	private int totalRecodCount;                  // 전체 레코드 갯수
+	private int curRecordCount;                  // 현재 읽어들인 레코드 갯수 
+	
+	private String roomManagerNotice;
+	boolean hasRoomManagerNotice;
+
+	public ListView roomBoardList;
+	public View headerView;
+	
+	public ImageView roomManagerImageView;
+	public TextView roomManagerNameView;
+	public TextView roomManagerNoticeView;
+	public TextView roomManagerPurposeView;
+	public EditText writeEdit;
+	
+	public ActionItem replyItem;
+	public ActionItem deleteItem;
+	
+	public SimpleProgressDialog waitProgressDialog;
+	public ImageLoader imageLoader;
+	
+	public RoomBoardResponseObject roomBoardResponseObject;
+	public RoomService roomService;
+	
+	public static final int ACTION_ID_REPLAY =1;
+	public static final int ACTION_ID_DELETE =2;
+	
+	public static RoomBoardFragment newInstance(int roomId,int page){
+		RoomBoardFragment fragment = new RoomBoardFragment();
+	    Bundle args = new Bundle();
+        args.putInt("roomId",roomId);
+        args.putInt("page",page);
+        fragment.setArguments(args);
+        return fragment;
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		this.activity = activity;
+		imageLoader = new ImageLoader(getActivity());
+		imageLoader.clearCache();
+
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		roomService = ServiceManager.getServiceManager().getRoomService();
+		roomId = getArguments().getInt("roomId");
+		page = getArguments().getInt("page");
+		pagingSize = 20;
+		totalRecodCount = 0;
+		curRecordCount = 0;
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		LinearLayout view = (LinearLayout)inflater.inflate(R.layout.fragment_roomboard ,null);
+		roomBoardList = (ListView )view.findViewById(R.id.roomboard_listview);
+		writeEdit = (EditText)view.findViewById(R.id.roomboard_write_edittext);
+		 Button writeBtn = (Button)view.findViewById(R.id.roomboard_write_btn);
+		
+		//신규 글 올리기 리스너 설정
+		writeBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				int userType = ((RoomDetailActivity)getActivity()).behaviorType;
+				
+				if (CommonUtils.isNullOrEmpty(writeEdit.getText().toString())){
+					AndroUtils.showToastMessage(getActivity(), getActivity().getResources().getString(R.string.no_text),
+							Toast.LENGTH_SHORT);
+					return;
+				}
+				if (userType == RoomDetailActivity.MEMBER_JOINED || userType ==RoomDetailActivity.OWNER){
+					AndroUtils.hideSoftKeyboard(getActivity(),writeEdit);
+					submitNewWriting(writeEdit.getText().toString());
+				}else {
+					AndroUtils.showToastMessage(getActivity(), getActivity().getResources().getString(R.string.not_user_not_join_alert), 
+							Toast.LENGTH_SHORT);
+					return;
+				}
+			
+			}
+		});
+		
+		headerView = inflater.inflate(R.layout.roomboard_list_header_view, null);
+		roomManagerImageView = (ImageView)headerView.findViewById(R.id.notice_row_image);
+		roomManagerNameView = (TextView)headerView.findViewById(R.id.roomboard_name_textview);
+		roomManagerPurposeView = (TextView)headerView.findViewById(R.id.roomboard_purpose_textview);
+		roomManagerNoticeView = (TextView)headerView.findViewById(R.id.roomboard_notice_textview);
+		headerView.findViewById(R.id.roomboard_write_notice_btn).setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				makeRoomNotice();			
+			}
+		});
+		setListClickActionItem();
+		return view;
+	}
+	
+	private void setListClickActionItem() {
+	
+		replyItem 	= new ActionItem(ACTION_ID_REPLAY, "댓글 ", getResources().getDrawable(R.drawable.comment_comment_icon_bg));
+		deleteItem 	= new ActionItem(ACTION_ID_DELETE , "삭제", getResources().getDrawable(R.drawable.comment_trash_icon_bg));
+    	
+	}
+        
+
+    private void showReplyDialog(Message message) {
+    	DialogFragment  newFragment = ReplyDialogFragment.newInstance(message.messageId,
+    			RoomDetailActivity.roomWithFragment.roomWithResponse.checkRoomWith.roomId);
+		FragmentManager fm = getFragmentManager(); 
+		newFragment.show(fm,"noticeDialog");		
+	}
+        
+	private void submitNewWriting(String writing) {
+		waitProgressDialog = new SimpleProgressDialog(getActivity(), 
+				getString(R.string.wait_title),getString(R.string.wait_message));
+		waitProgressDialog.start();
+		
+		ArticleService articleService = ServiceManager.getServiceManager().getArticleService();
+		articleService.setOnArticleCallback(this);
+		articleService.submitNewComment(writing,RoomDetailActivity.roomWithFragment.roomWithResponse.checkRoomWith.roomId);
+	}
+	
+	private void makeRoomNotice() {
+		if (!isRoomOwner()){
+			AndroUtils.showToastMessage(getActivity(),getActivity().getResources().getString(R.string.you_not_manager) , Toast.LENGTH_SHORT);
+			return;
+		}
+		 showNoticeWriteDialog();
+	}
+	
+	private void showNoticeWriteDialog() {
+		DialogFragment  newFragment = WriteNoticeDialogFragment.newInstance( RoomDetailActivity.roomWithFragment.roomWithResponse.checkRoomWith.roomOwner
+				, (hasRoomManagerNotice?roomManagerNotice:""));
+		FragmentManager fm = getFragmentManager(); 
+		newFragment.show(fm,"noticeDialog");
+		
+	}
+
+	private boolean isRoomOwner() {
+		int roomOwner = RoomDetailActivity.roomWithFragment.roomWithResponse.checkRoomWith.roomOwner;
+		if (roomOwner == Session.getInstance().user.userIndex){
+			return true;
+		}else {
+			return false;
+		}	
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		Log.v("룸보드프래그먼트", "onResume() 호출");
+		if (roomBoardResponseObject == null){
+			getRoomBoard(getArguments().getInt("roomId"));
+		}else {
+			updateUi(roomBoardResponseObject);
+		}
+	}
+
+	private void getRoomBoard(int roomId) {
+		waitProgressDialog = new SimpleProgressDialog(getActivity(), 
+				getString(R.string.wait_title),getString(R.string.wait_message));
+		waitProgressDialog.start();
+		roomService.setOnRoomCallback(this);
+		Log.v("룸보드 가져오기 파라미터" , "roomId--> " + roomId + " , "+ "page--> "+ page);
+		roomService.getRoomBoard(roomId,page);
+	}
+	
+	public void onRoomServiceCallback(BaseResponseObject object) {
+		if (waitProgressDialog.isShowing()){
+			SimpleProgressDialog.stop(waitProgressDialog);
+		}
+		
+		if (object.resultCode == Service.RESULT_FAIL) {
+			AndroUtils.showToastMessage(getActivity(), object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);
+			return;
+		}
+		
+		switch(object.requestType){
+		case Service.REQUEST_TYPE_GET_ROOM_BOARD:
+			AndroUtils.showToastMessage(getActivity(), object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);
+			roomBoardResponseObject = (RoomBoardResponseObject)object;
+			updateUi(roomBoardResponseObject);
+			break;
+		}			
+	}	
+
+	private void updateUi(RoomBoardResponseObject obj) {
+		roomBoardList.removeHeaderView(headerView);
+		roomManagerNameView.setText(obj.roomManagerName);
+		
+		roomManagerImageView.setImageBitmap(null);
+		String imageUrl = null;
+		if (!CommonUtils.isNullOrEmpty(obj.roomManageImagePath) && !"0".equals(obj.roomManageImagePath)){
+			imageUrl = Service.BASE_URL+ obj.roomManageImagePath;
+		}
+		imageLoader.displayImage(imageUrl, roomManagerImageView);
+		
+		roomManagerPurposeView.setText(CommonUtils.isNullOrEmpty(obj.roomManagerPurpose)?
+				getActivity().getResources().getString(R.string.no_purpose) : obj.roomManagerPurpose );
+		
+		if (!CommonUtils.isNullOrEmpty(obj.roomManagerNotice)){
+			hasRoomManagerNotice = true;
+			roomManagerNotice = obj.roomManagerNotice;
+		}else {
+			hasRoomManagerNotice = false;
+			roomManagerNotice = getActivity().getResources().getString(R.string.no_manager_notice);
+		}
+		
+		roomManagerNoticeView.setText(roomManagerNotice);
+		roomBoardList.addHeaderView(headerView);
+		roomBoardList.setAdapter(new RoomBoardAdaper(getActivity(),imageLoader, R.layout.roomboard_list_item_row, obj.messageList));
+	}
+	
+	public void createNotice(String notice, int ownerId) {
+		roomManagerNotice = notice;
+		waitProgressDialog = new SimpleProgressDialog(getActivity(), 
+				getString(R.string.wait_title),getString(R.string.wait_message));
+		waitProgressDialog.start();
+		
+		ArticleService articleService = ServiceManager.getServiceManager().getArticleService();
+		articleService.setOnArticleCallback(this);
+		articleService.createNotice(notice, ownerId,RoomDetailActivity.roomWithFragment.roomWithResponse.checkRoomWith.roomId);
+	}
+	
+	public void onArticleServiceCallback(BaseResponseObject object) {
+		if (waitProgressDialog.isShowing()){
+			SimpleProgressDialog.stop(waitProgressDialog);
+		}
+		
+		if (object.resultCode == Service.RESULT_FAIL) {
+			AndroUtils.showToastMessage(getActivity(), object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);
+			return;
+		}
+		
+		switch(object.requestType){
+		case Service.REQUEST_TYPE_CREATE_NOTICE:
+			AndroUtils.showToastMessage(getActivity(), object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);
+			updateNotice();
+			break;
+			
+		case Service.REQUEST_TYPE_SUBMIT_NEW_COMMENT:
+			ArticleActionResponseObject o1 = (ArticleActionResponseObject)object;
+			AndroUtils.showToastMessage(getActivity(), object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);
+			writeEdit.setText("");
+			break;
+			
+		case Service.REQUEST_TYPE_DELETE_COMMENT:
+			ArticleActionResponseObject o2 = (ArticleActionResponseObject)object;
+			AndroUtils.showToastMessage(getActivity(), object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);
+			break;
+		}	
+		
+	}
+
+	public void updateNotice(){
+		roomManagerNoticeView.setText(roomManagerNotice );
+	}
+
+	//서버로 글 삭제 요청한다. api 가 준비되지 않았음 
+	private void deleteMyComment(Message message) {
+		waitProgressDialog = new SimpleProgressDialog(getActivity(), 
+				getString(R.string.wait_title),getString(R.string.wait_message));
+		waitProgressDialog.start();
+		
+		ArticleService articleService = ServiceManager.getServiceManager().getArticleService();
+		articleService.setOnArticleCallback(this);	
+		articleService.deleteCmment(message.messageId);
+	}
+	
+	//댓글을 서버로 등록한다.
+	public void submitReplyComment(String comment, int parentId, int roomId) {
+		waitProgressDialog = new SimpleProgressDialog(getActivity(), 
+				getString(R.string.wait_title),getString(R.string.wait_message));
+		waitProgressDialog.start();
+		
+		ArticleService articleService = ServiceManager.getServiceManager().getArticleService();
+		articleService.setOnArticleCallback(this);	
+		articleService.submitReplyComment(comment, roomId, parentId);
+		
+	}
+
+	
+	public class RoomBoardAdaper extends BaseAdapter{
+		
+		Context con;
+		int resId;
+		ArrayList<Message> messageList;
+		LayoutInflater inflater;
+		ImageLoader imageLoader;
+		
+		public RoomBoardAdaper(Context con, ImageLoader imageLoader, int resId, ArrayList<Message> messageList){
+			this.con = con;
+			this.imageLoader = imageLoader;
+			this.resId = resId;
+			this.messageList = messageList;
+			this.inflater = (LayoutInflater) con.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
+		public int getCount() {
+			return messageList.size();
+		}
+		
+		public Object getItem(int position) {
+			return messageList.get(position);
+		}
+		
+		public long getItemId(int position) {
+			return position;
+		}
+		public View getView(int position, View convertView, ViewGroup parent) {
+			final int  pos = position;
+			
+			RoomBoardViewHolder viewHolder = null; 
+			if (convertView == null){
+				convertView = inflater.inflate(resId, parent, false);
+				viewHolder = new RoomBoardViewHolder();
+				viewHolder.writerImageView = (ImageView) convertView.findViewById(R.id.roomboard_row_image);
+				viewHolder.wirterNameView =   (TextView)convertView.findViewById(R.id.roomboard_textview1);
+				viewHolder.messageView =  (TextView)convertView.findViewById(R.id.roomboard_textview2);
+				viewHolder.replyCoutView = (TextView)convertView.findViewById(R.id.reply_count);
+				viewHolder.writeTimeView = (TextView)convertView.findViewById(R.id.roomboard_textview3);
+				convertView.setTag(viewHolder);
+			}else {
+				viewHolder = (RoomBoardViewHolder)convertView.getTag();
+			}
+			viewHolder.writerImageView.setImageBitmap(null);
+			
+			String url = null;
+			if (!CommonUtils.isNullOrEmpty(messageList.get(position).writerImagePath) &&
+					!"0".equals(messageList.get(position).writerImagePath)){
+				 url = Service.BASE_URL+messageList.get(position).writerImagePath;
+			}
+			
+			imageLoader.displayImage(url, viewHolder.writerImageView); 
+			
+			viewHolder.wirterNameView.setText(messageList.get(position).writerNickname);
+			viewHolder.messageView.setText(messageList.get(position).message);
+			viewHolder.writeTimeView.setText(messageList.get(position).writeTime);
+			viewHolder.replyCoutView.setText(CommonUtils.int2string(messageList.get(position).replyCount));
+			
+			final TextView anchorView = viewHolder.messageView;
+			final View  container = convertView.findViewById(R.id.roomboard_contaniner);
+			container.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					Message message = messageList.get(pos);
+					
+					Intent i = new Intent(getActivity(), BoardContentActivity.class);
+					i.putExtra("messageId",message.messageId );
+					i.putExtra("writerId",message.writeId);
+					i.putExtra("writerImagePath", message.writerImagePath);
+					i.putExtra("writerNickname", message.writerNickname);
+					i.putExtra("writeTime", message.writeTime);
+					i.putExtra("message",message.message);
+					i.putExtra("replyCount", message.replyCount);
+					startActivity(i);
+				}
+			});
+			final QuickAction listQuickAction = new QuickAction(activity, QuickAction.VERTICAL);
+			listQuickAction.addActionItem(deleteItem);
+			container.setOnLongClickListener(new OnLongClickListener() {
+				public boolean onLongClick(View v) {
+					if (Session.getInstance().sessionStatus != Session.AUTHORIZED){
+						return true;
+					}
+					if (Session.getInstance().user.userIndex !=messageList.get(pos).writeId){
+						return true;
+					}
+				
+					listQuickAction.show(anchorView);
+					return true;
+					}
+				});
+				
+		        listQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {			
+					public void onItemClick(QuickAction source, int actionPos, int actionId) {				
+						ActionItem actionItem = listQuickAction.getActionItem(actionPos);
+						if (actionId == ACTION_ID_REPLAY) {
+								showReplyDialog(messageList.get(pos));
+						} else if (actionId == ACTION_ID_DELETE) {
+							deleteMyComment(messageList.get(pos));
+					    }
+					}
+		        });		
+		        
+		/*    리스트 아이템이 이제는 상단, 미들, 하단별로 별도의 이미지를 사용하지 않기 때문에 주석처리함
+			if (position == 0){
+				convertView.setBackgroundResource(R.drawable.roomboard_comment_top_bg2);
+			}else if (position == getCount()-1){
+				convertView.setBackgroundResource(R.drawable.roomboard_comment_bottom_bg2);
+			}else {
+				convertView.setBackgroundResource(R.drawable.roomboard_comment_center_bg2);
+			}
+			*/
+			return convertView;
+		}
+	}
+	public class RoomBoardViewHolder{
+		public ImageView writerImageView;
+		public TextView wirterNameView;
+		public TextView messageView;
+		public TextView replyCoutView;
+		public TextView writeTimeView;
+	}
+}

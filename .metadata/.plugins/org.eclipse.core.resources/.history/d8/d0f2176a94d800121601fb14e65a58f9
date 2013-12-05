@@ -1,0 +1,10 @@
+package com.teamteam.witherest.service.callback.object;
+
+import java.util.ArrayList;
+
+import android.os.Message;
+
+public class ReplyListResponseObject extends BaseResponseObject {
+	public int totalBoardCount;
+	public ArrayList<Message> messageList;
+}

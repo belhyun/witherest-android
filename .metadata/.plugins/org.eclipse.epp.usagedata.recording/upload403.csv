@@ -1,0 +1,251 @@
+what,kind,bundleId,bundleVersion,description,time
+started,bundle,org.eclipse.mylyn.commons.net,3.7.1.v20120425-0100,"org.eclipse.mylyn.commons.net",1371743754484
+started,bundle,org.eclipse.mylyn.commons.notifications.core,0.9.1.v20120425-0100,"org.eclipse.mylyn.commons.notifications.core",1371743754484
+started,bundle,org.eclipse.mylyn.commons.notifications.feed,0.9.1.v20120425-0100,"org.eclipse.mylyn.commons.notifications.feed",1371743754500
+started,bundle,org.eclipse.mylyn.commons.ui,3.7.1.v20120425-0100,"org.eclipse.mylyn.commons.ui",1371743754500
+started,bundle,org.eclipse.mylyn.commons.workbench,3.7.1.v20120425-0100,"org.eclipse.mylyn.commons.workbench",1371743754500
+started,bundle,org.eclipse.mylyn.context.core,3.7.1.v20120425-0100,"org.eclipse.mylyn.context.core",1371743754500
+started,bundle,org.eclipse.mylyn.context.tasks.ui,3.7.1.v20120425-0100,"org.eclipse.mylyn.context.tasks.ui",1371743754500
+started,bundle,org.eclipse.mylyn.monitor.ui,3.7.1.v20120425-0100,"org.eclipse.mylyn.monitor.ui",1371743754500
+started,bundle,org.eclipse.mylyn.tasks.ui,3.7.1.v20120425-0100,"org.eclipse.mylyn.tasks.ui",1371743754500
+started,bundle,org.eclipse.mylyn.team.ui,3.7.1.v20120425-0100,"org.eclipse.mylyn.team.ui",1371743754500
+started,bundle,com.android.ide.eclipse.base,20.0.3.v201208082019-427395,"com.android.ide.eclipse.base",1371743754500
+started,bundle,org.spearce.egit.core,0.4.9,"org.spearce.egit.core",1371743754500
+started,bundle,org.spearce.egit.ui,0.4.9,"org.spearce.egit.ui",1371743754500
+started,bundle,org.spearce.jgit,0.4.9,"org.spearce.jgit",1371743754500
+os,sysinfo,,,"win32",1371743754500
+arch,sysinfo,,,"x86",1371743754500
+ws,sysinfo,,,"win32",1371743754500
+locale,sysinfo,,,"ko_KR",1371743754500
+processors,sysinfo,,,"2",1371743754515
+java.runtime.name,sysinfo,,,"Java(TM) SE Runtime Environment",1371743754515
+java.runtime.version,sysinfo,,,"1.6.0_21-b07",1371743754515
+java.specification.name,sysinfo,,,"Java Platform API Specification",1371743754515
+java.specification.vendor,sysinfo,,,"Sun Microsystems Inc.",1371743754515
+java.specification.version,sysinfo,,,"1.6",1371743754515
+java.vendor,sysinfo,,,"Sun Microsystems Inc.",1371743754515
+java.version,sysinfo,,,"1.6.0_21",1371743754515
+java.vm.info,sysinfo,,,"mixed mode, sharing",1371743754515
+java.vm.name,sysinfo,,,"Java HotSpot(TM) Client VM",1371743754515
+java.vm.specification.name,sysinfo,,,"Java Virtual Machine Specification",1371743754515
+java.vm.specification.vendor,sysinfo,,,"Sun Microsystems Inc.",1371743754515
+java.vm.specification.version,sysinfo,,,"1.0",1371743754515
+java.vm.vendor,sysinfo,,,"Sun Microsystems Inc.",1371743754515
+java.vm.version,sysinfo,,,"17.0-b17",1371743754515
+started,bundle,com.android.ide.eclipse.adt,20.0.3.v201208082019-427395,"com.android.ide.eclipse.adt",1371743754687
+started,bundle,org.eclipse.ltk.core.refactoring,3.5.101.r362_v20101117-0800,"org.eclipse.ltk.core.refactoring",1371743754953
+started,bundle,org.eclipse.ltk.ui.refactoring,3.5.0.v20100526-0800,"org.eclipse.ltk.ui.refactoring",1371743754953
+started,bundle,org.eclipse.jdt.launching,3.5.200.v20110105_r362,"org.eclipse.jdt.launching",1371743757781
+started,bundle,org.eclipse.jdt.apt.core,3.3.402.R36_v20110120-1000,"org.eclipse.jdt.apt.core",1371743757781
+started,bundle,org.eclipse.cdt.make.core,7.0.1.201102110609,"org.eclipse.cdt.make.core",1371743763125
+started,bundle,org.eclipse.cdt.managedbuilder.core,7.0.2.201102110609,"org.eclipse.cdt.managedbuilder.core",1371743763187
+started,bundle,org.eclipse.cdt.core,5.2.1.201102110609,"org.eclipse.cdt.core",1371743763265
+started,bundle,org.eclipse.cdt.ui,5.2.2.201102110609,"org.eclipse.cdt.ui",1371743763390
+started,bundle,org.eclipse.cdt.make.ui,7.0.0.201102110609,"org.eclipse.cdt.make.ui",1371743763421
+started,bundle,org.eclipse.jdt.apt.pluggable.core,1.0.301.R36_v20100727-0110,"org.eclipse.jdt.apt.pluggable.core",1371743768062
+started,bundle,org.eclipse.wst.sse.core,1.1.506.v201110201853,"org.eclipse.wst.sse.core",1371743772328
+started,bundle,org.eclipse.compare.core,3.5.101.R36x_v20100929-0800,"org.eclipse.compare.core",1371743778093
+opened,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371743778218
+started,bundle,org.eclipse.core.variables,3.2.400.v20100505,"org.eclipse.core.variables",1371743778359
+started,bundle,org.eclipse.jdt.debug,3.6.1.v20100715_r361,"org.eclipse.jdt.debug",1371743778687
+started,bundle,org.eclipse.jdt.debug.ui,3.5.2.v20100928a_r362,"org.eclipse.jdt.debug.ui",1371743778781
+started,bundle,org.eclipse.ui.navigator,3.5.0.I20100601-0800,"org.eclipse.ui.navigator",1371743778812
+activated,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371743778843
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1371743782593
+opened,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371743782843
+activated,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371743782921
+started,bundle,com.android.ide.eclipse.ddms,20.0.3.v201208082019-427395,"com.android.ide.eclipse.ddms",1371743795093
+opened,view,com.android.ide.eclipse.ddms,20.0.3.v201208082019-427395,"com.android.ide.eclipse.ddms.views.LogCatView",1371743795218
+activated,view,com.android.ide.eclipse.ddms,20.0.3.v201208082019-427395,"com.android.ide.eclipse.ddms.views.LogCatView",1371743795234
+started,bundle,com.android.ide.eclipse.traceview,20.0.3.v201208082019-427395,"com.android.ide.eclipse.traceview",1371743795562
+activated,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371743801359
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1371743847875
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371743850234
+started,bundle,org.eclipse.wst.common.frameworks,1.2.1.v201107271600,"org.eclipse.wst.common.frameworks",1371743852281
+started,bundle,org.eclipse.wst.common.emf,1.2.3.v201012100400,"org.eclipse.wst.common.emf",1371743852296
+started,bundle,org.eclipse.jem.util,2.1.3.v201012070000,"org.eclipse.jem.util",1371743852296
+started,bundle,org.eclipse.wst.common.emfworkbench.integration,1.2.4.v201106210700,"org.eclipse.wst.common.emfworkbench.integration",1371743852296
+started,bundle,org.eclipse.wst.common.core,1.2.0.v200908252030,"org.eclipse.wst.common.core",1371743852312
+started,bundle,org.eclipse.wst.common.modulecore,1.2.7.v201110060300,"org.eclipse.wst.common.modulecore",1371743852328
+started,bundle,org.eclipse.jst.j2ee.core,1.2.7.v201110060300,"org.eclipse.jst.j2ee.core",1371743852328
+started,bundle,org.eclipse.jem,2.0.402.v201106132000,"org.eclipse.jem",1371743852343
+started,bundle,org.eclipse.wst.common.frameworks.ui,1.2.0.v201004080500,"org.eclipse.wst.common.frameworks.ui",1371743852359
+started,bundle,org.eclipse.wst.xml.core,1.1.505.v201109271810,"org.eclipse.wst.xml.core",1371743852359
+started,bundle,org.eclipse.wst.validation,1.2.204.v201109220700,"org.eclipse.wst.validation",1371743852375
+started,bundle,org.eclipse.jst.j2ee,1.1.406.v201110130300,"org.eclipse.jst.j2ee",1371743852390
+started,bundle,org.eclipse.wst.jsdt.manipulation,1.0.200.v201004150600,"org.eclipse.wst.jsdt.manipulation",1371743852609
+started,bundle,org.eclipse.wst.jsdt.core,1.1.8.v201109150205,"org.eclipse.wst.jsdt.core",1371743853265
+started,bundle,org.eclipse.wst.jsdt.ui,1.1.7.v201109150205,"org.eclipse.wst.jsdt.ui",1371743853328
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371743853656
+executed,command,org.eclipse.ltk.ui.refactoring,3.5.0.v20100526-0800,"org.eclipse.ltk.ui.refactoring.commands.deleteResources",1371743853687
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.delete",1371743853687
+started,bundle,org.eclipse.wst.sse.ui,1.2.5.v201108191505,"org.eclipse.wst.sse.ui",1371743854640
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371743856515
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371743857781
+executed,command,org.eclipse.ltk.ui.refactoring,3.5.0.v20100526-0800,"org.eclipse.ltk.ui.refactoring.commands.deleteResources",1371743857812
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.delete",1371743857812
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371743871203
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371743872671
+executed,command,org.eclipse.ui.ide,3.6.2.M20101201-0800,"org.eclipse.ui.project.cleanAction",1371743872734
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371743873015
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371743893296
+opened,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371743902031
+activated,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371743902125
+started,bundle,org.eclipse.jdt.junit,3.6.1.r361_v20100825-0800,"org.eclipse.jdt.junit",1371743904343
+opened,view,org.eclipse.ui.ide,3.6.2.M20101201-0800,"org.eclipse.ui.views.ProblemView",1371743905234
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1371743908734
+started,bundle,org.eclipse.wst.ws.service.policy.ui,1.0.203.v201109140236,"org.eclipse.wst.ws.service.policy.ui",1371743908875
+started,bundle,org.eclipse.wst.ws.service.policy,1.0.204.v201011011834,"org.eclipse.wst.ws.service.policy",1371743908875
+started,bundle,org.eclipse.wst.command.env,1.0.409.v201004211805,"org.eclipse.wst.command.env",1371743908890
+started,bundle,org.eclipse.wst.ws,1.1.203.v201004211805,"org.eclipse.wst.ws",1371743908890
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371743908968
+started,bundle,org.eclipse.compare,3.5.101.R36x_v20100929-0800,"org.eclipse.compare",1371743909062
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371743919296
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371743920796
+executed,command,org.eclipse.ui.ide,3.6.2.M20101201-0800,"org.eclipse.ui.project.cleanAction",1371743920859
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371743921453
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371743921734
+activated,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371743930718
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1371743933984
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371743934062
+activated,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371743941578
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371743956109
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371743956250
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.undo",1371743964078
+activated,view,com.android.ide.eclipse.ddms,20.0.3.v201208082019-427395,"com.android.ide.eclipse.ddms.views.LogCatView",1371743978375
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1371744041843
+opened,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371744049750
+activated,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371744049843
+started,bundle,org.eclipse.pde.core,3.6.2.v20110210_r362,"org.eclipse.pde.core",1371744055640
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1371744061671
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744074125
+closed,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371744076000
+closed,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371744076062
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744076078
+executed,command,org.eclipse.ltk.ui.refactoring,3.5.0.v20100526-0800,"org.eclipse.ltk.ui.refactoring.commands.deleteResources",1371744076109
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.delete",1371744076109
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744078843
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744080156
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744080343
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744085812
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.properties",1371744085843
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744090937
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744096812
+executed,command,org.eclipse.ltk.ui.refactoring,3.5.0.v20100526-0800,"org.eclipse.ltk.ui.refactoring.commands.deleteResources",1371744096812
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.delete",1371744096812
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744101765
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744119250
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.import",1371744119265
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.import",1371744119265
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744124687
+closed,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371744126406
+closed,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371744126453
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744126484
+executed,command,org.eclipse.ltk.ui.refactoring,3.5.0.v20100526-0800,"org.eclipse.ltk.ui.refactoring.commands.deleteResources",1371744126484
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.delete",1371744126484
+started,bundle,org.eclipse.wst.server.core,1.1.208.v20111005_1734,"org.eclipse.wst.server.core",1371744129890
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744130843
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744130890
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.undo",1371744130890
+started,bundle,org.eclipse.wst.xml.ui,1.1.105.v201106142156,"org.eclipse.wst.xml.ui",1371744140140
+started,bundle,org.eclipse.wst.common.uriresolver,1.1.401.v201004280700,"org.eclipse.wst.common.uriresolver",1371744140750
+started,bundle,org.eclipse.wst.xsl.core,1.1.0.v201004290328,"org.eclipse.wst.xsl.core",1371744140968
+started,bundle,org.eclipse.wst.xsl.exslt.core,1.0.0.v201005240426,"org.eclipse.wst.xsl.exslt.core",1371744141000
+started,bundle,org.eclipse.jst.jsp.ui,1.1.505.v201110211728,"org.eclipse.jst.jsp.ui",1371744141281
+started,bundle,org.eclipse.jst.jsp.core,1.2.308.v201109202150,"org.eclipse.jst.jsp.core",1371744141406
+started,bundle,org.eclipse.wst.dtd.ui,1.0.500.v201004290328,"org.eclipse.wst.dtd.ui",1371744141687
+started,bundle,org.eclipse.wst.xsl.ui,1.1.1.v201009091745,"org.eclipse.wst.xsl.ui",1371744141765
+started,bundle,org.eclipse.jem.workbench,2.0.301.v201104271300,"org.eclipse.jem.workbench",1371744142812
+started,bundle,org.eclipse.wst.internet.cache,1.0.400.v201004280700,"org.eclipse.wst.internet.cache",1371744142906
+opened,editor,com.android.ide.eclipse.adt,20.0.3.v201208082019-427395,"com.android.ide.eclipse.editors.CommonXmlEditor",1371744146765
+activated,editor,com.android.ide.eclipse.adt,20.0.3.v201208082019-427395,"com.android.ide.eclipse.editors.CommonXmlEditor",1371744147062
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744152546
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744153671
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1371744153687
+executed,command,org.eclipse.ui.ide,3.6.2.M20101201-0800,"org.eclipse.ui.project.cleanAction",1371744153781
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744154453
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744172031
+activated,editor,com.android.ide.eclipse.adt,20.0.3.v201208082019-427395,"com.android.ide.eclipse.editors.CommonXmlEditor",1371744193468
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1371744202734
+opened,editor,com.android.ide.eclipse.adt,20.0.3.v201208082019-427395,"com.android.ide.eclipse.editors.CommonXmlEditor",1371744203281
+activated,editor,com.android.ide.eclipse.adt,20.0.3.v201208082019-427395,"com.android.ide.eclipse.editors.CommonXmlEditor",1371744203359
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1371744215875
+activated,editor,com.android.ide.eclipse.adt,20.0.3.v201208082019-427395,"com.android.ide.eclipse.editors.CommonXmlEditor",1371744217093
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1371744232718
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744236593
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744238750
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744238875
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744264171
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.properties",1371744264187
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744264734
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744270984
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744288468
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.import",1371744288500
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.import",1371744288500
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744290734
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744292218
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744292343
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744300671
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.properties",1371744300687
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744303843
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744305890
+executed,command,org.eclipse.ui.ide,3.6.2.M20101201-0800,"org.eclipse.ui.project.cleanAction",1371744305906
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744306156
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744308656
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744318328
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744339140
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744349000
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744352765
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744352890
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744366421
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.properties",1371744366437
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744374453
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744424484
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744425593
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744425609
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744425703
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744496437
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744497296
+started,bundle,org.eclipse.jdt.junit.core,3.6.1.r361_v20100825-0800,"org.eclipse.jdt.junit.core",1371744507078
+started,bundle,org.eclipse.cdt.debug.core,7.0.0.201102110609,"org.eclipse.cdt.debug.core",1371744507125
+started,bundle,org.eclipse.cdt.debug.ui,7.0.0.201102110609,"org.eclipse.cdt.debug.ui",1371744507140
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744511062
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744511203
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744512703
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.properties",1371744512734
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744519109
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744522406
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744523968
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744524093
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744533531
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.properties",1371744533578
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744534781
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744536281
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744536406
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744538375
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.properties",1371744538390
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744540375
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744541796
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744541921
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744543625
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.properties",1371744543640
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744551468
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744553765
+executed,command,org.eclipse.ltk.ui.refactoring,3.5.0.v20100526-0800,"org.eclipse.ltk.ui.refactoring.commands.deleteResources",1371744553765
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.edit.delete",1371744553765
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744556812
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744574546
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.import",1371744574562
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.import",1371744574562
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744585828
+activated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744604953
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.import",1371744604984
+executed,command,org.eclipse.ui,3.6.2.M20110203-1100,"org.eclipse.ui.file.import",1371744604984
+opened,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371744617484
+activated,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371744617578
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1371744624640
+opened,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371744625562
+activated,editor,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.CompilationUnitEditor",1371744625656
+activated,view,org.eclipse.jdt.ui,3.6.2.r362_v20110203,"org.eclipse.jdt.ui.PackageExplorer",1371744635203
+error,log,,,"No property tester contributes a property projectPersistentProperty org.eclipse.team.core.repository to type class org.eclipse.core.internal.resources.Project",1371744638781
+deactivated,workbench,org.eclipse.ui.workbench,3.6.2.M20110210-1200,"",1371744645281

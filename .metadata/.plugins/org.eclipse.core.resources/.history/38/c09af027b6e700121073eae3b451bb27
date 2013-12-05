@@ -1,0 +1,266 @@
+package com.teamteam.witherest;
+
+import java.util.ArrayList;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.teamteam.customComponent.SimpleProgressDialog;
+import com.teamteam.witherest.common.AndroUtils;
+import com.teamteam.witherest.common.CommonUtils;
+import com.teamteam.witherest.model.AppCache;
+import com.teamteam.witherest.model.Category;
+import com.teamteam.witherest.service.callback.CategoryServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.callback.object.CategoryRoomCountResponseObject;
+import com.teamteam.witherest.service.callback.object.MyCheckResponseObject;
+import com.teamteam.witherest.service.callback.object.CategoryRoomCountResponseObject.CategoryRoomCount;
+import com.teamteam.witherest.service.internal.CategoryService;
+import com.teamteam.witherest.service.internal.ErrorHandler;
+import com.teamteam.witherest.service.internal.Service;
+import com.teamteam.witherest.service.internal.ServiceManager;
+
+public class Fragment_CheckRoom extends Fragment implements CategoryServiceCallback{
+
+	private Activity activity;
+	private SimpleProgressDialog waitProgressDialog;
+	public CategoryRoomCountResponseObject roomCountObject;
+	public LinearLayout checkRoomView;
+
+	/* Fragment Life Cycle */
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		this.activity = activity;
+		Log.v("체크룸", "onAttach() 호출됨");
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Log.v("체크룸", "onCreate() 호출됨");
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		Log.v("체크룸", "onCreateView() 호출됨");
+		checkRoomView = (LinearLayout) inflater.inflate(R.layout.fragment_checkroom, null);
+		return checkRoomView;
+	}
+	
+	
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		Log.v("체크룸", "onViewCreated() 호출됨");
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		Log.v("체크룸", "onActivityCreated() 호출됨");
+	}
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		Log.v("체크룸", "onResume() 호출됨");
+		waitProgressDialog = new SimpleProgressDialog(getActivity(), getActivity().getString(R.string.wait_title),
+				getString(R.string.wait_message));
+			waitProgressDialog.start();
+			
+		//카테고리별 방 정보는 매번 읽어오지 않게 끔 작성함
+		if (roomCountObject == null ){
+			loadAllCategoryRoomCount();
+		}else {
+			updateUi();
+			Log.v("체크룸 요청상태","이미 존재하기 때문에 요청하지 않음");
+		}
+	}
+
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		SimpleProgressDialog.end(waitProgressDialog);
+		Log.v("체크룸", "onPause() 호출됨");
+
+	}
+	
+	
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		Log.v("체크룸", "onDestroy() 호출됨");
+	}
+
+	@Override
+	public void onDestroyView() {
+		// TODO Auto-generated method stub
+		super.onDestroyView();
+		Log.v("체크룸", "onDestroyView() 호출됨");
+	}
+
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		Log.v("체크룸", "onStop() 호출됨");
+	}
+
+	@Override
+	public void onDetach() {
+		// TODO Auto-generated method stub
+		super.onDetach();
+		Log.v("체크룸", "onDetach() 호출됨");
+	}
+	
+	public void updateUi(){
+
+		ArrayList<Category> categories = AppCache.getInstance().getAppCategory();
+
+		ListView checkRoomList = (ListView) checkRoomView.findViewById(R.id.check_room_list);
+		checkRoomList.setAdapter(new CategoryListAdapter(activity,R.layout.check_room_list_item, 
+				categories,roomCountObject.allCategoriesRoomCount));
+		checkRoomList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> arg0, View view, int position,
+					long id) {
+				if (roomCountObject.allCategoriesRoomCount.get(position).roomCount >0){
+					Intent i = new Intent(activity, CheckRoomListActivity.class);
+					i.putExtra("categoryId", AppCache.getInstance().getAppCategory().get(position).categoryId);
+					activity.startActivity(i);
+				}
+			}
+		});
+	}
+	
+	public void loadAllCategoryRoomCount(){
+		if (!waitProgressDialog.isShowing()){
+			waitProgressDialog.show();
+		}
+		CategoryService categoryService = ServiceManager.getServiceManager().getCategoryService();
+		categoryService.setOnCategoryCallback(this);	
+		categoryService.getAllCagetoryRoomCount();
+	}
+	
+	public void onCategoryServiceCallback(BaseResponseObject object) {
+		if (waitProgressDialog.isShowing()){
+			waitProgressDialog.dismiss();
+		}
+		if (object.resultCode == Service.RESULT_FAIL) {
+			return;
+		}
+		
+		switch(object.requestType){
+		case Service.REQUEST_TYPE_GET_ALL_CATEGORIES_ROOMCOUNT:
+			if (object.resultCode == ErrorHandler.COMMON_ERROR || object.resultCode == ErrorHandler.NETWORK_DISABLE ||
+					object.resultCode == ErrorHandler.PARSING_ERROR){
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				builder.setTitle(R.string.fatal_network_error);
+				builder.setMessage(R.string.fatal_network_error_message);
+				builder.setCancelable(false);
+				builder.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								getActivity().finish();
+							}
+						});
+				builder.create().show();
+				return;
+			}else if (object.resultCode == ErrorHandler.CONNECTION_TIMEOUT || object.resultCode == ErrorHandler.READ_TIMEOUT){
+				AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
+				builder2.setTitle(R.string.tempo_network_error);
+				builder2.setMessage(R.string.tempo_network_error_message);
+				builder2.setCancelable(false);
+				builder2.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								new Handler().postDelayed(new Runnable() {
+									public void run() {
+										loadAllCategoryRoomCount();
+									}
+								}, 100);
+							}
+						});
+
+				builder2.setNegativeButton(R.string.no,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						});
+
+				builder2.create().show();
+				return;
+			}
+			roomCountObject = (CategoryRoomCountResponseObject)object;
+			updateUi();
+			break;
+		}
+		
+	}
+	
+	class CategoryListAdapter extends BaseAdapter{
+		LayoutInflater inflater;
+		int layout; 
+		ArrayList<Category> categories;
+		ArrayList<CategoryRoomCount> categoryRoomCount;
+		Context context;
+		
+		public CategoryListAdapter(Context context, int layout, ArrayList<Category> list,ArrayList<CategoryRoomCount> categoryRoomCount){
+			this.context = context;
+			this.layout = layout;
+			this.categories = list;
+			this.categoryRoomCount = categoryRoomCount;
+			inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
+		public int getCount() {
+			return categories.size();
+		}
+
+		public Object getItem(int position) {
+			return categories.get(position);
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			final int pos = position;
+			if (convertView == null){
+				convertView = inflater.inflate(layout, parent, false);
+			}
+			TextView categoryTextView = (TextView) convertView.findViewById(R.id.check_room_textview);
+			TextView  roomCountTextView = (TextView)convertView.findViewById(R.id.check_room_count_textview);
+			
+			categoryTextView .setText(categories.get(position).categoryName);
+			roomCountTextView.setText(CommonUtils.int2string(categoryRoomCount.get( position).getRoomCount()));
+			return convertView;
+		}
+	}
+
+	/* /Fragment Life Cycle */
+}

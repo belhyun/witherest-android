@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Witherest</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    
+    <!-- Common String -->
+    <string name="common_welcome">다른 사람들과 할 일을 공유 하고 함께 이뤄 가는 공간\n함께 목표를 이루는 공간에 당신을 초대합니다.</string>
+    
+    <string name="exception_message">오류가 발생하였습니다.</string>
+    <string name="incorrect_networkconnect">잘못된 접근방식입니다.</string>
+    <!-- /Common String -->
+    
+    <!-- Login String -->
+    <string name="login_title">로그인</string>
+    <string name="login_message">다른 사람들과 할 일을 공유 하고 함께 이뤄 가는 공간\n함께 목표를 이루는 공간에 당신을 초대합니다.</string>
+	<string name="login_id_hint">아이디 (이메일 주소)</string>
+	<string name="login_passwd_hint">비밀번호</string>
+	<string name="login_btn">로그인</string>
+	
+	<string name="login_dialog_message">로그인중 입니다.</string>
+	
+		<!-- Error String -->
+		<string name="login_insert_id_empty">아이디 (이메일 주소)를 입력 해주세요.</string>
+		<string name="login_insert_passwd_empty">비밀번호를 입력 해주세요.</string>
+		<string name="login_id_incorrect">등록되지 않은 사용자 입니다.</string>
+		<string name="login_passwd_incorrect">비밀번호가 일치하지 않습니다.</string>
+		<!-- /Error String -->
+	
+	<!-- /Login String -->
+	
+	<!-- SignUp String -->
+	<string name="signup_title">가입하기</string>
+	<string name="signup_nickname_hint">닉네임</string>
+	<string name="signup_id_hint">아이디 (이메일 주소)</string>
+	<string name="signup_passwd_hint">비밀번호</string>
+	<string name="signup_passwdconfirm_hint">비밀번호 확인</string>
+	<string name="signup_interestedCategory_hint">관심 카테고리</string>
+	<string name="signup_attention">만들기 버튼을 누르면 &lt;font color=#3cc3c6&gt;이용약관&lt;/font&gt; 및 &lt;font color=#3cc3c6&gt;개인 정보&lt;/font&gt;&lt;br /&gt;&lt;font color=#3cc3c6&gt;취급 방침&lt;/font&gt;에 동의하게 됩니다.</string>
+	<string name="signup_make_btn">가입하기</string>
+	
+	<string name="signup_dialog_message">&lt;small&gt;회원가입  요청중입니다.&lt;/small&gt;&lt;br&gt;&lt;small&gt;잠시만 기다려 주세요.&lt;/small&gt;</string>
+	
+		<!-- Error String -->
+		<string name="signup_insert_nickname_empty">닉네임을 입력 해주세요.</string>
+		<string name="signup_insert_id_empty">아이디 (이메일 주소)를 입력 해주세요.</string>
+		<string name="signup_insert_passwd_empty">비밀번호를 입력 해주세요.</string>
+		<string name="signup_insert_passwdconfirm_empty">비밀번호 확인을 입력 해주세요.</string>
+		<string name="signup_insert_interestedCategory_empty">관심 카테고리를 선택 해주세요.</string>
+		
+		<string name="signup_insert_passwd_different">입력된 비밀번호가 일치하지 않습니다.</string>
+		<!-- /Error String -->
+	
+	<!-- /SignUp String -->
+		<string name="title_category">Category</string>
+		<string name="profile_title">프로필 수정</string>
+		<string name="profile">프로필</string>
+		<string name="profile_menu_text">프로필 이미지</string>
+		<string name="profile_image_des">이미지를 변경하시려면 눌러주세요</string>
+		<string name="profile_nick">닉네임</string>
+		<string name="email">이메일</string>
+		<string name="purpose">목표 문구</string>
+		<string name="mycategory">관심 카테고리</string>
+		<string name="settings_title">설정</string>
+		<string name="default_info_text">기본 정보</string>
+		<string name="version_title">버젼 정보</string>
+		<string name="default_version">1.0</string>
+		<string name="help_title">도움말</string>
+		<string name="suggestion_title">의견 보내기</string>
+		<string name="note_title">알림 설정</string>
+		<string name="system_title">시스템 설정</string>
+		<string name="withdraw_title">탈퇴</string>
+		<string name="logout_title">로그 아웃</string>
+		<string name="warning_withdraw">Witherest를 탈퇴하시겠습니까?</string>
+		<string name="confirm">확인</string>
+		<string name="cancel">취소</string>
+		<string name="confirm_withdraw">탈퇴 확인</string>
+		<string name="notification">알림</string>
+		<string name="notificationconfig">알림 수신 설정</string>
+		<string name="activity_noti_config_time">방 시간 알림</string>
+		<string name="activity_noti_config_time_des">방 알림 시간이 되었을 때 알림을 받습니다.</string>
+		<string name="activity_noti_config_manager_register">방장 신규 글 등록 알림</string>
+		<string name="activity_noti_config_manager_register_des">방장이 신규글을 등록했을 때 알림을 받습니다.</string>
+		<string name="activity_noti_config_register_mine">댓글 알림</string>
+		<string name="activity_noti_config_register_mine_des">내가 쓴글에 댓 글이 달렸을 때 알림을 받습니다.</string>
+		<string name="activity_noti_company">공지 알림</string>
+		<string name="activity_noti_company_des">Witherest의 공지 알림을 받습니다.</string>
+		<string name="selectimage">사진 선택</string>
+		<string name="activity_profile_input_email_text">이메일을 입력해주세요</string>
+		<string name="activity_profile_input_nick_text">닉네임을 입력해주세요</string>
+		<string name="activity_profile_input_purpose_text">목표 문구를 입력해주세요</string>
+		<string name="activity_profile_input_mycategories_text">관심 카테고리를 선택해주세요</string>
+		<string name="activity_profile_input_category_text">관심 항목을 선택해주세요</string>
+		<string name="activity_makeroom_room_image_title">방 이미지</string>
+		<string name="activity_makeroom_room_name_title">방이름</string>
+		<string name="activity_makeroom_purpose_title">할 일 내용</string>
+		<string name="activity_makeroom_title">방 만들기</string>
+		<string name="activity_makeroom_category_title">카테고리</string>
+		<string name="activity_makeroom_period_title">기간</string>
+		<string name="activity_makeroom_periodtype_default">매일</string>
+		<string name="activity_makeroom_period_default">21일</string>
+		<string name="activity_makeroom_periodtype_title">실천 주기</string>
+		<string name="activity_mkeroom_periodtype_default">매일</string>
+		<string name="activity_makeroom_alarm_title">알림</string>
+		<string name="activity_makeroom_alarm_default">매일</string>
+		<string name="activity_makeroom_content_hint">입력하시려면 눌러주세요</string>
+		<string name="activity_makeroom_alarmtime_title">알림 시간</string>
+		<string name="activity_makeroom_public_title">공개 여부</string>
+		<string name="activity_makeroom_public_default">공개</string>
+		<string name="activity_makeroom_maxmember_title">참여 인원</string>
+		<string name="activity_makeroom_maxmember_default">10명</string>
+		<string name="dialog_input_roomname_text">방 이름을 입력해주세요</string>
+		<string name="dialog_input_purpose_text">할 일 내용을 입력해주세요</string>
+		<string name="dialog_input_category_text">카테고리를 선택해주세요</string>
+		<string name="dialog_input_period_text">기간을 입력해주세요</string>
+		<string name="dialog_input_periodtype_text">실천 주기를 입력해주세요</string>
+		<string name="dialog_input_alarm_text">알림을 선택해주세요</string>
+		<string name="dialog_input_alarmtime_text">알림 시간을 지정해주세요</string>
+		<string name="dialog_input_pulbic_text">공개 여부를 설정해주세요</string>
+		<string name="dialog_input_maxmember_text">참여 인원을 설정해주세요</string>
+		<string name="request_select_day">요일을 선택해주세요</string>
+		<string name="daily">매일</string>
+		<string name="yes">예</string>
+		<string name="no">아니오</string>
+		<string name="publicyes">공개</string>
+		<string name="publicno">비공개</string>
+		<string name="unit_human">명</string>
+		<string name="simple_time">시</string>
+		<string name="simple_min">분</string>
+		<string name="am">오전</string>
+		<string name="pm">오후</string>
+		<string name="populate">인기순</string>
+		<string name="recent">둥록순</string>
+		<string name="agent">android</string>
+		<string name="login_dialog_title">로그인 중</string>
+		<string name="signup_dialog_title">회원 가입 요청중...</string>
+		<string name="server_error">일시적 네트워크 장애입니다.\n다시 시도해주세요.</string>
+		<string name="id_duplicated">이미 등록된 아이디입니다</string>
+		<string name="join_text">join</string>
+		<string name="setting_text">setting</string>
+		<string name="leave_text">leave</string>
+		<string name="with_text">with</string>
+		<string name="board_text">board</string>
+		<string name="roomboard_write_hint">소식을 전해주세요 !!</string>
+		<string name="write_text">올리기</string>
+		<string name="login_guide">로그인 안내</string>
+		<string name="login_join_message">로그인 전용 페이지 입니다\n아래의 버튼을 알맞게 눌러주세요</string>
+		<string name="login">로그인</string>
+		<string name="join">회원 가입</string>
+		<string name="logout_dialog_title">로그 아웃중</string>
+		<string name="logout_dialog_message">로그 아웃 요청중...</string>
+		<string name="wait_title">데이타 수신중</string>
+		<string name="wait_message">잠시만 기다려주세요</string>
+		<string name="makeroom_title_insert">방 이름을 입력해주세요 </string>
+		<string name="makeroom_purpose_insert">할일 내용을 입력해주세요</string>
+		<string name="makeroom_category_insert">룸을 생성할 카테고리를 입력해주세요</string>
+		<string name="createroom_dialog_title">체크룸 생성</string>
+		<string name="createroom_dialog_message">체크룸 생성 요청 중입니다 \n잠시만 기다려 주세요</string>
+		<string name="createroom_ok">정상적으로 방이 개설되었습니다</string>
+		<string name="room_modify">수정</string>
+		<string name="room_withdraw">탈퇴</string>
+		<string name="room_join">참여</string>
+		<string name="no_manager_notice">현재 방의 공지 사항이 없습니다.</string>
+		<string name="no_purpose">현재 자신의 목적문구가 없습니다.</string>
+		<string name="you_not_manager">방장만이 공지글을 작성할 수 있습니다</string>
+		<string name="write_notice_title">공지 작성</string>
+		<string name="confirm_notice">공지글을 작성해 주세요</string>
+		<string name="not_user_not_join_alert">글을 올리려면 이 방에 참여한 상태여야 합니다.</string>
+		<string name="no_text">글을 작성하지 않았습니다. 글을 작성해 주세요</string>
+		<string name="write_reply_title">댓글 작성</string>
+		<string name="modifyroom_ok">정상적으로 방이 수정되었습니다</string>
+		<string name="not_valid_email">입력하신 ID 는 이메일 형식에 맞지 않습니다\n이메일 형식에 맞게 입력해주세요</string>
+		<string name="not_valid_name">이름은 2자 이상이어야 합니다</string>
+		<string name="not_valid_password">비밀번호는 4자 이상이어야 합니다</string>
+		<string name="banned_modify_email">이메일은 수정하실 수 없습니다</string>
+		<string name="modify">수정</string>
+		<string name="profile_purpose_hint">자신의 목표 문구를 설정해 주세요</string>
+		<string name="profile_category_hint">관심 카테고리를 설정해주세요</string>
+		<string name="make_room">할 일을 추가해 주세요</string>
+		<string name="no_alarm">알림 시간 없음</string>
+		<string name="room_public_ok">공개</string>
+		<string name="room_public_not">비공개</string>
+		<string name="logout_fail">로그아웃 요청이 실패했습니다\n다시 시도해 주십시오</string>
+		<string name="finish_confirm_title">앱 종료 확인</string>
+		<string name="finish_confirm_message">앱을 종료하시겠습니까?</string>
+		<string name="logout_wait_message">로그아웃 중입니다\n잠시만 기다려 주세요</string>
+		<string name="profile_modify_ok">프로필이 정상적으로 수정되었습니다</string>
+		<string name="necessary_text">필수 사항</string>
+		<string name="option_text">선택 사항</string>
+		<string name="wrong_approach">잘못된 접근 경로입니다</string>
+		<string name="withdraw_ok">회원 탈퇴가 정상적으로 처리되었습니다</string>
+		<string name="member_guide_title">회원 가입 안내</string>
+		<string name="member_guide_message">회원 가입을 하시고 이용하실 수 있습니다.\n회원 가입절차는 아주 간단합니다.</string>
+		<string name="no_delete_room">자신을 제외하고 방에 인원이 없어야 방 삭제가 가능합니다</string>
+		<string name="delete_room_guide_title">방 삭제</string>
+		<string name="delete_room_guide_message">정말로 방을 삭제하시겠습니까?</string>
+		<string name="room_delete">방 삭제하기</string>
+		<string name="join_member">Witherest 가입하기</string>
+		<string name="join_member_text">회원이 아니시면 아래를 눌러 가입해주세요</string>
+		
+		<string name="pull_to_refresh_pull_label">새로 고침</string>
+   		 <string name="pull_to_refresh_release_label">새로 고침</string>
+   		 <string name="pull_to_refresh_refreshing_label">로딩중...</string>
+ 		 <string name="pull_to_refresh_tap_label">새로 고침하려면 탭 해주세요</string>
+ 		 <string name="progress_initialize">앱 초기화 중입니다</string>
+ 		 <string name="progress_version">버젼 체크를 진행중입니다</string>
+ 		 <string name="progress_category">필요한 데이타를 수신중입니다</string>
+ 		 <string name="progress_gcm">GCM 데이타를 식별중입니다</string>
+ 		 <string name="progress_autologin">자동 로그인 중입니다</string>
+ 		 <string name="note_saved">에버노트에 잘 저장이 되었습니다</string>
+ 		 <string name="error_creating_notestore">에버노트에 노트저장소 생성에 문제가 생겼습니다</string>
+ 		 <string name="error_saving_note">에버노트에 저장하는데 문제가 생겼습니다</string>
+ 		 <string name="empty_content_error">에버노트에 저장하기 위해서는 제목과 내용이 필요합니다</string>
+ 		 <string name="note_title">알림 설정</string>
+ 		 <string name="evernote_login_ok">에버노트 로그인이 되었습니다</string>
+ 		 <string name="evernote_login_fail">에버노트 인증에 실패했습니다</string>
+ 		 <string name="is_saving_evernote">에버노트에 기록중입니다\n잠시만 기다려주세요</string>
+ 		 <string name="note_message">알림 설정하기</string>
+ 		 <string name="acount_title">계정 연동</string>
+ 		 <string name="evernote_message1">에버노트와 연동하기</string>
+ 		 <string name="activity_setting_evernote_detail1">목표를 수행한 내용 기록하기</string>
+ 		 <string name="activity_setting_evernote_detail2">목표를 수행한 내용이 \n에버노트에 기록됩니다</string>
+ 		 <string name="room_time_note">witheset 방 시간 알림</string>
+ 		 <string name="room_time_note_suffix">의 방 시간 알림입니다.</string>
+ 		 <string name="dialog_input_public_not_public">공개 여부를 선택해 주세요</string>
+ 		 <string name="fatal_network_error">네트워크 오류</string>
+ 		 <string name="fatal_network_error_message">네트워크를 사용할 수 없거나, 오류가 발생했습니다.\n앱이 종료됩니다</string>
+ 		 <string name="tempo_network_error">일시적 네트워크 장애</string>
+ 		 <string name="tempo_network_error_message">일시적 네트워크 장애입니다. 재시도 하시겠습니까?</string>
+ 		 <string name="just">just</string>
+ 		 <string name="inappropriate_path">잘못된 접근 경로입니다.</string>
+ 		 <string name="registration_order">등록순</string>
+ 		 <string name="popular_order">인기도순</string>
+ 		 <string name="create">만들기</string>
+ 		 <string name="create_room">할 일 만들기</string>
+ 		 <string name="modify_room">할 일 수정하기</string>
+ 		 <string name="delete">삭제</string>
+ 		 <string name="upgrade">upgrade</string>
+ 		 <string name="login">로그인</string>
+ 		 <string name="logout">로그아웃</string>
+ 		 <string name="create_check_room">체크룸 개설</string>
+ 		 <string name="search_check_room">체크룸 검색</string>
+</resources>

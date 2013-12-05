@@ -1,0 +1,350 @@
+package com.teamteam.witherest;
+
+import java.util.ArrayList;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.teamteam.customComponent.WaitProgressDialog;
+import com.teamteam.customComponent.view.BadgeView;
+import com.teamteam.witherest.common.AndroUtils;
+import com.teamteam.witherest.common.CommonUtils;
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.service.RoomService;
+import com.teamteam.witherest.service.Service;
+import com.teamteam.witherest.service.ServiceManager;
+import com.teamteam.witherest.service.callback.RoomServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.callback.object.CheckRoomResponseObject;
+import com.teamteam.witherest.service.callback.object.MyCheckResponseObject;
+import com.teamteam.witherest.service.callback.object.MyCheckResponseObject.CheckRoom;
+
+public class Fragment_MyCheck extends Fragment implements RoomServiceCallback{
+	
+	public MyCheckResponseObject myCheckResponse;
+	public ListView myCheckRoomLisView;
+	private Activity activity;
+	
+	private View myCheckView;
+	private TextView nameView;
+	private TextView purposeView;
+	private TextView myCheckStartView;
+	private TextView myCheckExposeView;
+	private ImageView profileImageView;
+	private WaitProgressDialog waitProgressDialog;
+	
+	public int refreshPos;
+	public TextView refeshBadge;
+	
+	public RoomService roomService;
+
+	
+	/* Fragment Life Cycle */
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		Log.v("마이체크", "onAttach() 호출됨");
+		this.activity = activity;
+		roomService = ServiceManager.getServiceManager().getRoomService();
+		roomService.setOnRoomCallback(this);
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Log.v("마이체크", "onCreate() 호출됨");
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		Log.v("마이체크", "onCreateView(() 호출됨");
+		
+		myCheckView = inflater.inflate(R.layout.fragment_mycheck, null);
+		nameView= (TextView)myCheckView.findViewById(R.id.mycheck_name_textview);
+		purposeView= (TextView)myCheckView.findViewById(R.id.mycheck_purpose_textview);
+		
+		nameView.setText(CommonUtils.null2empty(Session.getInstance().user.nickName));
+		purposeView.setText(CommonUtils.null2empty(Session.getInstance().user.purpose));
+		
+		myCheckStartView = (TextView)myCheckView.findViewById(R.id.mycheck_star_textview);
+		myCheckExposeView = (TextView)myCheckView.findViewById(R.id.mycheck_expose_textview);
+		myCheckRoomLisView = (ListView)myCheckView.findViewById(R.id.mycheck_checklistview);
+		profileImageView = (ImageView)myCheckView.findViewById(R.id.mycheck_prifile_image);
+		
+
+		return myCheckView;
+	}
+	
+	public void loadMyCheckRooms(){
+			waitProgressDialog = new WaitProgressDialog(getActivity(), getActivity().getString(R.string.wait_title),
+					getString(R.string.wait_message));
+			waitProgressDialog.start();
+			RoomService roomService = ServiceManager.getServiceManager().getRoomService();
+			roomService.setOnRoomCallback(this);
+			roomService.getMyCheckRooms(String.valueOf(Session.getInstance().user.userIndex));
+	}
+	
+	public void updateUi(){
+		String image = Session.getInstance().user.profileImagePath;
+		if (CommonUtils.isNullOrEmpty(image)){
+			// 프로파일 이미지 경로가 있을 경우 서버로 부터 다운로드 받는 코드르 작성한다.
+		}
+		
+		myCheckExposeView.setText(myCheckResponse.createRoomCount + "/" + myCheckResponse.joinRoomCount);
+		myCheckStartView.setText(myCheckResponse.userStarCount+"");
+		myCheckRoomLisView.setAdapter(new MyCheckListAdapter(activity,R.layout.mycheck_list_item_row, myCheckResponse.roomList));
+	}
+	
+	public void onRoomServiceCallback(BaseResponseObject object) {
+		WaitProgressDialog.stop(waitProgressDialog);
+		if (object.resultCode == Service.RESULT_FAIL) {
+			AndroUtils.showToastMessage(getActivity(), object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);
+			return;
+		}
+		
+		switch(object.requestType){
+		case Service.REQUEST_TYPE_GET_MY_CHECKROOMS:
+			myCheckResponse = (MyCheckResponseObject)object;
+			updateUi();
+			break;
+		case Service.REQUEST_TYPE_CHECK_ROOM:
+			CheckRoomResponseObject checkRoomResponse = (CheckRoomResponseObject)object;
+			myCheckResponse.roomList.get(refreshPos).checkedMemberCount = checkRoomResponse.checkedMemberCount;
+			myCheckResponse.roomList.get(refreshPos).checked = true;
+			updateBadge();
+			break;
+			
+		case Service.REQUEST_TYPE_CANCEL_CHECK:
+			CheckRoomResponseObject cancelCheckRoomResponse = (CheckRoomResponseObject)object;
+			myCheckResponse.roomList.get(refreshPos).checkedMemberCount = cancelCheckRoomResponse.checkedMemberCount;
+			myCheckResponse.roomList.get(refreshPos).checked = false;
+			updateBadge();
+			break;
+		}
+	}
+	
+	
+	public void updateBadge(){
+		boolean  isRoomCompleted = myCheckResponse.roomList.get(refreshPos).checkedMemberCount >=myCheckResponse.roomList.get(refreshPos)
+			.curMemberCount;
+		refeshBadge.setBackgroundResource(isRoomCompleted? R.drawable.main_checknumber_complete_bg:R.drawable.main_checknumber_bg);
+		refeshBadge.setPadding(1, 1, 1,1);
+		refeshBadge.setText(CommonUtils.int2string( myCheckResponse.roomList.get(refreshPos).checkedMemberCount));
+	}
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		Log.v("마이체크", "onViewCreated() 호출됨");
+		
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		Log.v("마이체크", "onActivityCreated() 호출됨");
+	}
+	
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		Log.v("마이체크", "onResume() 호출됨");
+		if (myCheckResponse == null || myCheckResponse.roomList == null){
+			loadMyCheckRooms();
+		}else {
+			updateUi();
+			Log.v("체크룸 요청상태","이미 존재하기 때문에 요청하지 않음");
+		}
+	}
+
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		Log.v("마이체크", "onPause() 호출됨");
+	}
+	
+	
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		Log.v("마이체크", "onDestroy() 호출됨");
+	}
+
+	@Override
+	public void onDestroyView() {
+		// TODO Auto-generated method stub
+		super.onDestroyView();
+		Log.v("마이체크", "onDestroyView() 호출됨");
+	}
+
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		Log.v("마이체크", "onStop() 호출됨");
+	}
+
+	@Override
+	public void onDetach() {
+		// TODO Auto-generated method stub
+		super.onDetach();
+		Log.v("마이체크", "onDetach() 호출됨");
+	}
+
+	public void checkRoom(int roomId){
+		waitProgressDialog = new WaitProgressDialog(getActivity(), getActivity().getString(R.string.wait_title),
+				getString(R.string.wait_message));
+		waitProgressDialog.start();
+		
+		RoomService roomService = ServiceManager.getServiceManager().getRoomService();
+		roomService.setOnRoomCallback(this);
+		roomService.checkRoom(roomId);
+	}
+	
+	public void cancelCheck(int roomId){
+		waitProgressDialog = new WaitProgressDialog(getActivity(), getActivity().getString(R.string.wait_title),
+				getString(R.string.wait_message));
+		waitProgressDialog.start();
+		
+		RoomService roomService = ServiceManager.getServiceManager().getRoomService();
+		roomService.setOnRoomCallback(this);
+		roomService.cancelCheckRoom(roomId);
+		
+	}
+	
+	public class MyCheckListAdapter extends BaseAdapter{
+		Context  context ; 
+		int resId ;
+		LayoutInflater inflate;
+		ArrayList<CheckRoom> roomList;
+		int badge1;
+		int badge2;
+
+		
+		public MyCheckListAdapter(Activity act, int layoutRes, ArrayList<CheckRoom> roomList){
+			this.context = act;
+			this.resId = layoutRes;
+			this.roomList = roomList;
+			inflate = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			this.badge1 = R.drawable.main_checknumber_bg;
+			this.badge2 = R.drawable.main_checknumber_complete_bg;
+		}
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return this.roomList.size();
+		}
+
+		public Object getItem(int position) {
+			// TODO Auto-generated method stub
+			return this.roomList.get(position);
+		}
+
+		public long getItemId(int position) {
+			// TODO Auto-generated method stub
+			return position;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			final int pos = position;
+			boolean isRecycled = true;
+			
+			if (convertView == null){
+				convertView = inflate.inflate(resId,parent, false);
+				isRecycled = false;;
+			}
+
+			ImageView image = (ImageView)convertView.findViewById(R.id.list_image);
+			TextView joinInfo =  (TextView)convertView.findViewById(R.id.mycheck_room_joincount_textview);
+			CheckBox myCheck = (CheckBox)convertView.findViewById(R.id.mycheck_check_btn);
+			TextView purpose  = (TextView)convertView.findViewById(R.id.mycheck_room_purpose_textview);
+			TextView term = (TextView)convertView.findViewById(R.id.mycheck_room_team_textview);
+			TextView title = (TextView)convertView.findViewById(R.id.mycheck_room_title_textview);
+			View roomDetailBtn =  convertView.findViewById(R.id.mycheck_row_left_contaniner);
+			/*View badgeTarget = convertView.findViewById(R.id.mycheck_row_right_contaniner);*/
+			final TextView badge = (TextView)convertView.findViewById(R.id.mycheck_badge);
+			
+			if (CommonUtils.isNullOrEmpty(roomList.get(position).roomImagePath)){
+				image.setImageResource(R.drawable.stub);
+			}
+			
+			title.setText(roomList.get(position).roomTitle);
+			purpose.setText(roomList.get(position).roomPurpose);
+			term.setText(roomList.get(position).startDate + " ~ " + roomList.get(position).endDate );
+			joinInfo.setText(roomList.get(position).curMemberCount + "/" +roomList.get(position).maxMemberCount );
+			
+			boolean  isRoomCompleted = roomList.get(pos).checkedMemberCount >=roomList.get(pos).curMemberCount;
+			badge.setBackgroundResource(isRoomCompleted? badge2:badge1);
+			badge.setPadding(1, 1, 1,1);
+			badge.setText(CommonUtils.int2string(roomList.get(pos).checkedMemberCount));
+
+		/*	final BadgeView badge =(BadgeView)convertView.getTag();
+		 * badge.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
+			badge.setBadgeBackgroundColor(isRoomCompleted?Color.GREEN: Color.RED);
+			badge.setText(CommonUtils.int2string(roomList.get(pos).checkedMemberCount));
+			
+			if (roomList.get(pos).curMemberCount == 0){
+				badge.setBadgeBackgroundColor(Color.BLACK);
+			}
+			badge.setTextSize(14);
+	    	
+	    	if (!badge.isShown()){
+	    		badge.show();
+	    	}*/
+
+	    	roomDetailBtn.setOnClickListener(new OnClickListener() {
+				public void onClick(View view) {
+					Intent i = new Intent(getActivity(), RoomDetailActivity.class);
+					i.putExtra("roomId", roomList.get(pos).roomId);
+					i.putExtra("roomTitle", roomList.get(pos).roomTitle);
+					i.putExtra("roomOwner", roomList.get(pos).roomOwner);
+					startActivity(i);
+				}
+			});
+			
+	    	myCheck.setOnClickListener(new OnClickListener() {
+				public void onClick(View view) {
+					CheckBox check = (CheckBox)view;
+					Log.v(pos + ":" +roomList.get(pos).roomTitle+  " 체크상태", check.isChecked() + "");
+					
+					refreshPos = pos;
+					refeshBadge = badge;
+					if (check.isChecked()){
+						checkRoom(roomList.get(pos).roomId);
+					}else {
+						cancelCheck(roomList.get(pos).roomId);
+					}
+				}
+			});
+	    	
+	    	myCheck.setChecked(roomList.get(position).checked);
+			return convertView;
+		}
+	}
+	
+	
+  
+}

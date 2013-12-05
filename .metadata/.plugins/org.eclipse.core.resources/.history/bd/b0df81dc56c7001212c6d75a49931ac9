@@ -1,0 +1,152 @@
+package com.teamteam.witherest;
+
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.service.RoomService;
+import com.teamteam.witherest.service.ServiceManager;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.ListView;
+
+public class Fragment_MyCheck extends Fragment {
+	private Activity activity;
+
+	/* Fragment Life Cycle */
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		Log.v("마이체크", "onAttach() 호출됨");
+		this.activity = activity;
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Log.v("마이체크", "onCreate() 호출됨");
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		Log.v("마이체크", "onCreateView(() 호출됨");
+		View myCheckView = inflater.inflate(R.layout.fragment_mycheck, null);
+		
+		
+		Log.v("체크룸 가져오기", "요청 시작");
+		RoomService roomService = ServiceManager.getServiceManager().getRoomService();
+		roomService.getMyCheckRooms(String.valueOf(Session.getInstance().user.userIndex));
+		
+		ListView listView = (ListView)myCheckView.findViewById(R.id.mycheck_checklistview);
+		listView.setAdapter(new MyCheckListAdapter(activity,R.layout.mycheck_list_item_row));
+		return myCheckView;
+	}
+	
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		Log.v("마이체크", "onViewCreated() 호출됨");
+		
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		Log.v("마이체크", "onActivityCreated() 호출됨");
+	}
+	
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		Log.v("마이체크", "onResume() 호출됨");
+	}
+
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		Log.v("마이체크", "onPause() 호출됨");
+	}
+	
+	
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		Log.v("마이체크", "onDestroy() 호출됨");
+	}
+
+	@Override
+	public void onDestroyView() {
+		// TODO Auto-generated method stub
+		super.onDestroyView();
+		Log.v("마이체크", "onDestroyView() 호출됨");
+	}
+
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		Log.v("마이체크", "onStop() 호출됨");
+	}
+
+	@Override
+	public void onDetach() {
+		// TODO Auto-generated method stub
+		super.onDetach();
+		Log.v("마이체크", "onDetach() 호출됨");
+	}
+
+
+
+
+
+	public class MyCheckListAdapter extends BaseAdapter{
+
+		Context  context ; 
+		int resId ;
+		LayoutInflater inflate;
+		public MyCheckListAdapter(Activity act, int layoutRes){
+			this.context = act;
+			this.resId = layoutRes;
+			inflate = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return 20;
+		}
+
+		public Object getItem(int position) {
+			// TODO Auto-generated method stub
+			return position;
+		}
+
+		public long getItemId(int position) {
+			// TODO Auto-generated method stub
+			return position;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			if (convertView == null){
+				convertView = inflate.inflate(resId,parent, false);
+			}
+			
+			CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.mycheck_check_btn);
+			checkBox.setChecked(false);
+			return convertView;
+			
+		}
+		
+	}
+}

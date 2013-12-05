@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/delete_hover_bg" android:state_pressed="true"/>
+    <item android:drawable="@drawable/delete_hover_bg" android:state_pressed="false" android:state_selected="true"/>
+
+</animation-list>

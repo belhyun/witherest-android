@@ -1,0 +1,11 @@
+import com.google.android.gcm.server.Sender;
+
+
+public class GCMSender {
+	public static final String SERVER_KEY = "AIzaSyBxVOv5VE63ENm7YinR9q9sH72KMoQSS54";
+	public static final   String     registrationId = "이곳에 RegId를  입력하세요";
+	public static void main(String[] arg){
+		Sender sender = new Sender(SERVER_KEY);
+	}
+	
+}

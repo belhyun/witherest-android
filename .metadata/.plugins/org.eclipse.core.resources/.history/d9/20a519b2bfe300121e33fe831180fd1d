@@ -1,0 +1,57 @@
+package com.teamteam.witherest;
+
+import com.teamteam.witherest.alarm.AlarmWakeLock;
+import com.teamteam.witherest.alarm.Alarms;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+
+
+/**
+ * 등록한 알람 시간이 되었을 때 호출되는 리시버 
+ *
+ */
+public class AlarmTimeReceiver extends BroadcastReceiver {
+
+	@Override
+	public void onReceive(Context context, Intent intent) {	
+		generateAlarmNotification(context, intent);
+	}
+
+	private void generateAlarmNotification(Context context,Intent intent) {
+		
+		String userId = intent.getStringExtra(Alarms.INTENT_ALARM_KEY_USER_ID);
+		String password = intent.getStringExtra(Alarms.INTENT_ALARM_KEY_PASSWORD);
+		int roomId = intent.getIntExtra(Alarms.INTENT_ALARM_KEY_ROOM_ID, -1);
+		String roomName = intent.getStringExtra(Alarms.INTENT_ALARM_KEY_ROOM_NAME);
+		String roomPurpose = intent.getStringExtra(Alarms.INTENT_ALARM_KEY_ROOM_PURPOSE);
+		String alarmTime = intent.getStringExtra(Alarms.INTENT_ALARM_KEY_TIME);
+		
+		if (roomId == -1) return;
+		
+		int icon = R.drawable.login_logo;
+		long when = System.currentTimeMillis();
+		
+		String ticker = context.getResources().getString(R.string.room_time_note);
+		String message = "'" + roomPurpose + "'" + context.getResources().getString(R.string.room_time_note_suffix);
+		
+		AlarmWakeLock.acquire(context);
+		
+		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		Notification notification = new Notification(icon, ticker, when);
+		notification.defaults = Notification.DEFAULT_ALL;
+		
+		Intent notificationIntent = new Intent(context, MainActivity.class);
+		notificationIntent.putExtra("roomId", roomId);
+		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		PendingIntent sender = PendingIntent.getActivity(context, 0,notificationIntent, 0);
+
+		notification.setLatestEventInfo(context, ticker, message, sender);
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
+		notificationManager.notify(0, notification);
+	}
+}

@@ -1,0 +1,84 @@
+package com.teamteam.witherest.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpRequestBase;
+
+import android.app.Activity;
+import android.os.Message;
+import android.util.Log;
+
+import com.teamteam.witherest.R;
+import com.teamteam.witherest.common.CommonUtils;
+import com.teamteam.witherest.model.Category;
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.service.callback.CategoryServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.callback.object.CategoryResponseObject;
+
+public class CategoryService extends Service{
+
+	private static final String USER_ID = "user_id";
+	private static final String CATEGORY_ID = "cat_id";
+	private static final String PAGE = "page";
+	private static final String ROOMLIST_ORDER = "order";
+	
+	private ServiceHandler  handler;
+	private CategoryServiceCallback callback;
+	
+	public CategoryService(HttpClient httpClient, ServiceHandler  handler) {
+		super(httpClient);
+		this.handler = handler;
+	
+	}
+
+	@Override
+	public void finishedBackgroundProcess(String responseText) {
+		if (callback ==null) return;
+		Log.v("response_text", responseText);
+		BaseResponseObject obj = ParsingService.parseJson(responseText);
+		Message message = Message.obtain();
+		message.obj = obj ;
+		handler.sendMessage(message);
+		
+	}
+	
+	@Override
+	public void addHeaderSessionKey(HttpRequestBase request) {
+		String sessionKey = Session.getInstance().sessionKey;
+		if (sessionKey != null){
+			request.addHeader(ACC_TOKEN, sessionKey);
+		}
+	}
+
+
+	public void setOnCategoryCallback(CategoryServiceCallback callback){
+		this.callback = callback;
+		handler.setCategoryServiceCallback(callback);
+	}
+	public void getAllCategories(){
+		sendGet(GET_CATEGORIES_URL+ "?"+REQUEST_TYPE_STRING+"="+Service.REQUEST_TYPE_GET_ALL_CATEGORIES);
+	}
+	
+	public void getAllCagetoryRoomCount(){
+		sendGet(GET_ALL_CATEGORIES_ROOMCOUNT_URL+ "?"+REQUEST_TYPE_STRING+"="+Service.REQUEST_TYPE_GET_ALL_CATEGORIES_ROOMCOUNT);
+	}
+	
+	public void getRoomsByCategory(int categoryId,int page, int listType){
+		Map<String, String> paramMap = new HashMap<String, String>();
+		
+		paramMap.put(CATEGORY_ID, CommonUtils.int2string(categoryId) );
+		paramMap.put(ROOMLIST_ORDER, CommonUtils.int2string(listType));
+		paramMap.put(PAGE, CommonUtils.int2string(page));
+		paramMap.put(REQUEST_TYPE_STRING,CommonUtils.int2string(REQUEST_TYPE_GET_ROOMS_BY_CATEGORY));
+		
+		try {
+			sendPost(GET_ROOMS_BY_CATEGORY_URL, paramMap);
+		} catch (InterruptedException e) {
+		 }
+		
+	}
+}

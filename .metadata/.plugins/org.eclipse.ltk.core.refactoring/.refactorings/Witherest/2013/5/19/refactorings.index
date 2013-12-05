@@ -1,0 +1,64 @@
+1367733504328	Extracts string 'null' into R.string.activity_makeroom_category_title
+1367733580328	Extracts string 'null' into R.string.activity_makeroom_period_title
+1367734032562	Extracts string 'null' into R.string.activity_makeroom_periodtype_default
+1367734097328	Extracts string 'null' into R.string.activity_makeroom_period_default
+1367734456765	Extracts string 'null' into R.string.activity_makeroom_do_title
+1367734555109	Extracts string 'null' into R.string.activity_mkeroom_periodtype_default
+1367737879265	Extracts string 'null' into R.string.activity_makeroom_content_hint
+1367740231250	Delete element
+1367744754046	Rename resource 'activity_profile_common_modify.xml'
+1367752817312	Rename field 'activity_profile_common_edittext'
+1367760158078	Change Layout
+1367766789968	Delete element
+1367817085859	Rename field 'roomImagePath'
+1367817096406	Rename field 'roomName'
+1367817106921	Rename field 'purpose'
+1367817126062	Rename field 'categories'
+1367817135250	Rename field 'period'
+1367817145312	Rename field 'startDate'
+1367817160125	Rename field 'endDate'
+1367817177125	Rename field 'periodType'
+1367817190875	Rename field 'isAlarmed'
+1367817202171	Rename field 'publicLevel'
+1367817214343	Rename field 'maxMembers'
+1367817995390	Rename field 'mCategories'
+1367825774781	Rename field 'DIALOG_PURPOST'
+1367825962046	Rename field 'DIALOG_ROOMTILE'
+1367914590015	Extract method 'getDisplayStringFromPeriodType'
+1367940245265	Rename type 'MyAlertDialogFragment'
+1367940289484	Rename method 'showCommonDialog'
+1367945560468	Rename type 'Profile'
+1367946356406	Rename method 'showSettingDialog'
+1367946749281	Rename type 'MakeRoomSettingDialogFragment'
+1367949721656	Rename field 'id'
+1367949735328	Rename field 'name'
+1367949748000	Rename field 'description'
+1367950188578	Rename field 'profile'
+1367951866453	Rename local variable 'categories'
+1367990417312	Delete element
+1367990462140	Rename type 'ProfileActivity1'
+1367990642171	Rename package 'com.teamteam.witherest.vo'
+1367990699843	Move compilation unit
+1367991374421	Rename field 'mIv_roomThumb'
+1367996843718	Rename method 'onChangeRoomName'
+1367996876156	Rename method 'onChangePurpose'
+1367996900921	Rename method 'onChangeMaxMember'
+1367996913421	Rename method 'onCategoryChange'
+1367996928265	Rename method 'onPublicChange'
+1367996960265	Rename method 'onAlarmChange'
+1367996972765	Rename method 'onPeriodChange'
+1367996986140	Rename method 'onPeriodChange'
+1367996998156	Rename method 'onPeriodTypeChange'
+1367997009375	Rename method 'onPeriodTypeChange'
+1367997017734	Rename method 'onAlarmTimeChange'
+1368003279375	Delete element
+1368004578109	Rename resource 'simple_titles.xml'
+1368167024593	Delete element
+1368171104484	Rename type 'ResponseObject'
+1368175722484	Rename type 'UserCallback'
+1368247960265	Delete element
+1368250278031	Delete element
+1368260378953	Rename type 'ServiceCallback'
+1368279982593	Rename type 'CategoryResponseCallbakc'
+1368280182562	Rename type 'CategoryResponseCallback'
+1368280254812	Delete element

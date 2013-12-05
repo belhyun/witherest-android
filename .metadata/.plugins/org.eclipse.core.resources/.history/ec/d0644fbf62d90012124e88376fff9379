@@ -1,0 +1,151 @@
+package com.teamteam.witherest.service;
+
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONObject;
+
+import android.util.Log;
+
+import com.teamteam.witherest.model.Version;
+import com.teamteam.witherest.service.callback.object.ArticleActionResponseObject;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.callback.object.CategoryResponseObject;
+import com.teamteam.witherest.service.callback.object.CategoryRoomCountResponseObject;
+import com.teamteam.witherest.service.callback.object.CategoryRoomListResponseObject;
+import com.teamteam.witherest.service.callback.object.CheckRoomResponseObject;
+import com.teamteam.witherest.service.callback.object.DateCheckedMembers;
+import com.teamteam.witherest.service.callback.object.ReplyListResponseObject;
+import com.teamteam.witherest.service.callback.object.RoomActionResponseObject;
+import com.teamteam.witherest.service.callback.object.RoomBoardResponseObject;
+import com.teamteam.witherest.service.callback.object.RoomInfoResponseObject;
+import com.teamteam.witherest.service.callback.object.RoomWithResponseObject;
+import com.teamteam.witherest.service.callback.object.CreateRoomResponseObject;
+import com.teamteam.witherest.service.callback.object.IdDuplicateResponseObject;
+import com.teamteam.witherest.service.callback.object.JoinResponseObject;
+import com.teamteam.witherest.service.callback.object.LoginResponseObject;
+import com.teamteam.witherest.service.callback.object.MyCheckResponseObject;
+import com.teamteam.witherest.service.callback.object.VersionResponseObject;
+
+public class ParsingService {
+	public static BaseResponseObject parseJson(String responseText) {
+		JSONObject json = null;
+		BaseResponseObject response = null;
+		ObjectMapper mapper = new ObjectMapper();
+
+		int resultCode=  0;
+		String resultMsg = null;  
+		int requestType = 0;
+		
+		
+			json = new JSONObject(responseText);
+			resultCode = json.getInt("resultCode");
+			resultMsg = json.getString("resultMsg");
+			//requestType =json.getInt("requestType");
+			requestType = json.optInt("requestType", Service.REQUEST_TYPE_GET_ALL_CATEGORIES_ROOMCOUNT);
+	
+			switch (requestType) {
+			
+			/*유저 관련 처리*/ 
+			case Service.REQUEST_TYPE_CHECK_VERSION:
+				response = mapper.readValue(responseText,VersionResponseObject.class);
+				break;
+			case Service.REQUEST_TYPE_LOGIN:
+				response = mapper.readValue(responseText,LoginResponseObject.class);
+				break;
+			case Service.REQUEST_TYPE_DUPL_CHECK:
+				response = mapper.readValue(responseText,IdDuplicateResponseObject.class);
+				break;
+			case Service.REQUEST_TYPE_LOGOUT:
+				response = mapper.readValue(responseText, BaseResponseObject.class);
+				break;
+			case Service.REQUEST_TYPE_JOIN:
+				response = mapper.readValue(responseText,JoinResponseObject.class);
+				break;				
+			case Service.REQUEST_TYPE_MODIFY_PROFILE:
+				response = mapper.readValue(responseText,JoinResponseObject.class);
+				break;		
+			case Service.REQUEST_TYPE_WITHDRAW:
+				response = mapper.readValue(responseText, BaseResponseObject.class);
+				break;
+				
+			/*카테고리 관련 처리 */
+			case Service.REQUEST_TYPE_GET_ALL_CATEGORIES:
+				response = mapper.readValue(responseText,CategoryResponseObject.class);
+				break;				
+			case Service.REQUEST_TYPE_GET_ALL_CATEGORIES_ROOMCOUNT:
+				response = mapper.readValue(responseText, CategoryRoomCountResponseObject.class);
+				break;				
+			
+			/*방 관련 처리*/
+			case Service.REQUEST_TYPE_GET_MY_CHECKROOMS:
+				response = mapper.readValue(responseText, MyCheckResponseObject.class);
+				break;				
+			case Service.REQUEST_TYPE_CREATE_CHECKROOM:
+				response = mapper.readValue(responseText, CreateRoomResponseObject.class);
+				break;			
+			case Service.REQUEST_TYPE_CHECK_ROOM:
+				response = mapper.readValue(responseText, CheckRoomResponseObject.class);
+				break;				
+			case Service.REQUEST_TYPE_CANCEL_CHECK:
+				response = mapper.readValue(responseText, CheckRoomResponseObject.class);
+				break;			
+			case Service.REQUEST_TYPE_GET_ROOMS_BY_CATEGORY:
+				response = mapper.readValue(responseText, CategoryRoomListResponseObject.class);
+				break;				
+			case Service.REQUEST_TYPE_GET_ROOM_WITH:
+				response = mapper.readValue(responseText,RoomWithResponseObject.class);
+				break;				
+			case Service.REQUEST_TYPE_GET_ROOM_BOARD:
+				response = mapper.readValue(responseText, RoomBoardResponseObject.class);
+				break;		
+			case Service.REQUEST_TYPE_LEAVE_ROOM:
+				response = mapper.readValue(responseText, RoomActionResponseObject.class);
+				break;
+			case Service.REQUEST_TYPE_DELETE_ROOM:
+				response = mapper.readValue(responseText, RoomActionResponseObject.class);
+				break;
+				
+			case Service.REQUEST_TYPE_GET_CHECKED_MEMBER_BY_DATE:
+				response = mapper.readValue(responseText, RoomWithResponseObject.class);
+				break;
+				
+			//매니저 공지 사항 
+			case Service.REQUEST_TYPE_CREATE_NOTICE:
+				response = mapper.readValue(responseText, BaseResponseObject.class);
+				break;
+			//일반글 쓰기
+			case Service.REQUEST_TYPE_SUBMIT_NEW_COMMENT:
+				response = mapper.readValue(responseText, ArticleActionResponseObject.class);
+				break;
+			//글 삭제하기 
+			case Service.REQUEST_TYPE_DELETE_COMMENT:
+				response = mapper.readValue(responseText, ArticleActionResponseObject.class);
+				break;
+		    //댓글 쓰기 
+			case Service.REQUEST_TYPE_SUBMIT_REPLY_COMMENT:
+				response = mapper.readValue(responseText, ArticleActionResponseObject.class);
+				break;
+			case Service.REQUEST_TYPE_GET_REPLYS_BY_ID:
+				response = mapper.readValue(responseText, ReplyListResponseObject.class);
+				break;
+				
+			case Service.REQUEST_TYPE_GET_ROOMINFO:
+				response = mapper.readValue(responseText, RoomInfoResponseObject.class);
+				break;
+				
+			case Service.REQUEST_TYPE_MODIFY_ROOM:
+				response = mapper.readValue(responseText, BaseResponseObject.class);
+				break;
+			case Service.REQUEST_TYPE_ALARM_UPDATE:
+				response = mapper.readValue(responseText, BaseResponseObject.class);
+				break;
+				
+			case Service.REQUEST_TYPE_JOIN_ROOM:
+				response = mapper.readValue(responseText, BaseResponseObject.class);
+				break;
+			}
+
+		
+		}
+		return response;
+	}
+}

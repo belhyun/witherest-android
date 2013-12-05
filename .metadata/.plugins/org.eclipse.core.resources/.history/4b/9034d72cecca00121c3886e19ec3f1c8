@@ -1,0 +1,140 @@
+package com.teamteam.witherest;
+
+import com.teamteam.witherest.common.CommonUtils;
+import com.teamteam.witherest.service.callback.object.CategoryRoomListResponseObject;
+import com.teamteam.witherest.service.callback.object.CheckRoomResponseObject;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+
+public class CheckRoomListFragment extends ListFragment{
+	private static final String KEY_CONTENT = "Fragment:Content";
+	public int listType;;
+	public int page;
+	public int  titleRes;
+	
+	public CategoryRoomListResponseObject mRoomList;
+	public View fragmentView;
+	public CheckRoomListFragmentAdapter adapter;
+	
+	public static CheckRoomListFragment newInstance(String title, int listType, int page){
+		CheckRoomListFragment fragment = new CheckRoomListFragment();
+	    Bundle args = new Bundle();
+	    args.putString("title", title);
+        args.putInt("type", listType);
+        args.putInt("page", page);
+        fragment.setArguments(args);
+        return fragment;
+	}
+	
+	
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        listType = getArguments().getInt("listType");
+        page = getArguments().getInt("page");
+        titleRes = getArguments().getInt("title");
+    }
+    
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		fragmentView= inflater.inflate(R.layout.fragment_checkroom_list, null);
+		return fragmentView;
+		
+	}
+
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		/*Intent i = new Intent(getActivity(), RoomDetailActivity.class);
+		getActivity().startActivity(i);*/
+	}
+
+	@Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+	
+	
+
+
+	public CategoryRoomListResponseObject getRoomList() {
+		return mRoomList;
+	}
+
+
+	public void setRoomList(CategoryRoomListResponseObject roomList){
+		this.mRoomList = roomList;
+		adapter = new CheckRoomListFragmentAdapter(getActivity(), R.layout.checkroom_list_item_row, mRoomList);
+		setListAdapter(adapter);
+	}
+
+	public class CheckRoomListFragmentAdapter extends BaseAdapter{
+		Context  context ; 
+		int resId ;
+		LayoutInflater inflate;
+		CategoryRoomListResponseObject roomList;
+		
+		public CheckRoomListFragmentAdapter (Activity act, int layoutRes,CategoryRoomListResponseObject roomList){
+			this.context = act;
+			this.resId = layoutRes;
+			this.roomList = roomList;
+			inflate = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
+		public int getCount() {
+			return roomList.roomList.size();
+		}
+
+		public Object getItem(int position) {
+			return position;
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			final int pos = position;
+			if (convertView == null){
+				convertView = inflate.inflate(resId,parent, false);
+			}
+			ImageView roomImage = (ImageView)convertView.findViewById(R.id.list_image);
+			TextView roomTitle = (TextView)convertView.findViewById(R.id.mycheck_room_title_textview);
+			TextView roomPurpose = (TextView)convertView.findViewById(R.id.mycheck_room_purpose_textview);
+			TextView roomTerm = (TextView)convertView.findViewById(R.id.mycheck_room_team_textview);
+			TextView rooJoinState = (TextView)convertView.findViewById(R.id.mycheck_room_joincount_textview);
+			
+			if ( CommonUtils.isNullOrEmpty(roomList.roomList.get(pos).roomImagePath)){
+				
+			}
+			
+			roomTitle.setText(roomList.roomList.get(pos).roomTitle);
+			roomPurpose.setText(roomList.roomList.get(pos).roomPurpose);
+			roomTerm.setText(roomList.roomList.get(pos).startDate + " ~ " + roomList.roomList.get(pos).endDate);
+			rooJoinState.setText(roomList.roomList.get(pos).curMemberCount + " / " + roomList.roomList.get(pos).maxMemberCount );
+			
+			convertView.findViewById(R.id.mycheck_row_contaniner).setOnClickListener(new View.OnClickListener() {
+				public void onClick(View arg0) {
+					Intent i = new Intent(context, RoomDetailActivity.class);
+					i.putExtra("roomId",roomList.roomList.get(pos).roomId );
+					context.startActivity(i);	
+				}
+			});
+			return convertView;
+		}
+	}
+
+}

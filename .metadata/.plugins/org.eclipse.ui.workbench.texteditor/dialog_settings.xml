@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="267" key="DIALOG_WIDTH"/>
+		<item value="405" key="DIALOG_Y_ORIGIN"/>
+		<item value="355" key="DIALOG_HEIGHT"/>
+		<item value="981" key="DIALOG_X_ORIGIN"/>
+		<item value="1|굴림|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|굴림" key="DIALOG_FONT_NAME"/>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="true" key="wrap"/>
+		<item value="false" key="isRegEx"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="false" key="wholeword"/>
+		<item value="" key="selection"/>
+		<list key="findhistory">
+			<item value="loadFooter"/>
+			<item value="curPage"/>
+			<item value="mycheck_row_left_contaniner"/>
+			<item value="목표문구"/>
+			<item value=" android:typeface=&quot;sans&quot; "/>
+			<item value="activity_setting_evenote_container"/>
+			<item value="activity_noti_config_linear2"/>
+			<item value="note_title"/>
+		</list>
+		<list key="replacehistory">
+			<item value=""/>
+			<item value="makeroom_selector"/>
+			<item value="1px"/>
+			<item value="android:layout_height=&quot;wrap_content&quot;"/>
+			<item value="android:layout_height=&quot;match_parent&quot;"/>
+			<item value="#cccccc"/>
+			<item value="room"/>
+			<item value="reg"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item value="405" key="DIALOG_Y_ORIGIN"/>
+		<item value="605" key="DIALOG_X_ORIGIN"/>
+	</section>
+</section>

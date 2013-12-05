@@ -1,0 +1,7 @@
+package com.teamteam.customComponent;
+
+public class ScrollPager {
+	public int totalRecordCount;
+	public int page;
+	public static final int PAGING_SIZE = 10;
+}

@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e9e9e9"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:background="@drawable/roomwith_content_bg"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/roomwith_content_bg"
+            android:orientation="vertical" 
+            android:layout_marginBottom="10dp">
+
+            <!-- 기간 컨테이너 -->
+
+            <LinearLayout
+                android:id="@+id/period_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+  
+                android:layout_marginTop="1dip"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:gravity="center"
+                    android:src="@drawable/healthroom_date_icon_bg" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:src="@drawable/healthroom_dot_bg" />
+
+                <TextView
+                    android:id="@+id/room_with_periodview"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="#999999"
+                    android:textSize="11sp" />
+            </LinearLayout>
+             <LinearLayout
+                        android:id="@+id/linear1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="#cccccc" >
+                    </LinearLayout>
+
+            <!-- 알림 시간 컨테이너 -->
+
+            <LinearLayout
+                android:id="@+id/alarm_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+  
+                android:layout_marginTop="1dip"
+
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:gravity="center"
+                    android:src="@drawable/healthroom_alarm_icon_bg" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:src="@drawable/healthroom_dot_bg" />
+
+                <TextView
+                    android:id="@+id/room_with_alarmtime_view"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="#999999"
+                    android:textSize="11sp" />
+            </LinearLayout>
+             <LinearLayout
+                        android:id="@+id/linear1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="#cccccc" >
+                    </LinearLayout>
+
+            <!-- 공개 레벨 컨테이너 -->
+
+            <LinearLayout
+                android:id="@+id/public_level_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+    
+                android:layout_marginTop="1dip"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:gravity="center"
+                    android:src="@drawable/healthroom_public_icon_bg" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:src="@drawable/healthroom_dot_bg" />
+
+                <TextView
+                    android:id="@+id/room_with_publiclevel_view"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="#999999"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical"
+                android:padding="1dip" >
+
+                <TextView
+                    android:id="@+id/room_with_memberjoinview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#444444"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="People"
+                    android:textColor="#999999"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="#cccccc" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical"
+                android:padding="1dip" >
+
+                <TextView
+                    android:id="@+id/room_with_achieveview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#444444"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Achieved"
+                    android:textColor="#999999"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/date_decrease_btn"
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/roomwith_left_arrow_btn_on_off"
+                android:src="@drawable/roomwith_bg2_left_arrow_bg" />
+
+            <TextSwitcher
+                android:id="@+id/date_textswitcher"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@drawable/roomwith_bg2_center"
+                android:gravity="center_vertical|center_horizontal"
+                android:padding="0dp" />
+
+            <ImageButton
+                android:id="@+id/date_increase_btn"
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/roomwith_right_arrow_btn_on_off"
+                android:src="@drawable/roomwith_bg2_right_arrow_bg" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:background="@drawable/roomwith_bg3_bottom"
+            android:orientation="vertical"
+            android:padding="1dp" >
+
+            <GridView
+                android:id="@+id/roomwith_gridview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:columnWidth="40dp"
+                android:gravity="center"
+                android:horizontalSpacing="3dp"
+                android:numColumns="auto_fit"
+                android:padding="2dp"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="3dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

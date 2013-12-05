@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+
+
+    <RadioGroup
+        android:id = "@+id/radiogroup_period"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" 
+        android:checkedButton="@+id/list_radioButton" >
+
+        <RadioButton
+            android:id="@id/list_radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="목록에서 선택" />
+
+        <ListView
+            android:id="@+id/makeroom_period_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+
+        <RadioButton
+            android:id="@+id/directradioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="직접 입력" />
+
+        <RelativeLayout
+            android:id="@+id/direct_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.23" 
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/periodeditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toLeftOf="@+id/periodbutton"
+                android:ems="10"
+                android:inputType="number" >
+
+                <requestFocus />
+            </EditText>
+
+            <Button
+                android:id="@id/periodbutton"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="확인" />
+
+        </RelativeLayout>
+
+        <LinearLayout android:layout_height="20dp" >
+            
+        </LinearLayout>
+    </RadioGroup>
+    
+
+
+</LinearLayout>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Witherest</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    
+    <!-- Common String -->
+    <string name="common_welcome">The space where you share the things to do with others and where you can achieve your goal.\nWe invite you to where you can achieve the goal with others.</string>
+    
+    <string name="exception_message">Error occurred</string>
+    <string name="incorrect_networkconnect">You’ve accessed in a wrong way.</string>
+    <!-- /Common String -->
+    
+    <!-- Login String -->
+    <string name="login_title">Log in</string>
+    <string name="login_message">The space where you share the things to do with others and where you can achieve your goal.\n We invite you to where you can achieve the goal with others.</string>
+	<string name="login_id_hint">Enter your ID(E-mail address) </string>
+	<string name="login_passwd_hint">Enter your password</string>
+	<string name="login_btn"></string>
+	
+	<string name="login_dialog_message">Logging in</string>
+	
+		<!-- Error String -->
+		<string name="login_insert_id_empty">Enter your ID(E-mail address)</string>
+		<string name="login_insert_passwd_empty">Enter your password</string>
+		<string name="login_id_incorrect">Invalid user name</string>
+		<string name="login_passwd_incorrect">Invalid password</string>
+		<!-- /Error String -->
+	
+	<!-- /Login String -->
+	
+	<!-- SignUp String -->
+	<string name="signup_title">signup</string>
+	<string name="signup_nickname_hint">name</string>
+	<string name="signup_id_hint">id(email)</string>
+	<string name="signup_passwd_hint">password</string>
+	<string name="signup_passwdconfirm_hint">check password</string>
+	<string name="signup_interestedCategory_hint">Category which you are interested in</string>
+	<string name="signup_attention">By clicking Creating button, you agree to &lt;font color=#3cc3c6&gt;our Terms &lt;/font&gt; and &lt;font color=#3cc3c6&gt;our Personal Information Use Policy </string>
+	<string name="signup_make_btn">Sing up</string>
+	
+	<string name="signup_dialog_message">&lt;small&gt;Asking for SIGN UP&lt;/small&gt;&lt;br&gt;&lt;small&gt;Waiting.&lt;/small&gt;</string>
+	
+		<!-- Error String -->
+		<string name="signup_insert_nickname_empty">Enter your name</string>
+		<string name="signup_insert_id_empty">Enter your ID(E-mail address)</string>
+		<string name="signup_insert_passwd_empty">Enter your password</string>
+		<string name="signup_insert_passwdconfirm_empty">Re-enter your password to make sure</string>
+		<string name="signup_insert_interestedCategory_empty">Choose a category which you are interested in</string>
+		
+		<string name="signup_insert_passwd_different">Incorrect password. Make sure that it is typed correctly</string>
+		<!-- /Error String -->
+	
+	<!-- /SignUp String -->
+		<string name="title_category">Category</string>
+		<string name="profile_title">Profile_button_edit_profile</string>
+		<string name="profile">Profile</string>
+		<string name="profile_menu_text">Profile Picture</string>
+		<string name="profile_image_des">Tap to change your picture</string>
+		<string name="profile_nick">name</string>
+		<string name="email">Email</string>
+		<string name="purpose">Purpose</string>
+		<string name="mycategory">Category</string>
+		<string name="settings_title">Settings</string>
+		<string name="default_info_text">Basic</string>
+		<string name="version_title">App Version</string>
+		<string name="default_version">1.0</string>
+		<string name="help_title">Help</string>
+		<string name="suggestion_title">Report a Problem</string>
+		<string name="note_title">Alert setting</string>
+		<string name="system_title">System Setting</string>
+		<string name="withdraw_title">Unregister From Witherest</string>
+		<string name="logout_title">Log out</string>
+		<string name="warning_withdraw">Do you unregister from Witherest</string>
+		<string name="confirm">OK</string>
+		<string name="cancel">Cancel</string>
+		<string name="confirm_withdraw">Check </string>
+		<string name="notification">Alert</string>
+		<string name="notificationconfig">Alert setting</string>
+		<string name="activity_noti_config_time">Room time Alert</string>
+		<string name="activity_noti_config_time_des">Receive a notification when it’s time for Room alert.</string>
+		<string name="activity_noti_config_manager_register">New message Alert from a Head.</string>
+		<string name="activity_noti_config_manager_register_des">Receive a notification when Head uploads a new message.</string>
+		<string name="activity_noti_config_register_mine">Comment Alert</string>
+		<string name="activity_noti_config_register_mine_des">Receive a notification when comment is written to my posting.</string>
+		<string name="activity_noti_company">Notification</string>
+		<string name="activity_noti_company_des">Receive a notification alert from Witherest.</string>
+		<string name="selectimage">Choose the picture</string>
+		<string name="activity_profile_input_email_text">Enter E-mail address</string>
+		<string name="activity_profile_input_nick_text">Enter your name</string>
+		<string name="activity_profile_input_purpose_text">Enter your goal</string>
+		<string name="activity_profile_input_mycategories_text">Choose a category which you are interested in</string>
+		<string name="activity_profile_input_category_text">Choose a category which you are interested in</string>
+		<string name="activity_makeroom_room_image_title">Goal Picture</string>
+		<string name="activity_makeroom_room_name_title">Goal(essential)</string>
+		<string name="activity_makeroom_purpose_title">To do(essential)</string>
+		<string name="activity_makeroom_title">Make to do</string>
+		<string name="activity_makeroom_category_title">Category(essential)</string>
+		<string name="activity_makeroom_period_title">Date</string>
+		<string name="activity_makeroom_periodtype_default">Everyday</string>
+		<string name="activity_makeroom_period_default">21days</string>
+		<string name="activity_makeroom_periodtype_title">Cycle to carry out</string>
+		<string name="activity_mkeroom_periodtype_default">Everyday</string>
+		<string name="activity_makeroom_alarm_title">Notificate</string>
+		<string name="activity_makeroom_alarm_default">Everyday</string>
+		<string name="activity_makeroom_content_hint">Tap to write</string>
+		<string name="activity_makeroom_alarmtime_title">Notificate</string>
+		<string name="activity_makeroom_public_title">Privacy setting</string>
+		<string name="activity_makeroom_public_default">Open</string>
+		<string name="activity_makeroom_maxmember_title">participant</string>
+		<string name="activity_makeroom_maxmember_default">10</string>
+		<string name="dialog_input_roomname_text">Enter your goal</string>
+		<string name="dialog_input_purpose_text">Enter the description of things to do</string>
+		<string name="dialog_input_category_text">Choose a category</string>
+		<string name="dialog_input_period_text">Enter the period</string>
+		<string name="dialog_input_periodtype_text">Enter the cycle to carry out</string>
+		<string name="dialog_input_alarm_text">Choose the alert</string>
+		<string name="dialog_input_alarmtime_text">Choose the alert time</string>
+		<string name="dialog_input_pulbic_text">Set the privacy setting for open or not</string>
+		<string name="dialog_input_maxmember_text">Set the number of participants</string>
+		<string name="request_select_day">Choose the day</string>
+		<string name="daily">Everyday</string>
+		<string name="yes">Yes</string>
+		<string name="no">No</string>
+		<string name="publicyes">public</string>
+		<string name="publicno">closed</string>
+		<string name="unit_human">people</string>
+		<string name="simple_time">hour</string>
+		<string name="simple_min">minute</string>
+		<string name="am">am</string>
+		<string name="pm">pm</string>
+		<string name="populate">popular</string>
+		<string name="recent">new</string>
+		<string name="agent">android</string>
+		<string name="login_dialog_title">login</string>
+		<string name="signup_dialog_title">Asking for SIGN UP </string>
+		<string name="server_error">/ Temporary network problem is occurred. Please try it again.</string>
+		<string name="id_duplicated">Sorry, it’s already belonged ID</string>
+		<string name="join_text">Join</string>
+		<string name="setting_text">setting</string>
+		<string name="leave_text">leave</string>
+		<string name="with_text">With</string>
+		<string name="board_text">Board</string>
+		<string name="roomboard_write_hint">Tell your news !!</string>
+		<string name="write_text">Write</string>
+		<string name="login_guide">Guide Log in</string>
+		<string name="login_join_message">”LOG IN” only page \n Click the below button condignly</string>
+		<string name="login">Log in</string>
+		<string name="join">Sign up</string>
+		<string name="logout_dialog_title">Logging out</string>
+		<string name="logout_dialog_message">Asking for LOG OUT</string>
+		<string name="wait_title">Loading Data</string>
+		<string name="wait_message">Waiting</string>
+		<string name="makeroom_title_insert">Enter your goal</string>
+		<string name="makeroom_purpose_insert">Enter the description of things to do</string>
+		<string name="makeroom_category_insert">Choose a category</string>
+		<string name="createroom_dialog_title">Make Goal room</string>
+		<string name="createroom_dialog_message">Request to make goal room \n waiting</string>
+		<string name="createroom_ok">Goal room was opened successfully</string>
+		<string name="room_modify">Fix</string>
+		<string name="room_withdraw">quit</string>
+		<string name="room_join">Join</string>
+		<string name="no_manager_notice">No have notice</string>
+		<string name="no_purpose">No have purpose</string>
+		<string name="you_not_manager">Only Head can write notice</string>
+		<string name="write_notice_title">Notice</string>
+		<string name="confirm_notice">Please write notice</string>
+		<string name="not_user_not_join_alert">You must be enter this place for write</string>
+		<string name="no_text">Please write your news</string>
+		<string name="write_reply_title">Comment</string>
+		<string name="modifyroom_ok">Goal has been modified successfully</string>
+		<string name="not_valid_email">Please enter a valid email address</string>
+		<string name="not_valid_name">Name must be at least 2 letters</string>
+		<string name="not_valid_password">Password must be at least 4 letters</string>
+		<string name="banned_modify_email">Don`t you fix your email</string>
+		<string name="modify">Fix</string>
+		<string name="profile_title">Profile</string>
+		<string name="profile_purpose_hint">Enter your goal</string>
+		<string name="profile_category_hint">Choose a category which you are interested in</string>
+		<string name="make_room">make to do</string>
+		<string name="no_alarm">No alert</string>
+		<string name="room_public_ok">Open</string>
+		<string name="room_public_not">Close</string>
+		<string name="dialog_input_public_not_public">choose public or nonpublic</string>
+		<string name="fatal_network_error">fatal network_error</string>
+</resources>

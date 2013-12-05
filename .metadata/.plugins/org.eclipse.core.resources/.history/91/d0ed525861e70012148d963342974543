@@ -1,0 +1,255 @@
+package com.teamteam.witherest;
+
+import com.teamteam.customComponent.SimpleProgressDialog;
+import com.teamteam.witherest.alarm.WitherestAlarms;
+import com.teamteam.witherest.common.AndroUtils;
+import com.teamteam.witherest.common.CommonUtils;
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.service.callback.UserServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.internal.ErrorHandler;
+import com.teamteam.witherest.service.internal.Service;
+import com.teamteam.witherest.service.internal.ServiceManager;
+import com.teamteam.witherest.service.internal.UserService;
+
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.Window;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Toast;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+
+public class NotificationConfigActivity extends Activity implements OnCheckedChangeListener, UserServiceCallback, OnClickListener {
+
+	/** Called when the activity is first created. */
+	
+	public CheckBox roomTimeBtn;
+	public CheckBox roomManagerBtn;
+	public CheckBox replyBtn;
+	public CheckBox witheresBtn;
+	
+	public UserService userService;
+	private SimpleProgressDialog waitProgressDialog;
+	
+	private int curChangeOption;
+	private boolean curChangeOptionState ;
+	
+	public static final int CHANGE_OPTION_ROOM_TIME = 1;
+	public static final int CHANGE_OPTION_MANAGER_NOTICE = 2;
+	public static final int CHANGE_OPTION_REPLY = 3;
+	public static final int CHANGE_OPTION_WITHEREST_NOTICE = 4;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+	    requestWindowFeature(Window.FEATURE_NO_TITLE);
+	    setContentView(R.layout.activity_notificationconfig);
+	    
+	    initInstance();
+	    initView();
+	    initListener();
+	}
+
+	private void initInstance() {
+		userService = ServiceManager.getServiceManager().getUserService();
+	}
+
+	private void initView() {
+		roomTimeBtn = (CheckBox)findViewById(R.id.activity_noti_roomtime_btn);
+		roomManagerBtn = (CheckBox)findViewById(R.id.activity_noti_roommanager_btn);
+		replyBtn = (CheckBox)findViewById(R.id.activity_noti_reply_btn);
+		witheresBtn = (CheckBox)findViewById(R.id.activity_noti_witherestinfo_btn);
+		
+		roomTimeBtn.setChecked(Session.getInstance().user.isRoomTimeNotice);
+		roomManagerBtn.setChecked(Session.getInstance().user.isRoomManagerNotice);
+		replyBtn.setChecked(Session.getInstance().user.isReplyNotice);
+		witheresBtn.setChecked(Session.getInstance().user.isWitherestNotice);
+	}
+
+	private void initListener() {
+		roomTimeBtn.setOnCheckedChangeListener(this);
+		roomManagerBtn.setOnCheckedChangeListener(this);
+		replyBtn.setOnCheckedChangeListener(this);
+		witheresBtn.setOnCheckedChangeListener(this);
+		
+		roomTimeBtn.setOnClickListener( this);
+		roomManagerBtn.setOnClickListener(this);
+		replyBtn.setOnClickListener(this);
+		witheresBtn.setOnClickListener(this);
+	}
+
+	public void onCheckedChanged(CompoundButton button, boolean isChecked) {
+		switch(button.getId()){
+		case R.id.activity_noti_roomtime_btn:
+			Session.getInstance().user.setIsRoomTimeNotice(isChecked);
+			curChangeOptionState = isChecked;
+			curChangeOption = CHANGE_OPTION_ROOM_TIME;
+			break;
+			
+		case R.id.activity_noti_roommanager_btn:
+			Session.getInstance().user.setIsRoomManagerNotice(isChecked);
+			curChangeOptionState = isChecked;
+			curChangeOption = CHANGE_OPTION_MANAGER_NOTICE;
+			break;
+			
+		case R.id.activity_noti_reply_btn:
+			Session.getInstance().user.setIsReplyNotice(isChecked);
+			curChangeOptionState = isChecked;
+			curChangeOption = CHANGE_OPTION_REPLY;;
+			break;
+			
+		case R.id.activity_noti_witherestinfo_btn:
+			Session.getInstance().user.setIsWitherestNotice(isChecked);
+			curChangeOptionState = isChecked;
+			curChangeOption = CHANGE_OPTION_WITHEREST_NOTICE;
+			break;
+		}
+		
+		updateAlarm();
+	}
+	
+	public void onClick(View v) {
+		CheckBox button = (CheckBox)v;
+		switch(button.getId()){
+		case R.id.activity_noti_roomtime_btn:
+			Session.getInstance().user.setIsRoomTimeNotice(isChecked);
+			curChangeOptionState = isChecked;
+			curChangeOption = CHANGE_OPTION_ROOM_TIME;
+			break;
+			
+		case R.id.activity_noti_roommanager_btn:
+			Session.getInstance().user.setIsRoomManagerNotice(isChecked);
+			curChangeOptionState = isChecked;
+			curChangeOption = CHANGE_OPTION_MANAGER_NOTICE;
+			break;
+			
+		case R.id.activity_noti_reply_btn:
+			Session.getInstance().user.setIsReplyNotice(isChecked);
+			curChangeOptionState = isChecked;
+			curChangeOption = CHANGE_OPTION_REPLY;;
+			break;
+			
+		case R.id.activity_noti_witherestinfo_btn:
+			Session.getInstance().user.setIsWitherestNotice(isChecked);
+			curChangeOptionState = isChecked;
+			curChangeOption = CHANGE_OPTION_WITHEREST_NOTICE;
+			break;
+		}
+		
+		updateAlarm();
+		
+	}
+	
+	private void updateAlarm() {
+		if (CommonUtils.isNullOrEmpty(Session.getInstance().user.getAlarmParam()) ){
+			return;
+		}
+		Log.v("알람 업데이트","호출됩니다");
+		waitProgressDialog = new SimpleProgressDialog(this, getString(R.string.wait_title),getString(R.string.wait_message));
+		waitProgressDialog.start();
+		userService.setOnUserCallback(this);
+		userService.updateAlarm(Session.getInstance().user.getAlarmParam());
+	}
+
+	public void reverseUserSettings(){
+		switch(curChangeOption){
+		case CHANGE_OPTION_ROOM_TIME:
+			Session.getInstance().user.setIsRoomTimeNotice(!Session.getInstance().user.isRoomTimeNotice);
+			roomTimeBtn.setChecked(!roomTimeBtn.isChecked());
+			break;
+			
+		case CHANGE_OPTION_MANAGER_NOTICE:
+			Session.getInstance().user.setIsRoomManagerNotice(!Session.getInstance().user.isRoomManagerNotice);
+			roomManagerBtn.setChecked(!roomManagerBtn.isChecked());
+			break;
+			
+		case CHANGE_OPTION_REPLY:
+			Session.getInstance().user.setIsReplyNotice(!Session.getInstance().user.isReplyNotice);
+			replyBtn.setChecked(!replyBtn.isChecked());
+			break;
+			
+		case CHANGE_OPTION_WITHEREST_NOTICE:
+			Session.getInstance().user.setIsWitherestNotice(!Session.getInstance().user.isWitherestNotice);
+			witheresBtn.setChecked(!witheresBtn.isChecked());
+			break;
+		}
+	}
+	
+	public void onUserServiceCallback(BaseResponseObject object) {
+		if (waitProgressDialog.isShowing()){
+			SimpleProgressDialog.stop(waitProgressDialog);
+		}
+		
+		if (object.resultCode == Service.RESULT_FAIL) {
+			reverseUserSettings();
+			curChangeOption = -1;
+			return;
+		}
+		
+		switch(object.requestType){
+		case Service.REQUEST_TYPE_ALARM_UPDATE:
+			if (object.resultCode == ErrorHandler.COMMON_ERROR || object.resultCode == ErrorHandler.NETWORK_DISABLE ||
+					object.resultCode == ErrorHandler.PARSING_ERROR){
+				
+				reverseUserSettings();
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.fatal_network_error);
+				builder.setMessage(R.string.fatal_network_error_message);
+				builder.setCancelable(false);
+				builder.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								finish();
+							}
+						});
+				builder.create().show();
+				return;
+				
+			}else if (object.resultCode == ErrorHandler.CONNECTION_TIMEOUT || object.resultCode == ErrorHandler.READ_TIMEOUT){
+				
+				reverseUserSettings();
+				AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+				builder2.setTitle(R.string.tempo_network_error);
+				builder2.setMessage(R.string.tempo_network_error_message);
+				builder2.setCancelable(false);
+				builder2.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								new Handler().postDelayed(new Runnable() {
+									public void run() {
+										reverseUserSettings();
+										updateAlarm();
+									}
+								}, 100);
+							}
+						});
+
+				builder2.setNegativeButton(R.string.no,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						});
+				builder2.create().show();
+				return;
+			}
+			
+			if (curChangeOption == CHANGE_OPTION_ROOM_TIME){
+				WitherestAlarms alarms = new WitherestAlarms(this);
+				alarms.userOptionChanged(curChangeOptionState);
+				alarms.close();
+			}
+			curChangeOption = -1;
+			break;
+		}	
+		
+	}
+
+}

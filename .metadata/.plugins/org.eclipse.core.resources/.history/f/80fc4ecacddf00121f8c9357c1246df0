@@ -1,0 +1,9 @@
+
+public class GCMSender {
+	public static final String SERVER_KEY = "AIzaSyBxVOv5VE63ENm7YinR9q9sH72KMoQSS54";
+	
+	public static void main(String[] arg){
+		Sender sender = new Sender(SERVER_KEY);
+	}
+	
+}

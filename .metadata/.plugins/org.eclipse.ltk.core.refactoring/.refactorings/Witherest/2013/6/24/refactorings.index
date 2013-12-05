@@ -1,0 +1,37 @@
+1370752544203	Delete elements
+1370765858640	Rename method 'DisplayImage'
+1370766881812	Rename local variable 'nickname'
+1370772177531	Rename field 'periodContainerView'
+1370793295167	Copy field
+1370930112031	Delete element
+1370930506765	Delete element
+1370932041453	Delete element
+1370936389031	Rename field 'SENDER_ID'
+1370949957625	Rename field 'isGCMCompleted'
+1370960352484	Rename resource 'checkroom_list_selector_hover_bg.xml'
+1370961169546	Rename resource 'chekroom_list_selector.xml'
+1370969864109	Rename type 'CheckRoomListFragment'
+1370969987343	Rename type 'CheckRoomRegListFragment'
+1370970510265	Rename type 'CheckRoomListFragment'
+1370970592671	Rename resource 'checkroom_list_item_row.xml'
+1370971500656	Delete element
+1370971511937	Rename type 'CheckRoomRegListFragment'
+1370971566312	Rename resource 'checkroom_reg_list_item.xml'
+1370973211562	Delete element
+1371016669218	Rename type 'WaitProgressDialog'
+1371022858250	Rename type 'CheckRoomListFragmentAdapter'
+1371036909578	Move compilation units
+1371044313281	Rename resource 'imge_bg.xml'
+1371045999906	Rename type 'PopRoomListFragmentAdapter'
+1371096096875	Rename local variable 'badge'
+1371112135687	Rename field 'justOnce'
+1371119511578	Rename field 'isLoading'
+1371127532234	Rename field 'PASING_SIZE'
+1371128118109	Move file
+1371192430500	Rename method 'isSDCARDMOUNTED'
+1371197170421	Rename field 'CROP_FROM_CAMERA'
+1371207189671	Rename field 'TEMP_PHOTO_FILE'
+1371273132265	Delete element
+1371274896718	Rename field 'mustAllLoading'
+1371274906890	Rename field 'mustOneLoading'
+1371320113109	Delete element

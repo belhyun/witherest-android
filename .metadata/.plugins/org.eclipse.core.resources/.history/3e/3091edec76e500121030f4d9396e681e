@@ -1,0 +1,313 @@
+package com.teamteam.witherest;
+
+import com.teamteam.customComponent.SimpleProgressDialog;
+import com.teamteam.witherest.alarm.WitherestAlarms;
+import com.teamteam.witherest.alarm.WitherestAlarms.Alarm;
+import com.teamteam.witherest.alarm.WitherestAlarms.AlarmCancelAction;
+import com.teamteam.witherest.alarm.WitherestAlarms.AlarmRegisterAction;
+import com.teamteam.witherest.common.AndroUtils;
+import com.teamteam.witherest.common.CommonUtils;
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.service.callback.RoomServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.internal.RoomService;
+import com.teamteam.witherest.service.internal.Service;
+import com.teamteam.witherest.service.internal.ServiceManager;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class RoomDetailActivity extends FragmentActivity implements RoomServiceCallback{
+
+	public static RoomWithFragment roomWithFragment ;
+	public static RoomBoardFragment roomBoardFragment;
+	
+	public int roomId;
+	public String roomTitle;
+
+	public RadioGroup mRadioGroup;
+	public TextView behaviorBtn;
+	
+	public int behaviorType;
+	
+	public static final int NOT_SETTING = 0;
+	public static final int OWNER = 1;    // 방의 소유자 
+	public static final int MEMBER_JOINED = 2;     
+	public static final int MEMER_NOT_JOINED = 3;
+	public static final int NOT_MEMBER = 4; 
+	
+	public SimpleProgressDialog waitProgressDialog;
+	
+	public static final int DEFAULT_PAGE = 1;
+	
+	public static final int ROOM_MODIFY = 100;
+	
+	/*룸위드 화면이 아닌 다른 곳에서 방에 참여, 혹은 탈퇴, 방 수정할 경우 룸위드 의 정보도 갱신해야 하기 때문에
+	룸위드의 갱신 여부를 나타내는 플래그 변수*/
+	public static  boolean isRoomwithMustReloaded = false;
+	
+	//롬보드에서 게시물을 보고 다시 룸보드로 돌아왔을 때 댓글의 추가 삭제에 대해서 원글 리스트 갱신 여부를 판단하는 requestCode
+	public static final int ACTION_VIEW_CONTENT = 0;
+	//회원이 아닌 상태에서 방 참가버튼을 눌르고, 회원 가입으로 전환 후 다시 돌아왔을 때 갱신을 위한 requestCode
+	public static final int MEMBER_JOIN_FROM_ROOM = 1;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+	    requestWindowFeature(Window.FEATURE_NO_TITLE);
+	    setContentView(R.layout.activity_room_detail);
+		Intent i = getIntent();
+		roomId = i.getIntExtra("roomId",-1);
+		roomTitle = i.getStringExtra("roomTitle");
+		if (roomId == -1 || CommonUtils.isNullOrEmpty(roomTitle)){
+			AndroUtils.showToastMessage(this, "잘못된 접근 경로입니다.", Toast.LENGTH_SHORT);
+			return;
+		}
+		initInstance();
+		initView();
+		initListener();
+		changeFragment(roomWithFragment);
+		Log.v("RoomDetailActivity", "onCreate 호출됨");
+	}
+
+	
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if ( resultCode != RESULT_OK)
+			return;
+		switch (requestCode) {
+		case ACTION_VIEW_CONTENT:
+			roomBoardFragment.onActivityResult(requestCode, resultCode, data);
+			break;
+		case MEMBER_JOIN_FROM_ROOM:
+			changeBehaviorType(MEMER_NOT_JOINED);
+			break;
+		case ROOM_MODIFY:
+			checkRoomWithReloaded();
+			break;
+		}
+	
+	}
+
+
+
+	private void initInstance() {
+		behaviorType = NOT_SETTING;;
+		roomWithFragment = RoomWithFragment.newInstance(roomId, DEFAULT_PAGE);
+		roomBoardFragment = RoomBoardFragment.newInstance(roomId,DEFAULT_PAGE);
+	}
+
+	private void initView() {
+		mRadioGroup = (RadioGroup)findViewById(R.id.room_detail_radio_group);
+		TextView roomTitleView = (TextView)findViewById(R.id.room_detail_titl_textview);
+		behaviorBtn = (TextView)findViewById(R.id.room_detail_top_button);
+		roomTitleView.setText(roomTitle);
+	}
+
+	private void initListener() {
+		mRadioGroup.setOnCheckedChangeListener(mRadioCheck);
+		behaviorBtn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				switch(behaviorType){
+				case OWNER:
+					Intent i = new Intent(RoomDetailActivity.this, MakeRoomActivity.class);
+					i.putExtra("mode", MakeRoomActivity.ROOM_MODIFY);
+					i.putExtra("roomId", roomId);
+					i.putExtra("roomTitle", roomTitle);
+					/*방 수정하기화면에는 삭제 버튼도 있는데. 삭제 가능 여부는 방에 멤버가 있는지 없는지로 판단하기 때문에
+					방의 현재 인원수도 전달해준다*/
+					i.putExtra("curMemberCount", roomWithFragment.roomWithResponse.checkRoomWith.curMemberCount);
+					startActivityForResult(i, ROOM_MODIFY);
+					break;
+				case MEMBER_JOINED:
+					//방탈퇴
+					leaveRoom();
+					break;
+				case MEMER_NOT_JOINED:
+					joinRoom();
+					break;
+				case NOT_MEMBER:
+					showMemberGuide();
+					break;
+				default:
+				}
+			}
+		});
+	}
+	
+	private void showMemberGuide() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.member_guide_title);
+		builder.setMessage(R.string.member_guide_message);
+		builder.setCancelable(false);
+		builder.setPositiveButton("예",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						Intent i = new Intent(RoomDetailActivity.this, SignupActivity.class);
+						RoomDetailActivity.this.startActivityForResult(i, MEMBER_JOIN_FROM_ROOM);
+					}
+				});
+
+		builder.setNegativeButton("아니요",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {}
+				});
+
+		builder.create().show();
+		
+	}
+	public void changeBehaviorType(int type){
+		if (type == NOT_SETTING) return;
+		behaviorType = type;
+		switch(behaviorType){
+		case OWNER:
+			behaviorBtn.setText(R.string.room_modify);
+			break;
+			
+		case MEMBER_JOINED:
+			behaviorBtn.setText(R.string.room_withdraw);
+			break;
+			
+		case MEMER_NOT_JOINED:
+			behaviorBtn.setText(R.string.room_join);
+			break;
+			
+		case NOT_MEMBER:
+			behaviorBtn.setText(R.string.room_join);
+			break;
+		default:
+		}
+	}
+	
+	RadioGroup.OnCheckedChangeListener mRadioCheck = new RadioGroup.OnCheckedChangeListener() {
+		public void onCheckedChanged(RadioGroup group, int checkedId) {
+			if (group.getId() ==R.id.room_detail_radio_group){
+				switch(checkedId){
+				case R.id.room_with_radio_btn:
+					changeFragment(roomWithFragment);
+				break;
+				case R.id.room_board_radio_btn:
+					changeFragment(roomBoardFragment);
+				break;
+					
+				}
+			}
+		}
+	};
+	
+	private void changeFragment(Fragment fragment) {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.replace(R.id.activity_roomdetail_content_fragment ,fragment);
+		// 프래그먼트의 교체를 애니메이션화 한다.
+		// 애니메이션을 할 경우, 빠르게 교체 할 경우, 프래그먼트 전환에 문제가 생길 수 있으므로 주석처리한다.
+		//ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		ft.commit();
+	}
+	
+	private void joinRoom() {
+		waitProgressDialog = new SimpleProgressDialog(this, 
+				getString(R.string.wait_title),getString(R.string.wait_message));
+		waitProgressDialog.start();
+		RoomService roomService = ServiceManager.getServiceManager().getRoomService();
+		roomService.setOnRoomCallback(this);
+		roomService.joinRoom(roomId);
+	}
+
+	private void leaveRoom() {
+		waitProgressDialog = new SimpleProgressDialog(this, 
+				getString(R.string.wait_title),getString(R.string.wait_message));
+		waitProgressDialog.start();
+		RoomService roomService = ServiceManager.getServiceManager().getRoomService();
+		roomService.setOnRoomCallback(this);
+		roomService.leaveRoom(roomId);
+	}
+	
+	public void onRoomServiceCallback(BaseResponseObject object) {
+		if (waitProgressDialog.isShowing()){
+			SimpleProgressDialog.stop(waitProgressDialog);
+		}
+		
+		if (object.resultCode == Service.RESULT_FAIL) {
+			AndroUtils.showToastMessage(this, object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);
+			return;
+		}
+		
+		WitherestAlarms alarms = null;
+		
+		switch(object.requestType){
+		case Service.REQUEST_TYPE_GET_ROOM_WITH:
+			/*AndroUtils.showToastMessage(this, object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);*/
+			 break;
+			 
+		case Service.REQUEST_TYPE_JOIN_ROOM:
+			/*AndroUtils.showToastMessage(this, object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);*/
+			checkRoomWithReloaded();
+			changeBehaviorType(MEMBER_JOINED);
+			
+			WitheState.getInstance().init();
+			WitheState.getInstance().changeType = WitheState.JOIN_ROOM;
+			WitheState.getInstance().haveChanged = true;
+			WitheState.getInstance().id = roomId;
+			WitheState.getInstance().mustOneLoaded = true;
+			
+			//참여한 방의 알람을 등록한다.
+			alarms = new WitherestAlarms(this);
+			Alarm alarm = new Alarm();
+			alarm.userId = Session.getInstance().user.id;
+			alarm.roomId = roomId;
+			alarm.roomName = roomTitle;;
+			alarm.roomPurpse = roomWithFragment.roomWithResponse.checkRoomWith.roomPurpose;
+			alarm.alarmTime = roomWithFragment.roomWithResponse.checkRoomWith.alarmTime;
+			alarm.alarmEnabled =roomWithFragment.roomWithResponse.checkRoomWith.alarmLevel;
+			alarm.userRoomTimeOption = Session.getInstance().user.isRoomTimeNotice ? 1: 0;
+			
+			alarms.registerAlarm(alarm, AlarmRegisterAction.INSERT_AFTER_ALARM_START);
+			alarms.close();
+			break;
+			 
+		case Service.REQUEST_TYPE_LEAVE_ROOM:
+			/*AndroUtils.showToastMessage(this, object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);*/
+			checkRoomWithReloaded();
+			MainActivity.isMyCheckRoomMustReloaded = true;
+			changeBehaviorType(MEMER_NOT_JOINED);
+			WitheState.getInstance().init();
+			WitheState.getInstance().changeType = WitheState.LEAVE_ROOM;
+			WitheState.getInstance().haveChanged = true;
+			WitheState.getInstance().id = roomId;
+			WitheState.getInstance().mustOneDeleted = true;
+			
+			//탈퇴한 방의 알람을 해제한다.
+			alarms = new WitherestAlarms(this);
+			alarms.unregisterlAlarm(roomId, AlarmCancelAction.CANCEL_AFTER_DELETE);
+			alarms.close();
+			break;
+		}		
+		
+	}
+
+	private void checkRoomWithReloaded() {
+		MainActivity.isMyCheckRoomMustReloaded = true;
+		FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.activity_roomdetail_content_fragment);
+        if (fragment instanceof RoomWithFragment){
+        	roomWithFragment.getRoomWith(roomId);
+        }else {
+        	isRoomwithMustReloaded = true;
+        }
+	}
+
+}

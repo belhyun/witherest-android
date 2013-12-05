@@ -1,0 +1,621 @@
+package com.teamteam.witherest.service.internal;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.HttpVersion;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.conn.HttpHostConnectException;
+import org.apache.http.entity.mime.FormBodyPart;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
+import com.teamteam.witherest.common.CommonUtils;
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+
+
+
+import android.os.Message;
+import android.util.Log;
+
+public class Service {
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 클라이언트 버젼 관련 요청 타입 정의 0~ 100
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public static final int REQUEST_TYPE_CHECK_VERSION = 0;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 유저 관련 요청 타입 정의 100~ 200
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public static final int REQUEST_TYPE_LOGIN = 100;
+	public static final int REQUEST_TYPE_LOGOUT = 101;
+	public static final int REQUEST_TYPE_DUPL_CHECK = 102;
+	public static final int REQUEST_TYPE_JOIN = 103;
+	public static final int REQUEST_TYPE_ALARM_UPDATE = 104;
+	public static final int REQUEST_TYPE_MODIFY_PROFILE = 105;
+	public static final int REQUEST_TYPE_WITHDRAW = 106;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 카테고리 관련 요청 타입 정의 200~ 300
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public static final int REQUEST_TYPE_GET_ALL_CATEGORIES = 200;
+	public static final int REQUEST_TYPE_GET_ALL_CATEGORIES_ROOMCOUNT = 201;
+	public static final int REQUEST_TYPE_GET_ROOMS_BY_CATEGORY = 202;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 룸 관련 요청 타입 정의 300~ 400
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public static final int REQUEST_TYPE_GET_MY_CHECKROOMS = 300;
+	public static final int REQUEST_TYPE_CREATE_CHECKROOM=301;
+	public static final int REQUEST_TYPE_CHECK_ROOM = 302;
+	public static final int REQUEST_TYPE_CANCEL_CHECK = 303;
+	public static final int REQUEST_TYPE_GET_ROOM_WITH = 304;
+	public static final int REQUEST_TYPE_GET_ROOM_BOARD = 305;
+	public static final int REQUEST_TYPE_JOIN_ROOM = 306;
+	public static final int REQUEST_TYPE_LEAVE_ROOM = 307;
+	public static final int REQUEST_TYPE_GET_ROOMINFO = 308;
+	public static final int REQUEST_TYPE_MODIFY_ROOM = 309;
+	public static final int REQUEST_TYPE_DELETE_ROOM = 310;
+	public static final int REQUEST_TYPE_GET_CHECKED_MEMBER_BY_DATE = 311;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// article  관련 요청 타입 정의 400~ 500
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public static final int REQUEST_TYPE_CREATE_NOTICE = 400;
+	public static final int REQUEST_TYPE_SUBMIT_NEW_COMMENT = 401;
+	public static final int REQUEST_TYPE_SUBMIT_REPLY_COMMENT = 402;
+	public static final int REQUEST_TYPE_DELETE_COMMENT = 403;
+	public static final int REQUEST_TYPE_GET_REPLYS_BY_ID = 404; 
+
+	//api URL 
+	public static final String BASE_URL = "http://14.63.198.222";
+
+	public static final String VERSION_CHECK_URL 						 	 = BASE_URL + "/version";
+	public static final String LOGIN_URL            						     = BASE_URL +  "/login";
+	public static final String LOGOUT_URL           				             = BASE_URL + "/logout";
+	public static final String JOIN_URL             					             = BASE_URL +"/join";
+	public static final String DUPL_CHECK_URL     				             = BASE_URL +"/user/check";
+	public static final String ALARM_UPDATE_URL                             = BASE_URL + "/user/update_alarm";
+	public static final String MODYFY_PROFILE_URL                           = BASE_URL + "/user/update";
+	public static final String WITHDRAW_URL                                  = BASE_URL + "/user/un_register";
+	
+	public static final String GET_CATEGORIES_URL				             = BASE_URL + "/category/list";
+	public static final String GET_ALL_CATEGORIES_ROOMCOUNT_URL          = BASE_URL + "/category/room_cnt";
+	public static final String GET_ROOMS_BY_CATEGORY_URL = BASE_URL + "/category/room";
+	
+	public static final String GET_MY_CHECKROOMS_URL 		             = BASE_URL + "/room/my_room";
+	public static final String CREATE_CHECKROOM_URL                      = BASE_URL + "/room/create";
+	public static final String CHECK_ROOM_URL                               = BASE_URL + "/room/check";
+	public static final String CANCEL_CHECK_URL                              = BASE_URL + "/room/check_cancel";
+	public static final String GET_ROOM_WITH_URL                           = BASE_URL + "/room/with_list";
+	public static final String GET_ROOM_BOARD_URL                         = BASE_URL + "/article/get";
+	public static final String JOIN_ROOM_URL                                 = BASE_URL + "/user/join_room";
+	public static final String GET_ROOMINFO_URL                             = BASE_URL + "/room/get";
+	public static final String MODIFY_ROOM_URL                              = BASE_URL + "/room/update";
+	public static final String LEAVE_ROOM_URL                                = BASE_URL + "/user/un_join_room";
+	public static final String DELETE_ROOM_URL                               = BASE_URL + "/room/room_delete";
+	public static final String GET_CHECKED_MEMBER_BY_DATE_URL        = BASE_URL + "/room/chked_mem_by_date";
+	
+	public static final String CREATE_NOTICE_URL                            = BASE_URL + "/notice/write";
+	public static final String SUBMIT_NEW_COMMENT_URL                 = BASE_URL + "/article/write";
+	public static final String SUBMIT_REPLY_COMMENT_URL                = BASE_URL + "/article/write_rly";
+	public static final String DELETE_COMMENT_URL                         = BASE_URL +"/article/delete";
+	public static final String GET_REPLYS_BY_ID                               = BASE_URL + "/article/get_rly"; 
+	
+	//헤더에 추가할 세션의   키 이름 
+	public static final String ACC_TOKEN="acc_token ";
+	
+	public static final int PUBLIC_OK = 1;
+	public static final int PUBLIC_NOT=0;
+	
+	//요청 결과 응답 코드 
+	public static final int RESULT_OK = 1;        // 성공
+	public static final int RESULT_FAIL = 0;        // 실패
+	public static final String REQUEST_TYPE_STRING="request_type";
+	
+	public  static final String RESPONSE_NO_DATA = "수신된 데이타가 없습니다"; 
+	
+	protected String mimeType;
+	protected String paramEncoding;
+	protected String responseEncoding;
+	
+	protected int RegistrationTimeout ;
+	protected HttpClient httpClient;
+	protected ServiceHandler  handler;
+	protected boolean isBackground;
+	protected int DEFAULT_TIMEOUT = 2 * 1000;
+
+	public String getParamEncoding() {return paramEncoding;}
+	public void setParamEncoding(String paramEncoding) {this.paramEncoding = paramEncoding;}	
+	public String getResponseEncoding() {return responseEncoding;}
+	public void setResponseEncoding(String responseEncoding) {this.responseEncoding = responseEncoding;}	
+	public String getMimeType() {return mimeType;}
+	public void setMimeType(String mimeType) {this.mimeType = mimeType;}	
+	public int getRegistrationTimeout() {return RegistrationTimeout;}
+	public void setRegistrationTimeout(int registrationTimeout) {RegistrationTimeout = registrationTimeout;}	
+	public boolean getBackground() {return isBackground;}
+	public void setBackground(boolean connectionByThread) {this.isBackground = connectionByThread;}
+	
+	protected class 	ConnectionThread extends Thread{
+		String url;
+		String requestMethod;
+		ArrayList<NameValuePair> paramList;
+		String fileName;
+		Map<String, String> paramMap;
+		int requestCode;
+		
+		public ConnectionThread(String url,String requestMethod , ArrayList<NameValuePair> paramList){
+			this.url = url;
+			this.paramList= paramList;
+			this.requestMethod = requestMethod ;
+			setDaemon(true);
+		}
+		
+		public ConnectionThread(String url, String requestMethod, Map<String,String> paramMap){
+			this.url = url;
+			this.requestMethod = requestMethod;
+			this.paramMap= paramMap;
+			this.requestCode = CommonUtils.str2int(paramMap.get(REQUEST_TYPE_STRING));
+		}
+		
+		public ConnectionThread(String url,String requestMethod ,String fileName, Map<String,String> paramMap){
+			this.url = url;
+			this.paramMap= paramMap;
+			this.requestMethod = requestMethod ;
+			this.requestCode = CommonUtils.str2int(paramMap.get(REQUEST_TYPE_STRING));
+			this.fileName  = fileName;
+			setDaemon(true);
+		}
+		
+		public void run()  {
+			Log.v("요청 스레드 생성", this.url + "  ");
+			
+			String resp = null;
+			
+			if (requestMethod.equals("POST")){
+				resp = sendPostEx(this.url, getNameValuePair(paramMap));
+			}
+			else if (requestMethod.equals("GET")){
+				resp = sendGetEx(this.url);
+			}
+			else if (requestMethod.equals("DELETE")){
+				resp = sendDeleteEx(url, this.paramList);
+				
+			}
+			else if (requestMethod.equals("MULTIPART")){
+				resp = sendMultipartEx(this.url, fileName, paramMap);
+			}
+			else if (requestMethod.equals("PUT")){}
+			
+			finishedBackgroundProcess(url, resp);
+		}
+	}
+
+	public Service(HttpClient httpClient,ServiceHandler handler){
+		this.httpClient = httpClient;
+		this.handler = handler;
+		initService();
+	}
+	
+	
+	public void initService(){
+		setMimeType( "text/html");
+		setParamEncoding("utf-8");
+		setResponseEncoding("utf-8");
+		setBackground(true);
+		
+	/*	setRegistrationTimeout(DEFAULT_TIMEOUT);
+		HttpParams httpParams = httpClient.getParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, RegistrationTimeout);
+		HttpConnectionParams.setSoTimeout(httpParams, RegistrationTimeout);*/
+	}
+	
+	public void setConnetionTimeout(int time){
+		HttpParams httpParams = httpClient.getParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, RegistrationTimeout);
+	}
+	
+	public void setSoTimeout(int time){
+		HttpParams httpParams = httpClient.getParams();
+		HttpConnectionParams.setSoTimeout(httpParams, RegistrationTimeout);
+	}
+	
+	public void sendGet(String url, Map<String, String>) paramMap {
+		if (getBackground()){
+			ConnectionThread t = new ConnectionThread(url,"GET",null);
+			t.start();
+		}
+	}
+	
+	public void sendGet(String url, String paramEncoding, String responseEncoding){
+		if ( paramEncoding != null) setParamEncoding(paramEncoding);
+		if (responseEncoding != null) setResponseEncoding(responseEncoding);	
+			ConnectionThread t = new ConnectionThread(url,"GET",null);
+			t.start();
+	}
+	
+	public void sendGet(String url, Map<String, String> paramMap){
+		if (getBackground()){
+			ConnectionThread t = new ConnectionThread(url,"GET",paramMap);
+			t.start();
+		}
+	}
+	
+	public void sendPost(String url,String paramEncoding, String responseEncoding,Map<String,String> paramMap){
+		if ( paramEncoding != null) setParamEncoding(paramEncoding);
+		if (responseEncoding != null) setResponseEncoding(responseEncoding);	
+		
+		ArrayList<NameValuePair> paramsList = getNameValuePair(paramMap);
+		ConnectionThread t = new ConnectionThread(url,"POST",paramsList);
+		t.start();		
+	}
+	
+	public void sendPost(String url,Map<String,String> paramMap) throws InterruptedException{
+		ArrayList<NameValuePair> paramsList = getNameValuePair(paramMap);
+		ConnectionThread t = new ConnectionThread(url,"POST",paramsList);
+		t.start();
+	}
+	
+	public void sendMultipart(String url, String filename, Map<String, String> paramMap){
+		ConnectionThread t = new ConnectionThread(url,"MULTIPART",filename, paramMap);
+		t.start();
+	}
+	
+	public String sendGetEx(String url){
+		String result = null;
+		HttpGet httpGet = new HttpGet(url);
+		addHeaderSessionKey(httpGet);
+		HttpResponse response = null;
+		InputStream instream = null;
+		
+		try {
+			response = httpClient.execute( httpGet);
+			HttpEntity entity = response.getEntity();
+			if (entity != null) {
+				Log.v("entity ", "not null");
+					instream = entity.getContent();
+					result = convertStreamToString(instream);
+			}else{
+				Log.v("entity ", "null");
+			}
+			httpGet.abort();	
+		}catch(HttpHostConnectException e){
+			Log.v("HttpHostConnectException발생  ", e.toString());
+		}catch(SocketException e){
+			Log.v("SocketException 발생  ", e.toString());
+		}catch(SocketTimeoutException e){
+			// 연결이 된 후 읽기 제한시간을 초과했을 때 발생한다.
+			Log.v("SocketTimeoutException ", e.toString());
+		} catch (ClientProtocolException e) {
+			Log.v("ClientProtocolException", e.toString());
+		} catch (IOException e) {
+			Log.v("IOException!!!", e.toString());
+			/*	
+			 * 커넥션 타임아웃이 발생한 경우 IOException 에서 캐치한다. 
+			따라서 사용자에게 타임아웃을 알리고 재 연결을 시도해야 한다.
+			IOException 발생의 경우 자동적으로 커넥션을 해제되어 커넥션 매니저에게 돌아간다.
+			따라서 아무 작업을 할 필요가 없다 
+			*/
+		}catch(RuntimeException e){
+			Log.v("RuntimeException",e.toString());
+			httpGet.abort();	
+		}catch(Exception e){
+			Log.v("Exception!!", e.toString());
+		} finally {
+		
+			if (instream != null)
+				try {
+					instream.close();
+				} catch (IOException e) {
+					Log.v(" 스트림 닫기 IOException",e.toString());
+				}
+		}
+		
+		return result;
+	}
+	
+
+	private String sendPostEx(String url, ArrayList<NameValuePair> params)  {
+		String result = null;
+		HttpResponse response;
+		HttpPost httpPost = new HttpPost(url);
+		addHeaderSessionKey(httpPost);
+		InputStream instream = null;
+		
+		try{
+			HttpEntity entity = new UrlEncodedFormEntity(params, getParamEncoding());
+			httpPost.addHeader(entity.getContentType());
+			httpPost.setEntity(entity);
+			response = httpClient.execute(httpPost);
+	
+			HttpEntity respEntity = response.getEntity();
+			if (respEntity != null) {
+				Log.v("entity ", "not null");
+				instream = respEntity.getContent();
+				result = convertStreamToString(instream);
+				instream.close();
+			}else{
+				Log.v("entity ", "null");
+			}
+			httpPost.abort();	
+		}catch(HttpHostConnectException e){
+			Log.v("HttpHostConnectException발생  ", e.toString());
+		}catch(SocketException e){
+			Log.v("SocketException ", e.toString());
+		}catch(SocketTimeoutException e){
+			// 연결이 된 후 읽기 제한시간을 초과했을 때 발생한다.
+			Log.v("SocketTimeoutException ", e.toString());
+		} catch (ClientProtocolException e) {
+			Log.v("ClientProtocolException", e.toString());
+		} catch (IOException e) {
+			Log.v("IOException[post]", e.toString());
+			/*	
+			 * 커넥션 타임아웃이 발생한 경우 IOException 에서 캐치한다. 
+			따라서 사용자에게 타임아웃을 알리고 재 연결을 시도해야 한다.
+			IOException 발생의 경우 자동적으로 커넥션을 해제되어 커넥션 매니저에게 돌아간다.
+			따라서 아무 작업을 할 필요가 없다 
+			*/
+		}catch(RuntimeException e){
+			Log.v("RuntimeException",e.toString());
+			httpPost.abort();	
+		}catch(Exception e){
+			Log.v("Exception!!", e.toString());
+		} finally {
+		
+			if (instream != null)
+				try {
+					instream.close();
+				} catch (IOException e) {
+					Log.v(" 스트림 닫기 IOException",e.toString());
+				}
+		}
+
+		return result;
+	}
+	
+
+	//파일과 파라메터를 멀티파트 타입으로 전송함 
+	public String sendMultipartEx(String url, String filename, Map<String, String> paramMap){
+		String result = null;
+		HttpPost httpPost = new HttpPost(url);
+		HttpResponse resp;
+		
+		MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+		entity.addPart("image", new FileBody(new File(filename)));
+		InputStream instream = null;
+		try {
+			Set<Entry<String, String>> entrySet = null;
+			Iterator<Entry<String, String>> i = null;
+			if (paramMap != null){
+				entrySet = paramMap.entrySet();
+			    	i = entrySet.iterator();
+				while(i.hasNext()){
+					Map.Entry<String, String> entry = i.next();
+					String paramName = entry.getKey();
+					String paramValue = entry.getValue();
+					
+					FormBodyPart bodyPart=new FormBodyPart(paramName, new StringBody(paramValue,
+							Charset.forName(getParamEncoding())));
+					entity.addPart(bodyPart);
+				}
+			}
+			//httpPost.addHeader(entity.getContentType());
+			addHeaderSessionKey(httpPost);
+			httpPost.setEntity(entity);
+			resp = httpClient.execute(httpPost);
+			HttpEntity respEntity = resp.getEntity();
+			
+			if (respEntity != null) {
+				Log.v("entity ", "not null");
+				instream = respEntity.getContent();
+				result = convertStreamToString(instream);
+				instream.close();
+			}else{
+				Log.v("entity ", "null");
+			}
+			httpPost.abort();	
+		}catch(HttpHostConnectException e){
+			/*네트워크가 연결되지 않았을 때, 서버가 작동하지 않을 때 발생
+			서버가 언제나 작동하는 상태에서 이 익셉션이 발생할 경우, 장비의 네트웍 상태가 끊어졌다는 것을 의미한다.*/
+			Log.v("HttpHostConnectException발생  ", e.toString());
+		}catch(SocketException e){
+			Log.v("SocketException ", e.toString());
+		}catch(SocketTimeoutException e){
+			// 연결이 된 후 읽기 제한시간을 초과했을 때 발생한다.
+			Log.v("SocketTimeoutException ", e.toString());
+		} catch (ClientProtocolException e) {
+			Log.v("ClientProtocolException", e.toString());
+		} catch (IOException e) {
+			Log.v("IOException[multipart]", e.toString());
+			/*	
+			 * 커넥션 타임아웃이 발생한 경우 IOException 에서 캐치한다. 
+			따라서 사용자에게 타임아웃을 알리고 재 연결을 시도해야 한다.
+			IOException 발생의 경우 자동적으로 커넥션을 해제되어 커넥션 매니저에게 돌아간다.
+			따라서 아무 작업을 할 필요가 없다 
+			*/
+		}catch(RuntimeException e){
+			Log.v("RuntimeException",e.toString());
+			httpPost.abort();	
+		}catch(Exception e){
+			Log.v("Exception!!", e.toString());
+		} finally {
+		
+			if (instream != null)
+				try {
+					instream.close();
+				} catch (IOException e) {
+					Log.v(" 스트림 닫기 IOException",e.toString());
+				}
+		}
+
+		return result;
+	}
+	
+	//맵으로 된 파라미터를 ArrayList<NameValuePair>로 변환해 반환한다.
+	public ArrayList<NameValuePair> getNameValuePair(Map<String,String> paramMap){
+		ArrayList<NameValuePair> paramsList = new ArrayList<NameValuePair>();
+		Set<Entry<String, String>> entrySet = null;
+		Iterator<Entry<String, String>> i = null;
+		if (paramMap != null){
+			entrySet = paramMap.entrySet();
+			i = entrySet.iterator();
+			while(i.hasNext()){
+				Map.Entry<String, String> entry = i.next();
+				String paramName = entry.getKey();
+				String paramValue = entry.getValue();
+				paramsList.add(new BasicNameValuePair(paramName, paramValue));
+			}
+		}
+		return paramsList;
+	}
+	
+	public String convertStreamToString(InputStream is) {
+		StringBuilder sb = new StringBuilder();
+		String line = null;
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is, getResponseEncoding()), 8);
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			
+		} catch (IOException e) {
+			Log.v("스트림 읽는 중  IOException 익셉션", e.getMessage());
+		} catch (Exception  e) {
+			Log.v("스트림 읽는 중 Exception 익셉션", e.toString() + " : ==>" + e.getMessage() );
+		} finally {
+			try {
+				is.close();
+			} catch (IOException e) {
+				Log.v("익셉션", e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * 단일 파일 업로드
+	 * @param url - 업로드할 URLl
+	 * @param filename - 업로드할 파일 이름
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
+	public String postFile(String url, String filename) throws ClientProtocolException, IOException {
+		String result = null;
+		HttpResponse resp;
+		httpClient.getParams().setParameter(
+				CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+		HttpPost httpPost = new HttpPost(url);
+		File file = new File(filename);
+
+		MultipartEntity mpEntity = new MultipartEntity();
+		ContentBody cbFile = new FileBody(file, "image/jpeg");
+		mpEntity.addPart("userfile", cbFile);
+
+		httpPost.setEntity(mpEntity);
+		System.out.println("executing request " + httpPost.getRequestLine());
+		
+		try {
+			resp = httpClient.execute(httpPost);
+			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				HttpEntity respEntity = resp.getEntity();
+				if (respEntity != null) {
+					InputStream instream = respEntity.getContent();
+					result = convertStreamToString(instream);
+					instream.close();
+				}
+			} else {
+				Log.v(url+ " --> 응답 상태",  url + " --> " + resp.getStatusLine().getStatusCode() + " : " + resp.getStatusLine().getReasonPhrase() );
+			}
+		} catch ( IOException e) {	
+			Log.v("익셉션", e.getMessage());
+		} finally {	}
+		httpClient.getConnectionManager().shutdown();
+		return result;	
+	}
+	
+	public void sendDelete(String url, Map<String,String> paramMap){
+		ArrayList<NameValuePair> paramsList = null;
+		if (paramMap != null){
+			 paramsList = getNameValuePair(paramMap);
+		}
+		ConnectionThread t = new ConnectionThread(url,"DELETE",paramsList);
+		t.start();
+	}
+	
+	public String sendDeleteEx(String url,ArrayList<NameValuePair> paramsList ) {
+		String result = null;
+		HttpResponse resp;
+		HttpDelete httpDelete = new HttpDelete(url);
+		addHeaderSessionKey(httpDelete);
+		
+		try{
+		resp = httpClient.execute(httpDelete);
+			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {	
+				HttpEntity respEntity = resp.getEntity();
+				if (respEntity != null) {
+					InputStream instream = respEntity.getContent();
+					result = convertStreamToString(instream);
+					instream.close();
+				}
+			} else {
+				Log.v("로그아웃 결과", " " + resp.getStatusLine().getStatusCode());
+			}
+		}catch(Exception e){}
+		return result;
+	}
+	
+
+	/* 
+	 * 스레드의 통신한 후 그 결과를 받으면 호출되는 콜백 메서드
+	 * 통신은 커넥션 타임아웃, 이나 HttpResponse 로 부터 엔터티를 읽어오는 도중, 읽기 제한 시간에 걸리거나
+	 * 혹은 기타 등등의 에러가 발생시 그 결과로 널을 리턴한다.
+	 * 그래서 아래의 메서드로 전달되는 값이 널인지 아닌지를 판단하여 재 연결등을 시도해야 한다.
+	 */
+	public void finishedBackgroundProcess(String requsetUrl,String responseText) {
+		BaseResponseObject obj = ParsingService.parseJson(responseText);
+		Message message = Message.obtain();
+		message.obj = obj ;
+		handler.sendMessage(message);
+		Log.v("response_text", responseText);
+	}
+	
+	public void addHeaderSessionKey( HttpRequestBase request) {
+		String sessionKey = Session.getInstance().sessionKey;
+		if (sessionKey != null){
+			request.addHeader(ACC_TOKEN, sessionKey);
+		}
+	}
+
+}

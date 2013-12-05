@@ -1,0 +1,20 @@
+package com.teamteam.witherest.common;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.StringTokenizer;
+
+public class DateUtils {
+
+	/* date1 이 크면 1, date2 가 크면 2 , 같으면 0을 반환한다. */
+	public static int compareDate(Date date1, Date date2) {
+		int compare = date1.compareTo(date2);
+		if (compare > 0) {
+			return 1;
+		} else if (compare < 0) {
+			return 2;
+		} else {
+			return 0;
+		}
+	}
+}

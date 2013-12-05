@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id ="@+id/touch_container1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="left|center_vertical"
+    android:background="#e9e9e9"
+    android:orientation="vertical" >
+
+    <!--
+      Header Area  
+  	<include layout="@layout/fragment_top_bar" android:id="@+id/topbar"
+  	    android:layout_width="match_parent"
+  	    android:layout_height="wrap_content"/>
+    -->
+    <!-- /Header Area -->
+
+    <fragment
+        android:id="@+id/activity_main_topmenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.teamteam.witherest.Fragment_Top_Menu" />
+
+      <!-- Content Area -->
+
+    <FrameLayout
+        android:id="@+id/activity_main_fragment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/activity_main_bottomMenu"
+        android:layout_below="@id/activity_main_topmenu" />
+     <!-- /Content Area -->
+
+
+    <!-- Bottom Menu Area -->
+
+    <fragment
+        android:id="@id/activity_main_bottomMenu"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+      
+        class="com.teamteam.witherest.Fragment_Bottom_Menu" />
+    <!-- /Bottom Menu Area -->
+
+</RelativeLayout>

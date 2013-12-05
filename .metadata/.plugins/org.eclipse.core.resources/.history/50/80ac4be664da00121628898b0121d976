@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+
+android:oneshot="false">
+
+<item android:drawable="@drawable/img_intro_loading_a"
+
+android:duration="150">
+
+</item>
+
+<item android:drawable="@drawable/img_intro_loading_b"
+
+android:duration="150">
+
+</item>
+
+<item android:drawable="@drawable/img_intro_loading_c"
+
+android:duration="150">
+
+</item>
+
+<item android:drawable="@drawable/img_intro_loading_d"
+
+android:duration="150">
+
+</item>
+
+<item android:drawable="@drawable/img_intro_loading_e"
+
+android:duration="150">
+
+</item>
+
+<item android:drawable="@drawable/img_intro_loading_f"
+
+android:duration="150">
+
+</item>
+
+<item android:drawable="@drawable/img_intro_loading_g"
+
+android:duration="150">
+
+</item>
+
+<item android:drawable="@drawable/img_intro_loading_h"
+
+android:duration="150">
+
+</item>
+
+<item android:drawable="@drawable/img_intro_loading_i"
+
+android:duration="150">
+
+</item>
+
+<item android:drawable="@drawable/img_intro_loading_j"
+
+android:duration="150">
+
+</item>
+
+<item android:drawable="@drawable/img_intro_loading_k"
+
+android:duration="150">
+
+</item>
+
+<item android:drawable="@drawable/img_intro_loading_l"
+
+android:duration="150">
+
+</item>
+
+</animation-list>
+Hide details
+Change log
+r118 by zep25dr on Mar 17, 2011   Diff
+[No log message]
+Go to: 	
+Older revisions
+All revisions of this file
+File info
+Size: 1317 bytes, 78 lines
+View raw file

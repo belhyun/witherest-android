@@ -1,0 +1,65 @@
+package com.teamteam.witherest.service.internal;
+
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+
+public class ConnectionErrorHandler {
+	public static final int NETWORK_DISABLE = 1000;
+	public static final int READ_TIMEOUT = 1001;
+	public static final int CONNECTION_TIMEOUT= 1002;
+	public static final int PARSING_ERROR = 1003;
+	public static final int COMMON_ERROR = 1004; 
+	
+	public static final String NETWORK_DISABLE_STIRNG ="network_disable";
+	public static final String READ_TIMEOUT_STIRNG = "readtimeout";
+	public static final String CONNECTION_TIMEOUT_STIRNG= "connectiontimeout";
+	public static final String PARSING_ERROR_STIRNG ="parsingerror";
+	public static final String COMMON_ERROR_STRING = "commonerror";
+	
+	
+	public static void handleError(Context context, BaseResponseObject obj){
+		switch (obj.resultCode){
+		case NETWORK_DISABLE:
+		case PARSING_ERROR:
+		case COMMON_ERROR:
+			showAppDownDialog(context);
+			break;
+		case READ_TIMEOUT:
+			break;
+		case CONNECTION_TIMEOUT:
+			break;
+		}
+	}
+
+
+	private static void showAppDownDialog(Context context) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(R.string.netwok_error);
+		builder.setMessage("클라이언트가 최신버젼이 아닙니다.\n업그레이드를 하셔야 이용이 가능합니다");
+		builder.setCancelable(false);
+		builder.setPositiveButton("예",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						//AndroUtils.closeProgress(SplashActivity.this, progressBar);
+						progress.dismiss();
+						finish();
+						
+					}
+				});
+
+		builder.setNegativeButton("아니요",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						//AndroUtils.closeProgress(SplashActivity.this, progressBar);
+						progress.dismiss();
+						finish();
+					}
+				});
+
+		builder.create().show();
+		
+	}
+}

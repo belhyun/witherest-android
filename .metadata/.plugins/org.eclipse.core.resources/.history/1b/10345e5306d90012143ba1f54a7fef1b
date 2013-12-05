@@ -1,0 +1,21 @@
+import java.util.Calendar;
+import java.util.Date;
+
+
+public class TestDate {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		Date now = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.add(Calendar.DATE, -1);
+		Date yesterday = cal.getTime();
+		
+		int compare = now.compareTo()
+		
+	}
+
+}

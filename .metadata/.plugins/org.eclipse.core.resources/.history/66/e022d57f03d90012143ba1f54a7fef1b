@@ -1,0 +1,47 @@
+package com.teamteam.witherest.common;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.StringTokenizer;
+
+public class DateUtils {
+	public static int compareDate1(String sysdate, String strDate) throws Exception {
+		Date curr_date = new Date();
+
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+
+		StringTokenizer st = new StringTokenizer(sysdate, "/");
+		sysdate = st.nextToken()+st.nextToken()+st.nextToken();
+		Date param_date1 = fmt.parse(sysdate);
+
+		st = new StringTokenizer(strDate, "/");
+		strDate = st.nextToken()+st.nextToken()+st.nextToken();
+		Date param_date2 = fmt.parse(strDate);
+
+		int flag = 0;
+
+		long millisDiff = (param_date1.getTime() - param_date2.getTime())/(1000 * 60 * 60 * 24);
+
+		if(millisDiff > 0){
+		flag = 1;
+		}else if(millisDiff < 0){
+		flag = 2;
+		}else if(millisDiff == 0){
+		flag = 0;
+		}
+		return flag;
+		}
+	
+	
+	public static int compareDate(Date date1, Date date2){
+		int compare = date1.compareTo(date2);
+		if (compare > 0){
+			return 1;
+		}else if (compare<0){
+			return 2;
+		}else {
+			return 0;
+			
+		}
+	}
+}

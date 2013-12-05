@@ -1,0 +1,66 @@
+package com.teamteam.customComponent;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Looper;
+import android.util.Log;
+
+public class SimpleProgressDialog extends Thread {
+	Context mContext;
+	CharSequence mMessage;
+	String mTitle;
+	
+	ProgressDialog mProgressDialog;
+	Looper mLoop;
+
+	
+	public SimpleProgressDialog(Context context, String title,CharSequence message) {
+		mContext = context;
+		mMessage = message;
+		mTitle = title;
+		mProgressDialog = new ProgressDialog(mContext);
+		mProgressDialog.setIndeterminate(true);
+		//mProgressDialog.setTitle(mTitle);
+		mProgressDialog.setMessage(mMessage);
+		mProgressDialog.setCancelable(false);
+		
+		setDaemon(true);
+	}
+	
+	public void run() {
+		Looper.prepare();
+		show();
+		mLoop = Looper.myLooper();
+		Looper.loop();
+	}
+	
+	public boolean isShowing(){
+		return mProgressDialog.isShowing();
+	}
+	
+	public void show(){
+		
+		mProgressDialog.show();
+	}	
+	
+	/*루퍼 스레드는 종료하지 않고, 다이알로그만 숨긴다.*/
+	public void hide(){
+		mProgressDialog.dismiss();
+	}
+	
+/*	다이알로그를 해제 하고, 루퍼 스레드도 종료한다.
+	이 메서드를 호출하면 스레드가 죽기 때문에, 이 후 이 객체를 start 할 수 없다.
+	이는 스레드의 특성으로, 스레드는 중지, 종료하면 다시 생성하지 않는 한 재시작 할 수 없는 것과 같다.*/
+	public static void stop(SimpleProgressDialog waitProgressDialog) {
+		
+		waitProgressDialog.mProgressDialog.dismiss();
+		try {
+			Thread.sleep(200);
+		} catch(InterruptedException e) {
+			e.printStackTrace();
+		}
+		waitProgressDialog.mLoop.quit();
+	}
+}

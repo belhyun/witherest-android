@@ -1,0 +1,525 @@
+package com.example.test1;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnTouchListener;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView.OnItemClickListener;
+
+public class CopyOfFooter extends Activity implements OnItemClickListener,
+		OnScrollListener, OnTouchListener {
+	public static final int INC_COUNT = 5; // Ãß°¡·Î º¸¿©ÁÙ item °³¼ö
+	MoreItemAdapter adtMore;
+	ListView list;
+	View footer, header;
+	ArrayList<String> datas = new ArrayList<String>();
+	boolean justOnce = true, isHeader = false;
+	int footerId, headerId;
+	ImageView loadFooter, loadHeader;
+	AnimationDrawable footerSpinAnim, headerSpinAnim;
+
+	public String mStrings[] = { "111111111111111111111111111111111", "222",
+			"333", "444", "555", "666", "777", "888", "999", "000", "11111111",
+			"222", "333", "444", "555", "666", "777", "888", "999", "000",
+			"11111111", "222", "333", "444", "555", "666", "777", "888", "999",
+			"000", "11111111", "222", "333", "444", "555", "666", "777", "888",
+			"999", "000", "11111111", "222", "333", "444", "555", "666", "777",
+			"888", "999", "000", "11111111", "222", "333", "444", "555", "666",
+			"777", "888", "999", "000", "11111111", "222", "333", "444", "555",
+			"666", "777", "888", "999", "000", "11111111", "222", "333", "444",
+			"555", "666", "777", "888", "999", "000", "11111111", "222", "333",
+			"444", "555", "666", "777", "888", "999", "000", "11111111", "222",
+			"333", "444", "555", "666", "777", "888", "999", "000",
+			"111111111111111111111111111111111", "222", "333", "444", "555",
+			"666", "777", "888", "999", "000", "11111111", "222", "333", "444",
+			"555", "666", "777", "888", "999", "000", "11111111", "222", "333",
+			"444", "555", "666", "777", "888", "999", "000", "11111111", "222",
+			"333", "444", "555", "666", "777", "888", "999", "000", "11111111",
+			"222", "333", "444", "555", "666", "777", "888", "999", "000",
+			"11111111", "222", "333", "444", "555", "666", "777", "888", "999",
+			"000", "11111111", "222", "333", "444", "555", "666", "777", "888",
+			"999", "000", "11111111", "222", "333", "444", "555", "666", "777",
+			"888", "999", "000", "11111111", "222", "333", "444", "555", "666",
+			"777", "888", "999", "000", "11111111", "222", "333", "444", "555",
+			"666", "777", "888", "999", "000",
+			"111111111111111111111111111111111", "222", "333", "444", "555",
+			"666", "777", "888", "999", "000", "11111111", "222", "333", "444",
+			"555", "666", "777", "888", "999", "000", "11111111", "222", "333",
+			"444", "555", "666", "777", "888", "999", "000", "11111111", "222",
+			"333", "444", "555", "666", "777", "888", "999", "000", "11111111",
+			"222", "333", "444", "555", "666", "777", "888", "999", "000",
+			"11111111", "222", "333", "444", "555", "666", "777", "888", "999",
+			"000", "11111111", "222", "333", "444", "555", "666", "777", "888",
+			"999", "000", "11111111", "222", "333", "444", "555", "666", "777",
+			"888", "999", "000", "11111111", "222", "333", "444", "555", "666",
+			"777", "888", "999", "000", "11111111", "222", "333", "444", "555",
+			"666", "777", "888", "999", "000" };
+
+	@Override
+	public void onCreate(Bundle savedInstancestate) {
+		super.onCreate(savedInstancestate);
+		setContentView(R.layout.ui_listview2);
+
+		list = (ListView) findViewById(R.id.lv_morelist);
+		footer = getLayoutInflater().inflate(R.layout.ui_sub_footer, null,
+				false);
+
+		// / Spin animation °ü·Ã ImageView ±¸Çö
+
+		loadFooter = (ImageView) footer
+				.findViewById(R.id.iv_list_footer_loading);
+		loadFooter.setBackgroundResource(R.anim.anim_spiner);
+		footerSpinAnim = (AnimationDrawable) loadFooter.getBackground();
+
+		// header = getLayoutInflater().inflate(R.layout.ui_sub_header, null,
+		// false);
+
+		// / Spin animation °ü·Ã ImageView ±¸Çö
+
+		// loadHeader = (ImageView) header
+		// .findViewById(R.id.iv_list_header_loading);
+		//
+		// loadHeader.setBackgroundResource(R.anim.anim_spiner);
+		//
+		// headerSpinAnim = (AnimationDrawable) loadHeader.getBackground();
+
+		getData();
+
+		// list.setOnItemClickListener(this);
+		list.setOnScrollListener(this);
+		// list.setOnTouchListener(this);
+
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+
+		if (position == footerId) {
+			if (!justOnce) {
+				System.out
+						.println("Last position!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				justOnce = true;
+				loadData("footer");
+
+			}
+		} else if (position == headerId) {
+			if (!justOnce) {
+				System.out
+						.println("First position!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				justOnce = true;
+				loadData("header");
+			}
+		}
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+
+		// System.out.println("first : "+firstVisibleItem+" items : "+visibleItemCount+" last : "+totalItemCount);
+		if ((firstVisibleItem + visibleItemCount) == totalItemCount) { // /
+			if (!justOnce) {
+				
+				// System.out.println("Last position!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				justOnce = true;
+				loadData("footer");
+			}
+		} else if ((firstVisibleItem == 0)) { // / header
+			if (!justOnce) {
+				System.out
+						.println("First position!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				justOnce = true;
+				isHeader = true;
+				// loadData("header"); // Touch event¿¡¼­ ¼ÕÀ» ¶¼¾úÀ» ¶§ ÀÌº¥Æ®
+				// ¹ß»ýÇÏ°Ô²û onTouch·Î ³Ñ±è
+			}
+		} else {
+			// justOnce = false;
+			isHeader = false;
+		}
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView arg0, int arg1) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_UP) {
+			if (isHeader) {
+				System.out.println("onTouch() entered! event : " + event);
+				loadData("header");
+				isHeader = false;
+			}
+		}
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onResume()
+	 */
+
+	@Override
+	protected void onResume() {
+
+		System.out.println("Entered onResume()");
+
+		adtMore = new MoreItemAdapter(this, R.layout.ui_sub_list, datas);
+
+		list.addFooterView(footer);
+
+		 lvMore.addHeaderView(header);
+
+		list.setAdapter(adtMore);
+
+		list.setSelection(list.getHeaderViewsCount());
+
+		list.setScrollbarFadingEnabled(true);
+
+		headerId = 0;
+
+		footerId = list.getHeaderViewsCount() + datas.size();
+
+		justOnce = false;
+		list.setSelection(1);
+
+		super.onResume();
+
+	}
+
+	private void getData() {
+
+		System.out.println("Entered getDatas()");
+
+		// / Method 1. Ãß°¡ °³¼ö¸¸Å­ Ã³À½ºÎÅÍ ´Ù½Ã °¡Á®¿Í¼­ º¸¿©ÁÖ±â
+
+		int cnt = (datas.isEmpty()) ? 0 : datas.size();
+
+		if (cnt != 0)
+			datas.clear();
+
+		cnt = cnt + INC_COUNT;
+
+		for (int i = 0; i < cnt; i++) {
+
+			if (i < mStrings.length)
+
+				datas.add(mStrings[i]);
+
+		}
+
+	}
+
+	private void resetList() {
+
+		System.out.println("Entered resetList()");
+
+		adtMore = new MoreItemAdapter(this, R.layout.ui_sub_list, datas);
+
+		list.setAdapter(adtMore);
+
+		list.setSelection(list.getHeaderViewsCount());
+
+		footerId = list.getHeaderViewsCount() + datas.size();
+
+	}
+
+	private void refreshList() {
+
+		System.out.println("Entered refreshList()");
+
+		adtMore.notifyDataSetChanged();
+
+		footerId = list.getHeaderViewsCount() + datas.size();
+
+	}
+
+	private void loadData(String who) {
+
+		System.out.println("Entered loadData(), who = " + who);
+
+		new LongProgress(who).execute();
+
+	}
+
+	class LongProgress extends AsyncTask<Void, Void, Void> {
+
+		ProgressDialog dialog = new ProgressDialog(CopyOfFooter.this);
+
+		int cnt, start, end;
+
+		String view;
+
+		ArrayList<String> temp;
+
+		public LongProgress(String viewName) {
+
+			super();
+
+			view = viewName;
+
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see android.os.AsyncTask#onPreExecute()
+		 */
+
+		@Override
+		protected void onPreExecute() {
+
+			// / Method 1. ProgressDialog »ç¿ë
+
+			// dialog.setMessage("Loading data...");
+
+			// dialog.show();
+
+			// / Method 2. View¿¡ Spin animation »ç¿ë
+
+			// if (view == "header") {
+			//
+			// System.out.println("Header spin animation start.");
+			//
+			// headerSpinAnim.start();
+			//
+			// } else
+			if (view == "footer") {
+
+				// System.out.println("Footer spin animation start.");
+
+				footerSpinAnim.start();
+
+			}
+
+			temp = new ArrayList<String>();
+
+			super.onPreExecute();
+
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+
+			synchronized (datas) {
+
+				// / Method 2. Ãß°¡ °³¼ö¸¸Å­ adapter¿¡ ºÙ¿© ³Ö±â.
+
+				cnt = (datas.isEmpty()) ? 0 : datas.size();
+
+				System.out.println("previous datas count = " + datas.size());
+
+				if (view == "header") { // / Header ÂÊÀ¸·Î ½ºÅ©·Ñ¸µ ÇßÀ» ¶§...
+										// ¾ÆÀÌÅÛ ¹× ¸®½ºÆ®
+										// Àç¼³Á¤
+
+					start = 0;
+
+					end = cnt;
+
+				} else if (view == "footer") { // / Footer ÂÊÀ¸·Î ½ºÅ©·Ñ¸µ ÇßÀ»
+												// ¶§... ¾ÆÀÌÅÛ
+												// Ãß°¡ ¹× ¸®½ºÆ® °»½Å
+
+					start = cnt;
+
+					end = cnt + INC_COUNT;
+
+				}
+
+				System.out.println("Start = " + start + ", end = " + end);
+
+				for (int i = start; i < end; i++) {
+
+					try {
+
+						Thread.sleep(50);
+
+					} catch (InterruptedException e) {
+
+						e.printStackTrace();
+
+					}
+
+					temp.add(mStrings[i]);
+
+				}
+
+			}
+
+			return null;
+
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+		 */
+
+		@Override
+		protected void onPostExecute(Void result) {
+
+			System.out.println("Enterd onPostExecute()! result = " + result
+					+ ", temp size = " + temp.size());
+
+			if (view == "header") { // / Header ÂÊÀ¸·Î ½ºÅ©·Ñ¸µ ÇßÀ» ¶§...
+									// ¾ÆÀÌÅÛ ¹× ¸®½ºÆ® Àç¼³Á¤
+
+				System.out.println("Viewing Header...Called resetList()");
+
+				datas = null;
+
+				datas = temp;
+
+				resetList();
+
+			} else if (view == "footer") { // / Footer ÂÊÀ¸·Î ½ºÅ©·Ñ¸µ ÇßÀ»
+											// ¶§... ¾ÆÀÌÅÛ Ãß°¡ ¹×
+											// ¸®½ºÆ® °»½Å
+
+				System.out.println("Viewing Footer...Called refreshList()");
+
+				if (!temp.isEmpty()) {
+
+					for (int i = 0; i < temp.size(); i++) {
+
+						adtMore.add(temp.get(i));
+
+						// datas.add(temp.get(i)); /// adapter ¿¡ Ãß°¡ÇÏ¸é
+						// ÀÚµ¿ÀûÀ¸·Î ´Ã¾î³².
+						// Áï, Áßº¹ Ãß°¡¶ó¼­ »èÁ¦ÇÔ.
+
+					}
+
+				}
+
+				refreshList();
+
+			}
+
+			System.out.println("result datas count = " + datas.size()
+					+ ", adtMore size = " + adtMore.getCount());
+
+			// / Method 1. ProgressDialog »ç¿ë
+
+			// dialog.dismiss();
+
+			// / Method 2. View¿¡ Spin animation »ç¿ë
+
+			if (view == "header") {
+
+				System.out.println("Header spin animation stop.");
+
+				headerSpinAnim.stop();
+
+			} else if (view == "footer") {
+
+				System.out.println("Footer spin animation stop.");
+
+				footerSpinAnim.stop();
+
+			}
+
+			justOnce = false;
+
+			super.onPostExecute(result);
+
+		}
+
+	}
+
+	class MoreItemAdapter extends ArrayAdapter<String> {
+
+		Context ctx;
+
+		List<String> mDatas;
+
+		int resId;
+
+		public MoreItemAdapter(Context context, int textViewResourceId,
+				List<String> items) {
+
+			super(context, textViewResourceId, items);
+
+			ctx = context;
+
+			mDatas = items;
+
+			resId = textViewResourceId;
+
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see android.widget.ArrayAdapter#getView(int, android.view.View,
+		 * android.view.ViewGroup)
+		 */
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+
+			View row = convertView;
+
+			TextView holder;
+
+			if (row == null) {
+
+				LayoutInflater inflator = (LayoutInflater) ctx
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+				row = inflator.inflate(resId, null);
+
+				holder = (TextView) row.findViewById(R.id.tv_list_item);
+
+				row.setTag(holder);
+
+			} else {
+
+				holder = (TextView) row.getTag();
+
+			}
+
+			final String str = mDatas.get(position);
+
+			if (str != null) {
+
+				holder.setText(str);
+
+			}
+
+			return row;
+
+		}
+
+	}
+
+}

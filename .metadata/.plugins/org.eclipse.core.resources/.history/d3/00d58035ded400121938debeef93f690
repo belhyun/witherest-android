@@ -1,0 +1,29 @@
+import java.io.File;
+
+
+public class Test {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		String file = "C:/a/b/c/d/e.jpg";
+		System.out.println(getBeforeExtension(file, "_imsi"));
+	}
+
+	public static String getBeforeExtension(String path, String insert){
+		if ( getFileExtension(path).equals("") || getFileExtension(path) == null){
+			return null;
+		}
+		StringBuffer sb = new StringBuffer(path);
+		int index = path.lastIndexOf(".")-1;
+		sb.insert(index, insert);
+		return sb.toString();
+	}
+	
+
+	public static String getFileExtension(String file){
+		return file.substring(file.lastIndexOf(".")+1,file.length());
+			
+	}
+}

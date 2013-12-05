@@ -1,0 +1,45 @@
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.android.gcm.server.Message;
+import com.google.android.gcm.server.Result;
+import com.google.android.gcm.server.Sender;
+
+
+public class GCMSender {
+	
+	public static final String SERVER_KEY = "AIzaSyBxVOv5VE63ENm7YinR9q9sH72KMoQSS54";
+	public  List<String>  registrationIds = new ArrayList<String>();
+	public  String     registrationId = "이곳에 RegId를  입력하세요";
+	public static  final String SELECT_PAGE = "http://자신의 서버  아이피/select_registration.php";
+	public  static  String JSON = null;
+
+	public static String   COLLAPSE_KEY = String.valueOf(Math.random() % 100 + 1);
+	public  static boolean  DELAY_WHILE_IDLE = true;
+	public static int   TIME_TO_LIVE = 3;
+	public  static int    RETRY = 3;
+	
+	public Sender sender;
+	public Message message;
+	public Result result;
+	
+	public GCMSender(){
+		sender = new Sender(SERVER_KEY);
+	}
+	
+	public void sendMessage(String message){
+		message = new Message.Builder()
+		.collapseKey(COLLAPSE_KEY)
+		.delayWhileIdle(DELAY_WHILE_IDLE)
+		.timeToLive(TIME_TO_LIVE)
+		.addData("message",message)
+		.build();
+		
+	}
+	
+	public static void main(String[] arg){
+	   GCMSender gcmSender = new GCMSender();
+	   
+	}
+	
+}

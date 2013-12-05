@@ -1,0 +1,24 @@
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.android.gcm.server.Sender;
+
+
+public class GCMSender {
+	public static final String SERVER_KEY = "AIzaSyBxVOv5VE63ENm7YinR9q9sH72KMoQSS54";
+	
+	
+	private List<String>  registrationIds = new ArrayList<String>();
+	private  String     registrationId = "이곳에 RegId를  입력하세요";
+	private static  final String SELECT_PAGE = "http://자신의 서버  아이피/select_registration.php";
+	private static  String JSON = null;
+	private static String   API_KEY = "자신이 발급받은 API KEY를 입력하세요";
+	private static String   COLLAPSE_KEY = String.valueOf(Math.random() % 100 + 1);
+	private static boolean  DELAY_WHILE_IDLE = true;
+	private static int   TIME_TO_LIVE = 3;
+	private static int    RETRY = 3;
+	public static void main(String[] arg){
+		Sender sender = new Sender(SERVER_KEY);
+	}
+	
+}

@@ -1,0 +1,135 @@
+package com.teamteam.witherest;
+
+import com.teamteam.customComponent.SimpleProgressDialog;
+import com.teamteam.witherest.common.AndroUtils;
+import com.teamteam.witherest.model.Session;
+
+import com.teamteam.witherest.service.Service;
+import com.teamteam.witherest.service.ServiceManager;
+import com.teamteam.witherest.service.UserService;
+import com.teamteam.witherest.service.callback.UserServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+
+import android.os.Bundle;
+
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.Window;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+public class MainActivity extends FragmentActivity implements UserServiceCallback{
+
+	public static final int ACT_CREATE_ROOM = 0;
+	public UserService userService;
+	public  SimpleProgressDialog waitProgressDialog;
+	public Fragment_Bottom_Menu bottomFragment;
+	public RelativeLayout touchContainer;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		initInstance();
+		initView();
+		initListener();
+	}
+
+	private void initInstance() {
+		userService = ServiceManager.getServiceManager().getUserService();
+	}
+	
+	private void initView() {
+		touchContainer = (RelativeLayout)findViewById(R.id.touch_container1);
+		FragmentManager fragmentManger = getSupportFragmentManager();
+		bottomFragment = (Fragment_Bottom_Menu)fragmentManger.findFragmentById(R.id.activity_main_bottomMenu);
+	}
+
+	private void initListener() {
+		
+	}
+	
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			new AlertDialog.Builder(this)
+					.setIcon(android.R.drawable.ic_dialog_alert)
+					.setTitle(R.string.finish_confirm_title)
+					.setMessage(R.string.finish_confirm_message)
+					.setPositiveButton(R.string.confirm,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,int which) {
+									if (Session.getInstance().sessionStatus == Session.AUTHORIZED){
+										logout();
+									}else {
+										finish();
+									}
+								}
+							}).setNegativeButton(R.string.cancel, null).show();
+
+			return true;
+		}
+
+		return super.onKeyDown(keyCode, event);
+	}
+
+	protected void logout() {
+		waitProgressDialog = new SimpleProgressDialog(this, 
+				getString(R.string.wait_title),getString(R.string.logout_wait_message));
+		waitProgressDialog.start();
+		userService.setOnUserCallback(this);
+		userService.logout(Session.getInstance().user.userIndex, Session.getInstance().user.gcmId);
+	}
+
+	public void onUserServiceCallback(BaseResponseObject object) {
+		if (waitProgressDialog.isShowing()){
+			SimpleProgressDialog.stop(waitProgressDialog);
+		}
+		if (object.resultCode == Service.RESULT_FAIL) {
+			AndroUtils.showToastMessage(MainActivity.this,R.string.logout_fail, Toast.LENGTH_SHORT);
+			return;
+		}
+		
+		switch(object.requestType){
+		case Service.REQUEST_TYPE_LOGOUT:
+			finish();
+			break;
+		}	
+	}
+
+
+	public void hideBottom() {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		ft.hide(bottomFragment);
+		ft.commit();	
+	}
+
+	public void showBottom() {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		ft.show(bottomFragment);
+		ft.commit();
+	}
+	
+	
+	
+	
+	/*
+	 * protected void onActivityResult(int requestCode, int resultCode, Intent
+	 * intent) { FragmentManager fragmentManger = getSupportFragmentManager();
+	 * Fragment fragment =
+	 * fragmentManger.findFragmentById(R.id.activity_main_fragment); if
+	 * (fragment instanceof Fragment_MyCheck){
+	 * fragment.onActivityResult(requestCode, resultCode, intent); } }
+	 */
+
+}

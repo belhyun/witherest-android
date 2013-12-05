@@ -1,0 +1,5 @@
+package com.teamteam.witherest;
+
+public interface ActConstants {
+	public int CREATE_ROOM + 0; 
+}

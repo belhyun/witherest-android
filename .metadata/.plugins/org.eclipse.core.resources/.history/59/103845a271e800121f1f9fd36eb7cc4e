@@ -1,0 +1,444 @@
+package com.teamteam.witherest;
+
+import java.util.ArrayList;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.Window;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.teamteam.customComponent.SimpleProgress;
+import com.teamteam.customComponent.SimpleProgressDialog;
+import com.teamteam.witherest.alarm.WitherestAlarms;
+import com.teamteam.witherest.alarm.WitherestAlarms.Alarm;
+import com.teamteam.witherest.alarm.WitherestAlarms.AlarmRegisterAction;
+import com.teamteam.witherest.common.AndroUtils;
+import com.teamteam.witherest.common.CommonUtils;
+import com.teamteam.witherest.model.AppCache;
+import com.teamteam.witherest.model.AppInfo;
+import com.teamteam.witherest.model.Category;
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.model.User;
+import com.teamteam.witherest.model.UserOption;
+import com.teamteam.witherest.model.UserProfile;
+import com.teamteam.witherest.service.callback.CategoryServiceCallback;
+import com.teamteam.witherest.service.callback.RoomServiceCallback;
+import com.teamteam.witherest.service.callback.UserServiceCallback;
+import com.teamteam.witherest.service.callback.VersionServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.callback.object.CategoryResponseObject;
+import com.teamteam.witherest.service.callback.object.LoginResponseObject;
+import com.teamteam.witherest.service.callback.object.MyCheckResponseObject;
+import com.teamteam.witherest.service.callback.object.VersionResponseObject;
+import com.teamteam.witherest.service.callback.object.MyCheckResponseObject.CheckRoom;
+import com.teamteam.witherest.service.external.GCMController;
+import com.teamteam.witherest.service.internal.CategoryService;
+import com.teamteam.witherest.service.internal.ErrorHandler;
+import com.teamteam.witherest.service.internal.RoomService;
+import com.teamteam.witherest.service.internal.Service;
+import com.teamteam.witherest.service.internal.ServiceManager;
+import com.teamteam.witherest.service.internal.UserService;
+import com.teamteam.witherest.service.internal.VersionService;
+
+public class SplashActivity extends Activity implements UserServiceCallback, 
+		VersionServiceCallback,CategoryServiceCallback {
+
+	SimpleProgressDialog dialog;
+	SimpleProgress progress;
+	GCMController gcmController; 
+	public TextView progressTextview;
+	public String userId;
+	public String password;
+	
+	Animation anim;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		/*requestWindowFeature(Window.FEATURE_NO_TITLE);*/
+		setContentView(R.layout.activity_splash);
+		
+		gcmController = new GCMController(this);
+		//progressBar = new ProgressBar(this);
+		progress = new SimpleProgress(this);
+		progressTextview= (TextView)findViewById(R.id.progress_text);
+		anim = new AlphaAnimation(0.0f, 1.0f);
+		anim.setDuration(400); 
+		anim.setStartOffset(20);
+		anim.setRepeatMode(Animation.REVERSE);
+		anim.setRepeatCount(Animation.INFINITE);
+		
+		new Handler().postDelayed(new Runnable() {
+			public void run() {
+				progressTextview.startAnimation(anim);
+				progress.start();
+				initializeApp();
+				checkVersion();
+			}
+		}, 100);
+	}
+
+	public void showProgressText(String progress){
+		progressTextview.setText(progress);
+	}
+	
+	private void initializeApp() {
+		showProgressText(getResources().getString(R.string.progress_initialize));
+		AppInfo appInfo = AppInfo.getInstance();
+		appInfo.loadAppInfo();
+		
+		Session session = Session.getInstance();
+		session.initialize();
+	}
+
+	private void checkVersion() {
+		showProgressText(getResources().getString(R.string.progress_version));
+		ServiceManager manager = ServiceManager.getServiceManager();
+		VersionService versionService = manager.getVersionService();
+		versionService.setOnVersionCallback(this);
+		versionService.checkVersion();
+	}
+
+	private void getCategories(){
+		showProgressText(getResources().getString(R.string.progress_category));
+		ServiceManager manager = ServiceManager.getServiceManager();
+		CategoryService categoryService = manager.getCategoryService();
+		categoryService.setOnCategoryCallback(this);
+		categoryService.getAllCategories();
+	}
+	
+	private void getGCMRegisterId() {
+		showProgressText(getResources().getString(R.string.progress_gcm));
+		final Witherest application = (Witherest)getApplication();
+		String regId = gcmController.registGCM();
+		
+		if (!CommonUtils.isNullOrEmpty(regId)){
+			application.setGCMId(regId);
+			application.setGCMReady(true);
+			getCategories();
+			
+		}else {
+			new Thread(){
+				private boolean isGCMRegisterCompleted = false;
+				public void run(){
+					while(!isGCMRegisterCompleted){
+						if (application.isGCMReady()){
+							isGCMRegisterCompleted = true;
+						}else {
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException e) {}
+						}
+					}	
+					
+					runOnUiThread(new Runnable(){
+						public void run() {
+							getCategories();
+						}	
+					});
+				}
+			}.start();
+		}
+	}
+	
+	public void checkAutoLogin() {
+		WitherestPreference pref = new WitherestPreference(this);
+		userId = pref.getString("email", null);
+		password = pref.getString("password", null);
+		
+		if (!CommonUtils.isNullOrEmpty(userId) && !CommonUtils.isNullOrEmpty(password)) {
+			showProgressText(getResources().getString(R.string.progress_autologin));
+			ServiceManager manager = ServiceManager.getServiceManager();
+			UserService userService = manager.getUserService();
+			userService.setOnUserCallback(this);
+			userService.login(userId, password , ((Witherest)getApplication()).getGCMId());
+		} else {
+			progress.dismiss();
+			anim.cancel();
+			finish();
+			
+			Intent i = new Intent(this, MainActivity.class);
+			startActivity(i);
+			
+		}
+	}
+	
+	public void onVersionServiceCallback(BaseResponseObject object) {
+		if (object.resultCode == Service.RESULT_FAIL) {
+			/*	AndroUtils.showToastMessage(getActivity(), object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);*/
+			progress.dismiss();
+			anim.cancel();
+				return;
+			}
+		
+		if (object.resultCode == ErrorHandler.COMMON_ERROR || object.resultCode == ErrorHandler.NETWORK_DISABLE ||
+				object.resultCode == ErrorHandler.PARSING_ERROR){
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.fatal_network_error);
+			builder.setMessage(R.string.fatal_network_error_message);
+			builder.setCancelable(false);
+			builder.setPositiveButton(R.string.confirm,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							progress.dismiss();
+							anim.cancel();
+							finish();
+						}
+					});
+			builder.create().show();
+			return;
+		}else if (object.resultCode == ErrorHandler.CONNECTION_TIMEOUT || object.resultCode == ErrorHandler.READ_TIMEOUT){
+			AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+			builder2.setTitle(R.string.tempo_network_error);
+			builder2.setMessage(R.string.tempo_network_error_message);
+			builder2.setCancelable(false);
+			builder2.setPositiveButton(R.string.confirm,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							new Handler().postDelayed(new Runnable() {
+								public void run() {
+									checkVersion();
+								}
+							}, 100);
+						}
+					});
+
+			builder2.setNegativeButton(R.string.no,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							progress.dismiss();
+							anim.cancel();
+							finish();
+						}
+					});
+
+			builder2.create().show();
+			return;
+		}
+		
+		VersionResponseObject obj = (VersionResponseObject) object;
+		AppInfo appInfo = AppInfo.getInstance();
+		
+		if (appInfo.getVersion().getMajorVersion() < obj.getVersion().getMajorVersion()) {
+			Log.v("version",appInfo.getVersion().getMajorVersion() +" : "+obj.getVersion().getMajorVersion());
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("업그레이드 안내");
+			builder.setMessage("클라이언트가 최신버젼이 아닙니다.\n업그레이드를 하셔야 이용이 가능합니다");
+			builder.setCancelable(false);
+			builder.setPositiveButton("예",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							//AndroUtils.closeProgress(SplashActivity.this, progressBar);
+							progress.dismiss();
+							anim.cancel();
+							finish();
+							
+						}
+					});
+			builder.setNegativeButton("아니요",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							//AndroUtils.closeProgress(SplashActivity.this, progressBar);
+							progress.dismiss();
+							finish();
+						}
+					});
+
+			builder.create().show();
+		}
+		
+		else if (appInfo.getVersion().getMinorVersion() < obj.getVersion().getMinorVersion()) {
+			appInfo.needUpgrade = true;
+			AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+			builder2.setTitle("업그레이드 안내");
+			builder2.setMessage("클라이언트가 최신버젼이 아닙니다.\n업그레이드 하시겠습니까?\n업그레이드 하지 않으셔도 이용이 가능합니다.");
+			builder2.setCancelable(false);
+			builder2.setPositiveButton("예",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							//AndroUtils.closeProgress(SplashActivity.this, progressBar);
+							progress.dismiss();
+							anim.cancel();
+							finish();
+						}
+					});
+			builder2.setNegativeButton("아니요",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							getGCMRegisterId();
+						}
+					});
+			builder2.create().show();
+		}else {
+			getGCMRegisterId();
+		}
+	}
+
+
+
+	public void onCategoryServiceCallback(BaseResponseObject object) {
+		if (object.resultCode == Service.RESULT_FAIL) {
+			/*	AndroUtils.showToastMessage(getActivity(), object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);*/
+			progress.dismiss();
+			anim.cancel();
+			return;
+			}
+		
+		if (object.resultCode == ErrorHandler.COMMON_ERROR || object.resultCode == ErrorHandler.NETWORK_DISABLE ||
+				object.resultCode == ErrorHandler.PARSING_ERROR){
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.fatal_network_error);
+			builder.setMessage(R.string.fatal_network_error_message);
+			builder.setCancelable(false);
+			builder.setPositiveButton(R.string.confirm,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							progress.dismiss();
+							anim.cancel();
+							finish();
+						}
+					});
+			builder.create().show();
+			return;
+		}else if (object.resultCode == ErrorHandler.CONNECTION_TIMEOUT || object.resultCode == ErrorHandler.READ_TIMEOUT){
+			AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+			builder2.setTitle(R.string.tempo_network_error);
+			builder2.setMessage(R.string.tempo_network_error_message);
+			builder2.setCancelable(false);
+			builder2.setPositiveButton(R.string.confirm,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							new Handler().postDelayed(new Runnable() {
+								public void run() {
+									getCategories();
+								}
+							}, 100);
+						}
+					});
+
+			builder2.setNegativeButton(R.string.no,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							progress.dismiss();
+							anim.cancel();
+						}
+					});
+
+			builder2.create().show();
+			return;
+		}
+		
+		CategoryResponseObject obj = (CategoryResponseObject)object;
+		AppCache cache  = AppCache.getInstance();
+		cache.setAppCategory(obj.categories);
+		checkAutoLogin();
+	}
+	
+	public void onUserServiceCallback(BaseResponseObject object) {
+		if (object.resultCode == Service.RESULT_FAIL) {
+			AndroUtils.showToastMessage(this, object.resultMsg,
+					Toast.LENGTH_LONG);
+			progress.dismiss();
+			anim.cancel();
+			return;
+		}
+		
+		switch (object.requestType) {
+		case Service.REQUEST_TYPE_LOGIN:
+			
+			if (object.resultCode == ErrorHandler.COMMON_ERROR || object.resultCode == ErrorHandler.NETWORK_DISABLE ||
+					object.resultCode == ErrorHandler.PARSING_ERROR){
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.fatal_network_error);
+				builder.setMessage(R.string.fatal_network_error_message);
+				builder.setCancelable(false);
+				builder.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								progress.dismiss();
+								anim.cancel();
+								finish();
+							}
+						});
+				builder.create().show();
+				return;
+			}else if (object.resultCode == ErrorHandler.CONNECTION_TIMEOUT || object.resultCode == ErrorHandler.READ_TIMEOUT){
+				AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+				builder2.setTitle(R.string.tempo_network_error);
+				builder2.setMessage(R.string.tempo_network_error_message);
+				builder2.setCancelable(false);
+				builder2.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								new Handler().postDelayed(new Runnable() {
+									public void run() {
+										checkAutoLogin();
+									}
+								}, 100);
+							}
+						});
+
+				builder2.setNegativeButton(R.string.no,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								progress.dismiss();
+								anim.cancel();
+							}
+						});
+
+				builder2.create().show();
+				return;
+			}
+			
+			LoginResponseObject obj = (LoginResponseObject) object;
+
+			// 로그인을 했으므로 유저상태를 인증상태로 변경
+			Session.getInstance().sessionStatus = Session.AUTHORIZED;
+			// 로그인을 하고 받아온 세션키를 저장한다.
+			// 이 세션키는 로그아웃할 때 까지 헤더에 추가된다.
+			Session.getInstance().sessionKey = obj.token;
+			
+			//유저 기본 정보를 세팅
+			Session.getInstance().user = obj.user;
+			Session.getInstance().user.id = userId;
+			Session.getInstance().user.gcmId = ((Witherest)getApplication()).getGCMId();
+			Session.getInstance().user.password = password;
+			
+			progress.dismiss();
+			anim.cancel();
+			
+			finish();
+			final Intent i = new Intent(this, MainActivity.class);
+			
+			new Handler().postDelayed(new Runnable() {
+				public void run() {
+					// i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(i);
+					//AndroUtils.closeProgress(this, progressBar);
+				}
+			}, 200);
+			
+			break;
+			
+		case Service.REQUEST_TYPE_DUPL_CHECK:
+			break;
+			
+		case Service.REQUEST_TYPE_JOIN:
+			break;
+			
+		case Service.REQUEST_TYPE_LOGOUT:
+			break;
+		}
+	}
+}

@@ -1,0 +1,53 @@
+package com.teamteam.customComponent;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Looper;
+import android.util.Log;
+
+public class SimpleProgressDialog extends Thread {
+	Context mContext;
+	CharSequence mMessage;
+	String mTitle;
+	
+	ProgressDialog mProgressDialog;
+	Looper mLoop;
+
+	
+	public SimpleProgressDialog(Context context, String title,CharSequence message) {
+		mContext = context;
+		mMessage = message;
+		mTitle = title;
+		mProgressDialog = new ProgressDialog(mContext);
+		mProgressDialog.setIndeterminate(true);
+		//mProgressDialog.setTitle(mTitle);
+		mProgressDialog.setMessage(mMessage);
+		mProgressDialog.setCancelable(false);
+		
+		setDaemon(true);
+	}
+	
+	public void run() {
+		Looper.prepare();
+		mProgressDialog.show();
+		mLoop = Looper.myLooper();
+		Looper.loop();
+	}
+	
+	public boolean isShowing(){
+		return mProgressDialog.isShowing();
+	}
+	
+	public static void stop(SimpleProgressDialog waitProgressDialog) {
+		
+		waitProgressDialog.mProgressDialog.dismiss();
+		try {
+			Thread.sleep(200);
+		} catch(InterruptedException e) {
+			e.printStackTrace();
+		}
+		waitProgressDialog.mLoop.quit();
+	}
+}

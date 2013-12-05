@@ -1,0 +1,14 @@
+import java.text.SimpleDateFormat;
+
+
+public class Test {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		SimpleDateFormat formage = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+	}
+
+}

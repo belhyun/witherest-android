@@ -1,0 +1,462 @@
+package com.teamteam.witherest;
+
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.CheckBox;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.evernote.client.android.EvernoteSession;
+import com.teamteam.customComponent.SimpleProgressDialog;
+import com.teamteam.customComponent.view.BadgeView;
+import com.teamteam.witherest.alarm.WitherestAlarms;
+import com.teamteam.witherest.alarm.WitherestAlarms.AlarmCancelAction;
+import com.teamteam.witherest.common.AndroUtils;
+import com.teamteam.witherest.common.CommonUtils;
+import com.teamteam.witherest.model.AppInfo;
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.service.callback.UserServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.callback.object.RoomWithResponseObject;
+import com.teamteam.witherest.service.external.EvernoteController;
+import com.teamteam.witherest.service.internal.ConnectionErrorHandler;
+import com.teamteam.witherest.service.internal.Service;
+import com.teamteam.witherest.service.internal.ServiceManager;
+import com.teamteam.witherest.service.internal.UserService;
+
+public class ActivitySettings extends Activity implements OnClickListener, UserServiceCallback{
+
+	public static final String addminEmailAddress = "admin@naver.com";
+	
+	public UserService userService;
+	private SimpleProgressDialog waitProgressDialog;
+	
+	private View mEvernoteBtn;
+	private CheckBox mEvernoteCheckBtn;
+	
+	public EvernoteController mEver;
+	
+	public int mEverNoteAction= -1;
+	
+	public static final int EVERNOTE_REQUEST_LOGIN = 1;
+	public static final int EVERNOTE_REQUEST_LOGOUT = 2;
+	public static final int EVERNOTE_LOGINSTATE_REQUEST_RECORING = 3;
+	public static final int EVERNOTE_LOGINSTATE_REQUEST_NO_RECORDING= 4;
+	
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+	    requestWindowFeature(Window.FEATURE_NO_TITLE);
+	    setContentView(R.layout.activity_settings);
+	   
+	    initInstance();
+	    initView();
+	    initListener();
+	}
+	
+	private void initInstance() {
+		userService= ServiceManager.getServiceManager().getUserService();	
+		mEver = new EvernoteController(this);
+	}
+
+	public void initView(){
+		int major = AppInfo.getInstance().getVersion().majorVersion;
+		int minor = AppInfo.getInstance().getVersion().minorVersion;
+		TextView versionView = ((TextView)findViewById(R.id.activity_settins_version_textView));
+		versionView.setText(major+"."+minor);
+		
+		if (AppInfo.getInstance().needUpgrade){
+			BadgeView badge = new BadgeView(this,findViewById(R.id.badge_anchor));
+			badge.setBadgePosition(BadgeView.POSITION_CENTER);
+			badge.setText(R.string.upgrade);
+			badge.setTextColor(Color.BLUE);
+	    	badge.setBadgeBackgroundColor(Color.YELLOW);
+	    	badge.setTextSize(12);
+	    	badge.show();
+		}
+		
+		if (Session.getInstance().sessionStatus == Session.AUTHORIZED){
+			((TextView)findViewById(R.id.withdraw_text)).setText(R.string.withdraw_title);
+			((TextView)findViewById(R.id.logout_text)).setText(R.string.logout_title);
+			
+		}
+		
+		mEvernoteBtn =findViewById(R.id.activity_setting_evenote_container);
+		mEvernoteCheckBtn = (CheckBox)findViewById(R.id.activity_setting_evernote_btn);
+
+		updateUi();
+	}
+	
+	public void initListener(){
+		findViewById(R.id.help_btn).setOnClickListener(this);
+		findViewById(R.id.send_btn).setOnClickListener(this);
+		findViewById(R.id.modify_profile_btn).setOnClickListener(this);
+		findViewById(R.id.note_config_btn).setOnClickListener(this);
+		findViewById(R.id.widthdraw_btn).setOnClickListener(this);
+		findViewById(R.id.logout_btn).setOnClickListener(this);
+		mEvernoteBtn.setOnClickListener(this);
+		mEvernoteCheckBtn.setOnClickListener(this);
+	}
+
+	public void onClick(View view) {
+		Intent i = null;
+		Uri uri = null;
+		int id = view.getId();
+		switch(id){
+		
+		case R.id.help_btn:
+			i = new Intent(ActivitySettings.this, ActivityHelp.class);
+			startActivity(i);
+			break;
+		case R.id.send_btn:
+			i = new Intent(Intent.ACTION_VIEW);
+			uri = Uri.parse("mailto:"+addminEmailAddress);
+			i.setData(uri);
+			startActivity(i);
+			break;
+		case R.id.modify_profile_btn:
+		 i = new Intent(ActivitySettings.this, ActivityProfile.class);
+			startActivity(i);
+			break;
+		case R.id.note_config_btn:
+			i = new Intent(ActivitySettings.this,ActivityNotificationConfig.class);
+			startActivity(i);
+			break;
+		case R.id.widthdraw_btn:
+			AlertDialog.Builder builder = new AlertDialog.Builder(ActivitySettings.this);
+			builder.setTitle(R.string.confirm_withdraw)
+			.setMessage(R.string.warning_withdraw)
+			.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					withdraw();
+				}
+			})
+			.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					
+				}
+			}).show();
+			break;
+			
+		case R.id.logout_btn:
+			logout();
+			break;
+			
+		case R.id.activity_setting_evenote_container:
+			if (mEver.isLoggedin()){
+				mEverNoteAction = EVERNOTE_REQUEST_LOGOUT;
+				updateEvenoteConfig(false);
+			}else {
+				mEver.login();
+			}
+			break;
+			
+		case R.id.activity_setting_evernote_btn:
+			mEverNoteAction = mEvernoteCheckBtn.isChecked()? EVERNOTE_LOGINSTATE_REQUEST_RECORING
+					: EVERNOTE_LOGINSTATE_REQUEST_NO_RECORDING;
+			updateEvenoteConfig(mEvernoteCheckBtn.isChecked());
+		}
+		
+	}
+	
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		SimpleProgressDialog.end(waitProgressDialog);
+	}
+	
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		waitProgressDialog = new SimpleProgressDialog(this, getString(R.string.wait_title),getString(R.string.wait_message));
+		waitProgressDialog.start();
+	}
+
+	public void updateEvenoteConfig(boolean isEvernote){
+		if (CommonUtils.isNullOrEmpty(Session.getInstance().user.getAlarmParam()) ){
+			return;
+		}
+		
+		Session.getInstance().user.setIsEvernote(isEvernote);
+		if (!waitProgressDialog.isShowing()){
+			waitProgressDialog.show();
+		}
+		userService.setOnUserCallback(this);
+		userService.updateAlarm(Session.getInstance().user.getAlarmParam());
+	}
+	
+	private void updateUi() {
+		boolean isEvernote = Session.getInstance().user.isEvernote;
+		if (mEver.isLoggedin()){
+			mEvernoteCheckBtn.setEnabled(true);
+		}else {
+			mEvernoteCheckBtn.setEnabled(false);
+		}
+		
+		if (mEver.isLoggedin() && isEvernote){
+			mEvernoteCheckBtn.setChecked(true);
+		}else {
+			mEvernoteCheckBtn.setChecked(false);
+		}
+		
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+	      case EvernoteSession.REQUEST_CODE_OAUTH:
+	        if (resultCode == Activity.RESULT_OK) {
+	        	updateUi();
+	        }
+	        break;
+	    }
+	}
+	
+	protected void withdraw() {
+		if (!waitProgressDialog.isShowing()){
+			waitProgressDialog.show();
+		}
+		userService.setOnUserCallback(this);
+		userService.withDraw();
+	}
+
+
+	private void logout() {
+		if (!waitProgressDialog.isShowing()){
+			waitProgressDialog.show();
+		}
+		userService.setOnUserCallback(this);
+		userService.logout(Session.getInstance().user.userIndex, Session.getInstance().user.gcmId);
+	}
+
+	public void onUserServiceCallback(BaseResponseObject object) {
+		
+		if (waitProgressDialog.isShowing()){
+			waitProgressDialog.dismiss();
+		}
+		
+		if (object.resultCode == Service.RESULT_FAIL) {
+			if (object.requestType == Service.REQUEST_TYPE_ALARM_UPDATE){
+				if (mEverNoteAction == EVERNOTE_REQUEST_LOGOUT ){
+					Session.getInstance().user.setIsEvernote(!Session.getInstance().user.isEvernote);
+					mEverNoteAction = -1;
+				}else {
+					mEvernoteCheckBtn.setChecked(!mEvernoteCheckBtn.isChecked());
+					Session.getInstance().user.setIsEvernote(mEvernoteCheckBtn.isChecked());
+					mEverNoteAction = -1;
+				}
+			}
+			return;
+		}
+		
+		switch(object.requestType){
+		case Service.REQUEST_TYPE_LOGOUT:
+			if (object.resultCode == ConnectionErrorHandler.COMMON_ERROR || object.resultCode == ConnectionErrorHandler.NETWORK_DISABLE ||
+					object.resultCode == ConnectionErrorHandler.PARSING_ERROR){
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.fatal_network_error);
+				builder.setMessage(R.string.fatal_network_error_message);
+				builder.setCancelable(false);
+				builder.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								finish();
+							}
+						});
+				builder.create().show();
+				return;
+			}else if (object.resultCode == ConnectionErrorHandler.CONNECTION_TIMEOUT || object.resultCode == ConnectionErrorHandler.READ_TIMEOUT){
+				AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+				builder2.setTitle(R.string.tempo_network_error);
+				builder2.setMessage(R.string.tempo_network_error_message);
+				builder2.setCancelable(false);
+				builder2.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								new Handler().postDelayed(new Runnable() {
+									public void run() {
+										logout();
+									}
+								}, 100);
+							}
+						});
+
+				builder2.setNegativeButton(R.string.no,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						});
+
+				builder2.create().show();
+				return;
+			}
+		/*	AndroUtils.showToastMessage(this, object.requestType + " : " + object.resultMsg, Toast.LENGTH_SHORT);*/
+			
+			//세션을 초기화 한다.
+			Session.getInstance().initialize();
+			//메인화면으로 전환
+			Intent i = new Intent(this, ActivityMain.class);
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(i);
+			finish();
+			break;
+			
+		case Service.REQUEST_TYPE_WITHDRAW:
+			if (object.resultCode == ConnectionErrorHandler.COMMON_ERROR || object.resultCode == ConnectionErrorHandler.NETWORK_DISABLE ||
+					object.resultCode == ConnectionErrorHandler.PARSING_ERROR){
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.fatal_network_error);
+				builder.setMessage(R.string.fatal_network_error_message);
+				builder.setCancelable(false);
+				builder.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								finish();
+							}
+						});
+				builder.create().show();
+				return;
+			}else if (object.resultCode == ConnectionErrorHandler.CONNECTION_TIMEOUT || object.resultCode == ConnectionErrorHandler.READ_TIMEOUT){
+				AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+				builder2.setTitle(R.string.tempo_network_error);
+				builder2.setMessage(R.string.tempo_network_error_message);
+				builder2.setCancelable(false);
+				builder2.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								new Handler().postDelayed(new Runnable() {
+									public void run() {
+										withdraw();
+									}
+								}, 100);
+							}
+						});
+
+				builder2.setNegativeButton(R.string.no,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						});
+
+				builder2.create().show();
+				return;
+			}
+			AndroUtils.showToastMessage(this, R.string.withdraw_ok, Toast.LENGTH_SHORT);
+			processWithdraw();
+			break;
+			
+		case Service.REQUEST_TYPE_ALARM_UPDATE:
+			if (object.resultCode == ConnectionErrorHandler.COMMON_ERROR || object.resultCode == ConnectionErrorHandler.NETWORK_DISABLE ||
+					object.resultCode == ConnectionErrorHandler.PARSING_ERROR){
+				
+				if (mEverNoteAction == EVERNOTE_REQUEST_LOGOUT ){
+					Session.getInstance().user.setIsEvernote(!Session.getInstance().user.isEvernote);
+					mEverNoteAction = -1;
+				}else {
+					mEvernoteCheckBtn.setChecked(!mEvernoteCheckBtn.isChecked());
+					Session.getInstance().user.setIsEvernote(mEvernoteCheckBtn.isChecked());
+					mEverNoteAction = -1;
+				}
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.fatal_network_error);
+				builder.setMessage(R.string.fatal_network_error_message);
+				builder.setCancelable(false);
+				builder.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								finish();
+							}
+						});
+				builder.create().show();
+				return;
+				
+			}else if (object.resultCode == ConnectionErrorHandler.CONNECTION_TIMEOUT || object.resultCode == ConnectionErrorHandler.READ_TIMEOUT){
+				
+				if (mEverNoteAction == EVERNOTE_REQUEST_LOGOUT ){
+					Session.getInstance().user.setIsEvernote(!Session.getInstance().user.isEvernote);
+				}else {
+					mEvernoteCheckBtn.setChecked(!mEvernoteCheckBtn.isChecked());
+					Session.getInstance().user.setIsEvernote(mEvernoteCheckBtn.isChecked());
+				}
+				
+				AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+				builder2.setTitle(R.string.tempo_network_error);
+				builder2.setMessage(R.string.tempo_network_error_message);
+				builder2.setCancelable(false);
+				builder2.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								new Handler().postDelayed(new Runnable() {
+									public void run() {
+										if (mEverNoteAction == EVERNOTE_REQUEST_LOGOUT){
+											updateEvenoteConfig(false);
+										}else {
+											mEvernoteCheckBtn.setChecked(!mEvernoteCheckBtn.isChecked());
+											updateEvenoteConfig(mEvernoteCheckBtn.isChecked());
+										}
+									}
+								}, 100);
+							}
+						});
+
+				builder2.setNegativeButton(R.string.no,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								mEverNoteAction = -1;
+							}
+						});
+
+				builder2.create().show();
+				return;
+			}
+			
+			if (mEverNoteAction == EVERNOTE_REQUEST_LOGOUT){
+				mEver.logout();
+			}
+			mEverNoteAction = -1;
+			updateUi();
+			break;
+		}			
+	}
+
+	private void processWithdraw() {
+		//프레퍼런스의 회원 정보를 삭제한다.
+		SharedPreferences pref = getSharedPreferences("witherest", 0);
+		SharedPreferences.Editor edit = pref.edit();
+		edit.clear();
+		edit.commit();
+		
+		// 등록된 알람을 모두 취소/삭제한다.
+		WitherestAlarms alarms = new WitherestAlarms(this,Session.getInstance().user.id, Session.getInstance().user.password);
+		alarms.unregisterAllAlarm(AlarmCancelAction.CANCEL_AFTER_DELETE);
+		alarms.close();
+		
+		Session.getInstance().initialize();
+		//메인화면으로 전환
+		Intent i = new Intent(this, ActivityMain.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(i);
+		finish();
+	}
+
+}

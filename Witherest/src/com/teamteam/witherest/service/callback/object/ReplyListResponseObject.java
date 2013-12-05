@@ -1,0 +1,17 @@
+package com.teamteam.witherest.service.callback.object;
+
+import java.util.ArrayList;
+
+import com.teamteam.witherest.service.callback.object.RoomBoardResponseObject.Message;
+
+
+public class ReplyListResponseObject extends BaseResponseObject {
+	public int totalBoardCount;
+	public ArrayList<Message> messageList;
+	
+	public int getTotalBoardCount() {return totalBoardCount;}
+	public void setTotalBoardCount(int totalBoardCount) {this.totalBoardCount = totalBoardCount;}
+	
+	public ArrayList<Message> getMessageList() {return messageList;}
+	public void setMessageList(ArrayList<Message> messageList) {this.messageList = messageList;}
+}

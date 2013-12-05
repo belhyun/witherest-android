@@ -1,0 +1,219 @@
+package com.teamteam.witherest;
+
+import java.util.ArrayList;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Html;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.teamteam.customComponent.WaitProgressDialog;
+import com.teamteam.witherest.model.AppCache;
+import com.teamteam.witherest.model.Category;
+import com.teamteam.witherest.service.CategoryService;
+import com.teamteam.witherest.service.Service;
+import com.teamteam.witherest.service.ServiceManager;
+import com.teamteam.witherest.service.UserService;
+import com.teamteam.witherest.service.callback.UserServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.callback.object.IdDuplicateResponseObject;
+
+public class SignupActivity extends Activity implements OnClickListener, UserServiceCallback,OnTouchListener {
+	
+    private ServiceManager serviceManager ;
+    private CategoryService categoryService;
+    private UserService userService;
+	private WaitProgressDialog waitProgressDialog;
+	private ArrayList<Category> appCategories;
+	
+	private Category myCategory;
+	boolean[] selectCategories;
+	
+	private EditText nickname_edittext;
+	private EditText id_edittext;
+	private EditText passwd_edittext;
+	private EditText passwdconfirm_edittext;
+	private EditText interestedCategory_edittext;
+	private TextView attention_textview;
+	private Button signup_btn;
+	
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+	    requestWindowFeature(Window.FEATURE_NO_TITLE);
+	    setContentView(R.layout.activity_signup);
+	    initInstance();
+	    initForm();
+	    initListener();
+	   
+		signup_btn.setOnClickListener(this);
+	}
+	
+	private void initInstance() {	
+		appCategories = AppCache.getInstance().getAppCategory();
+		serviceManager = ServiceManager.getServiceManager();
+		userService = serviceManager.getUserService();
+		userService.setOnUserCallback(this);
+	}
+
+	private void initForm() {
+		nickname_edittext = (EditText) findViewById(R.id.activity_signup_nickname_edittext);
+		id_edittext = (EditText) findViewById(R.id.activity_signup_id_edittext);
+		passwd_edittext = (EditText) findViewById(R.id.activity_signup_passwd_edittext);
+		passwdconfirm_edittext = (EditText) findViewById(R.id.activity_signup_passwdconfirm_edittext);
+		interestedCategory_edittext = (EditText) findViewById(R.id.activity_signup_interestedCategory_edittext);
+		
+		attention_textview = (TextView) findViewById(R.id.activity_signup_attention_textview);
+		signup_btn = (Button) findViewById(R.id.activity_signup_signup_btn);
+	}
+
+	
+	private void initListener() {
+		signup_btn.setOnClickListener(this);
+		interestedCategory_edittext.setOnTouchListener(this);
+	}
+
+    
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	
+    	if(attention_textview.getText().length() == 0)
+    		attention_textview.setText(Html.fromHtml(getString(R.string.signup_attention)));
+    }
+    
+	public void onClick(View v) {
+		switch(v.getId()) {
+		case R.id.activity_signup_signup_btn: 
+			if (checkForm()){
+				waitProgressDialog = new WaitProgressDialog(SignupActivity.this, getString(R.string.signup_dialog_title),Html.fromHtml(getString(R.string.signup_dialog_message)));
+				waitProgressDialog.start();
+				String id = id_edittext.getText().toString();
+				//userService.checkIdDuplicated(id);
+				String nickName = nickname_edittext.getText().toString();
+				String password = passwd_edittext.getText().toString();
+				userService.join(id, nickName, password,myCategory);
+				
+			}
+			break;
+		}
+	}
+	
+	public boolean onTouch(View v, MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_DOWN){
+			if (appCategories != null){
+				showCategoryDialog();
+				return true;
+			}else if (appCategories == null){
+	
+				return true;
+			}
+		}
+		return false;
+		
+	}
+
+	private boolean checkForm() {
+		boolean result = false;
+		final String nickname = nickname_edittext.getText().toString();
+		final String id = id_edittext.getText().toString();
+		final String passwd = passwd_edittext.getText().toString();
+		final String passwdconfirm = passwdconfirm_edittext.getText().toString();
+		final String interestedcategory = interestedCategory_edittext.getText().toString();
+		
+		if(nickname == null || nickname.trim().length() == 0) {
+			Toast.makeText(SignupActivity.this, getString(R.string.signup_insert_nickname_empty), Toast.LENGTH_SHORT).show();
+			nickname_edittext.requestFocus();
+		}
+		else if(id == null || id.trim().length() == 0) {
+			Toast.makeText(SignupActivity.this, getString(R.string.signup_insert_id_empty), Toast.LENGTH_SHORT).show();
+			id_edittext.requestFocus();
+		}
+		else if(passwd == null || passwd.length() == 0) {
+			Toast.makeText(SignupActivity.this, getString(R.string.signup_insert_passwd_empty), Toast.LENGTH_SHORT).show();
+			passwd_edittext.requestFocus();
+		}
+		else if(passwdconfirm == null || passwdconfirm.length() == 0) {
+			Toast.makeText(SignupActivity.this, getString(R.string.signup_insert_passwdconfirm_empty), Toast.LENGTH_SHORT).show();
+			passwdconfirm_edittext.requestFocus();
+			
+		}
+		else if(!passwd.equals(passwdconfirm)) {
+			Toast.makeText(SignupActivity.this, getString(R.string.signup_insert_passwd_different), Toast.LENGTH_SHORT).show();
+			passwdconfirm_edittext.requestFocus();
+		}
+		else if(interestedcategory == null || interestedcategory.trim().length() == 0) {
+			Toast.makeText(SignupActivity.this, getString(R.string.signup_insert_interestedCategory_empty), Toast.LENGTH_SHORT).show();
+		}
+		else {
+			result = true;
+		}
+		return result;
+	}
+
+	
+	public void onUserServiceCallback(BaseResponseObject object) {
+		if (object.resultCode ==Service.RESULT_OK){
+			switch(object.requestType){
+			case Service.REQUEST_TYPE_DUPL_CHECK:
+				IdDuplicateResponseObject object1 = (IdDuplicateResponseObject)object;
+				Toast.makeText(SignupActivity.this,"중복체크" + ":" + object1.resultMsg,Toast.LENGTH_SHORT).show();
+				
+				if (object1.isDuplication == false){
+					String id = id_edittext.getText().toString();
+					String nickName = nickname_edittext.getText().toString();
+					String password = passwd_edittext.getText().toString();
+					userService.join(id, nickName, password,myCategory);
+				
+				}else{
+					WaitProgressDialog.stop(waitProgressDialog);
+					Toast.makeText(SignupActivity.this, R.string.id_duplicated, Toast.LENGTH_SHORT).show();
+					id_edittext.requestFocus();
+				}
+				break;
+			case Service.REQUEST_TYPE_JOIN:
+				WaitProgressDialog.stop(waitProgressDialog);
+				Intent i = new Intent(SignupActivity.this, LoginActivity.class);
+				i.putExtra("userId", id_edittext.getText().toString());
+				finish();
+				startActivity(i);
+				Toast.makeText(SignupActivity.this,"회원가입" + ":" + object.resultMsg,Toast.LENGTH_SHORT).show();
+				break;
+			}
+		}else {
+			WaitProgressDialog.stop(waitProgressDialog);
+			Toast.makeText(SignupActivity.this,object.requestType+ " : " + object.resultMsg,Toast.LENGTH_SHORT).show();
+		}
+			
+	}
+
+	private void showCategoryDialog() {
+		String[] cateArr  = new String[appCategories.size()];
+		for (int i = 0; i <appCategories.size(); i++){
+			cateArr[i] = appCategories.get(i).categoryName;
+		}
+		
+		new AlertDialog.Builder(SignupActivity.this)
+		.setTitle(R.string.dialog_input_category_text)
+		.setItems(cateArr, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				myCategory = appCategories.get(which);
+				interestedCategory_edittext.setText(myCategory.categoryName);
+			}
+		})
+		.show();
+	}
+
+}

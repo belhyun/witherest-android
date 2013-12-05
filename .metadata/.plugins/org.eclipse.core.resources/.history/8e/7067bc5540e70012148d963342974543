@@ -1,0 +1,92 @@
+package com.teamteam.customComponent;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Looper;
+import android.util.Log;
+
+/*
+ * SimpleProgressDialog 클래스는 Thread 를 이용해서 루퍼를 작동시킨다.
+ * 루퍼가 동작하는 한 스레드는 살아 있게 된다.그러나 이 클래스의 stop() 메서드를 호출하여
+ * 루퍼를 중지시키면, 스레드는 종료한다.
+ * 스레드 안에서 루퍼를 동작시키는 것일 뿐 본질적으로 스레드와 같기 때문에
+ * 루퍼를 종료하여 스레드가 중지되면, 이 스레드는 일반적인 스레드와 마찬가지로 재시작을 할 수가 없다
+ * (스레드는 중지, 종료되면 재시작 할 수 없음)
+ * 결국 다시 프로그레스다이알로그를 띄우려면 새롭게 객체를 생성해서 스레드를 시작하여야 한다.
+ * 그러나 이 방식으로 하면 잦은 루퍼 생성 및 종료로 인하여, 메모리 릭과 뷰의 drawing 에 무리가 가기 때문에,
+ * 처음 시작시 루퍼를 작동시키고, 필요한 만큼 show() 와 dismisss 를 호출한 후 제거해야 할 때 
+ * stop() 메서드를 호출함으로 자원을 해제하면, 메모리 릭이나 뷰의 drawing 문제가 발생하지 않는다.
+ * 
+ * 즉 자주 생성하지 말고, 한번만 생성해서 사용하면서  필요할 때 숨기거나 보여주면서, 액티비티 종료시에 
+ * 제거하는 것임.
+ * 
+ * 액티비티 종료시에 굳이 stop 메서드를 호출해서 명시적으로 제거해주지 않아도 된다.
+ * setDaemon(true) 으로 인해 액티비티 종료시 자동 제거가 된다. 그러나 확실하지 않기때문에 stop 를 호출해주자.
+ */
+public class SimpleProgressDialog extends Thread {
+	Context mContext;
+	CharSequence mMessage;
+	String mTitle;
+	
+	ProgressDialog mProgressDialog;
+	Looper mLoop;
+
+	
+	public SimpleProgressDialog(Context context, String title,CharSequence message) {
+		mContext = context;
+		mMessage = message;
+		mTitle = title;
+		mProgressDialog = new ProgressDialog(mContext);
+		mProgressDialog.setIndeterminate(true);
+		//mProgressDialog.setTitle(mTitle);
+		mProgressDialog.setMessage(mMessage);
+		mProgressDialog.setCancelable(false);
+		
+		setDaemon(true);
+	}
+	
+	public void run() {
+		Looper.prepare();
+		show();
+		mLoop = Looper.myLooper();
+		Looper.loop();
+	}
+	
+	public boolean isShowing(){
+		return mProgressDialog.isShowing();
+	}
+	
+	public void show(){
+		mProgressDialog.show();
+	}	
+	
+	/*루퍼 스레드는 종료하지 않고, 다이알로그만 숨긴다.
+	 이메서드를 이용해서 다이알로그를 숨긴다 하더라도, isShowing() 메서드에서는 true 로 검출된다. 
+	 * */
+	public void hide(){
+		mProgressDialog.hide();
+	}
+	
+	/*루퍼 스레드는 종료하지 않고, 다이알로그만 해제한다.
+	 이메서드를 이용해서 다이알로그를 해제하면, isShowing() 메서드에서는 false 로 검출된다. 
+	 * */
+	public void dismiss(){
+		mProgressDialog.dismiss();
+	}
+	
+/*	다이알로그를 해제 하고, 루퍼 스레드도 종료한다.
+	이 메서드를 호출하면 스레드가 죽기 때문에, 이 후 이 객체를 start 할 수 없다.
+	이는 스레드의 특성으로, 스레드는 중지, 종료하면 다시 생성하지 않는 한 재시작 할 수 없는 것과 같다.*/
+	public static void stop(SimpleProgressDialog waitProgressDialog) {
+		
+		waitProgressDialog.mProgressDialog.dismiss();
+		try {
+			Thread.sleep(200);
+		} catch(InterruptedException e) {
+			e.printStackTrace();
+		}
+		waitProgressDialog.mLoop.quit();
+	}
+}

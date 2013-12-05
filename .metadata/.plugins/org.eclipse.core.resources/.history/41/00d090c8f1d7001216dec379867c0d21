@@ -1,0 +1,45 @@
+package com.teamteam.customComponent;
+
+import com.teamteam.witherest.MainActivity;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
+public class EventCaptureLinearLayout extends RelativeLayout {
+
+	public EventCaptureLinearLayout(Context context, AttributeSet attrs,
+			int defStyle) {
+		super(context, attrs, defStyle);
+		// TODO Auto-generated constructor stub
+	}
+
+	public EventCaptureLinearLayout(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		// TODO Auto-generated constructor stub
+	}
+
+	public EventCaptureLinearLayout(Context context) {
+		super(context);
+		// TODO Auto-generated constructor stub
+	}
+
+
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent e) {
+		if (e.getAction() == MotionEvent.ACTION_DOWN){
+			((MainActivity)getContext()).hideBottom();
+			}else if (e.getAction() == MotionEvent.ACTION_UP){
+				((MainActivity)getContext()).showBottom();
+			}else if (e.getAction() == MotionEvent.ACTION_MOVE){
+				return false;
+			}
+			return false;
+	}
+	
+
+	
+	
+}

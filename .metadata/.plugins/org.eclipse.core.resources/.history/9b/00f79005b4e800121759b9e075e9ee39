@@ -1,0 +1,403 @@
+package com.teamteam.witherest;
+
+import java.util.ArrayList;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Handler;
+import android.text.Html;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.teamteam.customComponent.SimpleProgressDialog;
+import com.teamteam.witherest.common.AndroUtils;
+import com.teamteam.witherest.common.CommonUtils;
+import com.teamteam.witherest.model.AppCache;
+import com.teamteam.witherest.model.Category;
+import com.teamteam.witherest.model.Session;
+import com.teamteam.witherest.service.callback.UserServiceCallback;
+import com.teamteam.witherest.service.callback.object.BaseResponseObject;
+import com.teamteam.witherest.service.callback.object.IdDuplicateResponseObject;
+import com.teamteam.witherest.service.callback.object.LoginResponseObject;
+import com.teamteam.witherest.service.internal.CategoryService;
+import com.teamteam.witherest.service.internal.ErrorHandler;
+import com.teamteam.witherest.service.internal.Service;
+import com.teamteam.witherest.service.internal.ServiceManager;
+import com.teamteam.witherest.service.internal.UserService;
+
+public class SignupActivity extends Activity implements OnClickListener, UserServiceCallback,OnTouchListener {
+	
+    private ServiceManager serviceManager ;
+    private CategoryService categoryService;
+    private UserService userService;
+	private SimpleProgressDialog waitProgressDialog;
+	private ArrayList<Category> appCategories;
+	
+	private Category myCategory;
+	boolean[] selectCategories;
+	
+	private EditText nickname_edittext;
+	private EditText id_edittext;
+	private EditText passwd_edittext;
+	private EditText passwdconfirm_edittext;
+	private EditText interestedCategory_edittext;
+	private TextView attention_textview;
+	private Button signup_btn;
+	
+	
+	private String mId;
+	private String mNickName;
+	private String password;
+	private String mPasswdconfirm;
+	private String mInterestedcategory;
+
+	private String mReturnActivity;
+	
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+	    requestWindowFeature(Window.FEATURE_NO_TITLE);
+	    setContentView(R.layout.activity_signup);
+	    initInstance();
+	    initForm();
+	    initListener();
+	   
+		signup_btn.setOnClickListener(this);
+	}
+	
+	private void initInstance() {	
+		appCategories = AppCache.getInstance().getAppCategory();
+		serviceManager = ServiceManager.getServiceManager();
+		userService = serviceManager.getUserService();
+		userService.setOnUserCallback(this);
+		
+		mReturnActivity = getIntent().getStringExtra("returnActivity");
+	}
+
+	private void initForm() {
+		nickname_edittext = (EditText) findViewById(R.id.activity_signup_nickname_edittext);
+		id_edittext = (EditText) findViewById(R.id.activity_signup_id_edittext);
+		passwd_edittext = (EditText) findViewById(R.id.activity_signup_passwd_edittext);
+		passwdconfirm_edittext = (EditText) findViewById(R.id.activity_signup_passwdconfirm_edittext);
+		interestedCategory_edittext = (EditText) findViewById(R.id.activity_signup_interestedCategory_edittext);
+		
+		attention_textview = (TextView) findViewById(R.id.activity_signup_attention_textview);
+		signup_btn = (Button) findViewById(R.id.activity_signup_signup_btn);
+	}
+
+	
+	private void initListener() {
+		signup_btn.setOnClickListener(this);
+		interestedCategory_edittext.setOnTouchListener(this);
+	}
+
+    
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	waitProgressDialog = new SimpleProgressDialog(this,
+				getString(R.string.wait_title),getString(R.string.wait_message));
+		waitProgressDialog.start();
+    	if(attention_textview.getText().length() == 0)
+    		attention_textview.setText(Html.fromHtml(getString(R.string.signup_attention)));
+    }
+    
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		SimpleProgressDialog.end(waitProgressDialog);
+	}
+
+	public void onClick(View v) {
+		switch(v.getId()) {
+		case R.id.activity_signup_signup_btn: 
+			if (!checkForm()){
+				return;			
+			}
+	
+			if (!CommonUtils.checkMinLength(mNickName,2)){
+				AndroUtils.showToastMessage(this, R.string.not_valid_name, Toast.LENGTH_SHORT);
+				nickname_edittext.requestFocus();
+				return;
+			}
+			
+			if (!AndroUtils.isValidEmail(mId)){
+				AndroUtils.showToastMessage(this, R.string.not_valid_email, Toast.LENGTH_SHORT);
+				id_edittext.requestFocus();
+				return;
+			}
+		
+			if (!CommonUtils.checkMinLength(password,4)){
+				AndroUtils.showToastMessage(this, R.string.not_valid_password, Toast.LENGTH_SHORT);
+				passwd_edittext.requestFocus();
+				return;
+			}
+			
+			join();
+			break;
+		}
+	}
+	
+	public boolean onTouch(View v, MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_DOWN){
+			if (appCategories != null){
+				showCategoryDialog();
+				return true;
+			}else if (appCategories == null){
+	
+				return true;
+			}
+		}
+		return false;
+		
+	}
+
+	private boolean checkForm() {
+		boolean result = false;
+		mNickName = nickname_edittext.getText().toString();
+		mId = id_edittext.getText().toString();
+		password = passwd_edittext.getText().toString();
+		mPasswdconfirm = passwdconfirm_edittext.getText().toString();
+		mInterestedcategory = interestedCategory_edittext.getText().toString();
+		
+		if(mNickName == null || mNickName.trim().length() == 0) {
+			Toast.makeText(SignupActivity.this, getString(R.string.signup_insert_nickname_empty), 
+					Toast.LENGTH_SHORT).show();
+			nickname_edittext.requestFocus();
+		}
+		else if(mId == null || mId.trim().length() == 0) {
+			Toast.makeText(SignupActivity.this, getString(R.string.signup_insert_id_empty), 
+					Toast.LENGTH_SHORT).show();
+			id_edittext.requestFocus();
+		}
+		else if(password == null || password.length() == 0) {
+			Toast.makeText(SignupActivity.this, getString(R.string.signup_insert_passwd_empty), 
+					Toast.LENGTH_SHORT).show();
+			passwd_edittext.requestFocus();
+		}
+		else if(mPasswdconfirm == null || mPasswdconfirm.length() == 0) {
+			Toast.makeText(SignupActivity.this, getString(R.string.signup_insert_passwdconfirm_empty), 
+					Toast.LENGTH_SHORT).show();
+			passwdconfirm_edittext.requestFocus();
+			
+		}
+		else if(!password.equals(mPasswdconfirm)) {
+			Toast.makeText(SignupActivity.this, getString(R.string.signup_insert_passwd_different), Toast.LENGTH_SHORT).show();
+			passwdconfirm_edittext.requestFocus();
+		}
+		else if(mInterestedcategory == null || mInterestedcategory.trim().length() == 0) {
+			Toast.makeText(SignupActivity.this, getString(R.string.signup_insert_interestedCategory_empty), Toast.LENGTH_SHORT).show();
+		}
+		else {
+			result = true;
+		}
+		return result;
+	}
+	
+	public void login(){
+		if (!waitProgressDialog.isShowing()){
+			waitProgressDialog.show();
+		}
+		
+		userService.setOnUserCallback(this);
+		userService.login(mId, password, ((Witherest)getApplication()).getGCMId());
+		Intent i = new Intent(SignupActivity.this, LoginActivity.class);
+		i.putExtra("userId", id_edittext.getText().toString());
+	}
+	
+	private void join() {
+		
+		if (waitProgressDialog.isShowing()){
+			waitProgressDialog.show();
+		}
+		userService.setOnUserCallback(this);
+		userService.join(mId, mNickName, password, myCategory);
+	}
+
+	
+	private void showCategoryDialog() {
+		String[] cateArr  = new String[appCategories.size()];
+		for (int i = 0; i <appCategories.size(); i++){
+			cateArr[i] = appCategories.get(i).categoryName;
+		}
+		
+		new AlertDialog.Builder(SignupActivity.this)
+		.setTitle(R.string.dialog_input_category_text)
+		.setItems(cateArr, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				myCategory = appCategories.get(which);
+				interestedCategory_edittext.setText(myCategory.categoryName);
+			}
+		})
+		.show();
+	}
+
+	
+	public void onUserServiceCallback(BaseResponseObject object) {
+		if (object.resultCode == Service.RESULT_FAIL) {
+			if (waitProgressDialog.isShowing()){
+				waitProgressDialog.dismiss();
+			}
+			return;
+		}
+		
+	
+		switch(object.requestType){
+		case Service.REQUEST_TYPE_DUPL_CHECK:
+			IdDuplicateResponseObject object1 = (IdDuplicateResponseObject)object;
+			/*Toast.makeText(SignupActivity.this,"중복체크" + ":" + object1.resultMsg,Toast.LENGTH_SHORT).show();*/
+			
+			if (object1.isDuplication == false){
+				String id = id_edittext.getText().toString();
+				String nickName = nickname_edittext.getText().toString();
+				String password = passwd_edittext.getText().toString();
+				userService.join(id, nickName, password,myCategory);
+				
+			}else{
+				if (waitProgressDialog.isShowing()){
+					waitProgressDialog.dismiss();
+				}
+				Toast.makeText(SignupActivity.this, R.string.id_duplicated, Toast.LENGTH_SHORT).show();
+				id_edittext.requestFocus();
+			}
+			break;
+			
+		case Service.REQUEST_TYPE_JOIN:
+			if (object.resultCode == ErrorHandler.COMMON_ERROR || object.resultCode == ErrorHandler.NETWORK_DISABLE ||
+					object.resultCode == ErrorHandler.PARSING_ERROR){
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.fatal_network_error);
+				builder.setMessage(R.string.fatal_network_error_message);
+				builder.setCancelable(false);
+				builder.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								
+							}
+						});
+				builder.create().show();
+				return;
+			}else if (object.resultCode == ErrorHandler.CONNECTION_TIMEOUT || object.resultCode == ErrorHandler.READ_TIMEOUT){
+				AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+				builder2.setTitle(R.string.tempo_network_error);
+				builder2.setMessage(R.string.tempo_network_error_message);
+				builder2.setCancelable(false);
+				builder2.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								new Handler().postDelayed(new Runnable() {
+									public void run() {
+										join();
+									}
+								}, 100);
+							}
+						});
+
+				builder2.setNegativeButton(R.string.no,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						});
+
+				builder2.create().show();
+				return;
+			}
+			
+			login();
+			break;
+			
+		case Service.REQUEST_TYPE_LOGIN:
+			if (waitProgressDialog.isShowing()){
+				waitProgressDialog.dismiss();
+			}
+			
+			if (object.resultCode == ErrorHandler.COMMON_ERROR || object.resultCode == ErrorHandler.NETWORK_DISABLE ||
+					object.resultCode == ErrorHandler.PARSING_ERROR){
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.fatal_network_error);
+				builder.setMessage(R.string.fatal_network_error_message);
+				builder.setCancelable(false);
+				builder.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+							
+							}
+						});
+				builder.create().show();
+				return;
+			}else if (object.resultCode == ErrorHandler.CONNECTION_TIMEOUT || object.resultCode == ErrorHandler.READ_TIMEOUT){
+				AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+				builder2.setTitle(R.string.tempo_network_error);
+				builder2.setMessage(R.string.tempo_network_error_message);
+				builder2.setCancelable(false);
+				builder2.setPositiveButton(R.string.confirm,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								new Handler().postDelayed(new Runnable() {
+									public void run() {
+										login();
+									}
+								}, 100);
+							}
+						});
+
+				builder2.setNegativeButton(R.string.no,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						});
+
+				builder2.create().show();
+				return;
+			}
+			
+			LoginResponseObject obj = (LoginResponseObject) object;
+
+			// 로그인을 했으므로 유저상태를 인증상태로 변경
+			Session.getInstance().sessionStatus = Session.AUTHORIZED;
+			// 로그인을 하고 받아온 세션키를 저장한다.
+			// 이 세션키는 로그아웃할 때 까지 헤더에 추가된다.
+			Session.getInstance().sessionKey = obj.token;
+			
+			//유저 기본 정보를 세팅
+			Session.getInstance().user = obj.user;
+			Session.getInstance().user.id = mId;
+			Session.getInstance().user.gcmId = ((Witherest)getApplication()).getGCMId();
+			Session.getInstance().user.password = password;
+			
+			SharedPreferences pref = getSharedPreferences("witherest", 0);
+			SharedPreferences.Editor edit = pref.edit();
+			edit.putString("email", obj.user.id);
+			edit.putString("password", obj.user.password);
+			edit.commit();
+			
+			if (mReturnActivity != null){
+				Activity act = AndroUtils.findActivity(this, mReturnActivity);
+				Intent intent = new Intent(this, act.getClass());
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				finish();
+			}
+			else {
+				Intent i = new Intent();
+				setResult(RESULT_OK, i);
+				finish();
+			}
+		}		
+	}
+
+
+}

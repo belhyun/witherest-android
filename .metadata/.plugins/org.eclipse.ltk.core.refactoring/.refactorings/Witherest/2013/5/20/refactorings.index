@@ -1,0 +1,29 @@
+1368339937546	Rename field 'eamil'
+1368339966218	Rename field 'email'
+1368340006718	Rename local variable 'email'
+1368340045468	Rename field 'categoryId'
+1368340071953	Rename field 'categoryName'
+1368340089296	Rename field 'categoryDes'
+1368341267687	Rename field 'idl'
+1368374293546	Rename field 'profile'
+1368383364921	Delete element
+1368418341187	Rename resource 'mycheck_list_item.xml'
+1368421098890	Rename resource 'mycheck_check_button.xml'
+1368424876859	Rename resource 'mychek_list_row_on_off.xml'
+1368605465718	Delete element
+1368622036750	Delete element
+1368622429406	Delete element
+1368622443921	Rename resource 'lib'
+1368625845718	Rename resource 'healthroom_arrow_bg.png'
+1368627648828	Rename type 'CheckRoomListAdapter'
+1368627676859	Rename type 'RoomListFragment'
+1368630615515	Rename type 'RoomListActivity'
+1368630656171	Rename type 'RoomListFragmentAdapter'
+1368688399765	Delete element
+1368688430500	Delete element
+1368689463421	Delete element
+1368695822406	Rename field 'RoomWithFragment'
+1368695829625	Rename field 'RoomBoardFragment'
+1368776143175	Rename type 'GridImageAdaper'
+1368851556921	Rename local variable 'grid'
+1368851969015	Delete element

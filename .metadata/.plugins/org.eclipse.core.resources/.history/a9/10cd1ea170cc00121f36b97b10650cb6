@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e9e9e9"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/common_header_bar" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/activity_makeroom_title"
+                android:textColor="#444444"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/common_header_shadow" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_makeroom_title"
+                    android:textColor="#444444"
+                    android:textSize="18sp"
+                    android:typeface="sans" />
+
+                <Button
+                    android:id="@+id/submit_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20pt"
+                    android:text="만들기"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#444444"
+                android:orientation="vertical" >
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/activity_makeroom_image_get_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_selector"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:padding="10dp" >
+
+                <LinearLayout
+                    android:id="@+id/activity_makeroom_image_linear"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="5dip"
+                    android:background="@drawable/image_bg"
+                    android:padding="3dip" >
+
+                    <ImageView
+                        android:id="@+id/activity_makeroom_thumb_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/main_profileimg_bg" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/activity_makeroom_image_text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/activity_makeroom_image_linear"
+                    android:layout_toRightOf="@id/activity_makeroom_image_linear"
+                    android:text="@string/activity_makeroom_room_image_title"
+                    android:textColor="#040404"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/activity_profile_image_text2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/activity_makeroom_image_text1"
+                    android:layout_marginTop="1dip"
+                    android:layout_toRightOf="@id/activity_makeroom_image_linear"
+                    android:clickable="false"
+                    android:text="@string/profile_image_des"
+                    android:textColor="#343434"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#b5b5b5" >
+            </LinearLayout>
+
+            <!-- 방 이름 설정 -->
+
+            <LinearLayout
+                android:id="@+id/activity_makeroom_roomname_get_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_selector"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <TextView
+                    android:id="@+id/textview2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:text="@string/activity_makeroom_room_name_title"
+                    android:textColor="#343434"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/activity_makeroom_roomname_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:hint="@string/activity_makeroom_content_hint"
+                    android:textColor="#343434"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear1"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#b5b5b5" >
+            </LinearLayout>
+
+            <!-- 할일 내용 설정 -->
+
+            <LinearLayout
+                android:id="@+id/activity_makeroom_purpose_get_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_selector"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <TextView
+                    android:id="@+id/textview3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:text="@string/activity_makeroom_purpose_title"
+                    android:textColor="#343434"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/activity_makeroom_purpose_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:hint="@string/activity_makeroom_content_hint"
+                    android:textColor="#343434"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#b5b5b5" >
+            </LinearLayout>
+
+            <!-- 카테고리 -->
+
+            <LinearLayout
+                android:id="@+id/activity_makeroom_category_get_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_selector"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <TextView
+                    android:id="@+id/textview4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:text="@string/activity_makeroom_category_title"
+                    android:textColor="#343434"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/activity_makeroom_category_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:hint="@string/activity_makeroom_content_hint"
+                    android:textColor="#343434"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear2"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#b5b5b5" >
+            </LinearLayout>
+
+            <!-- 기간 -->
+
+            <LinearLayout
+                android:id="@+id/activity_makeroom_period_get_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_selector"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:text="@string/activity_makeroom_period_title"
+                    android:textColor="#343434"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/activity_makeroom_period_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1px"
+                    android:layout_marginTop="1dip"
+                    android:hint="@string/activity_makeroom_content_hint"
+                    android:textColor="#343434"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#b5b5b5" >
+            </LinearLayout>
+
+            <!-- 실천 주기 -->
+
+            <LinearLayout
+                android:id="@+id/activity_makeroom_periodtype_get_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_selector"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:text="@string/activity_makeroom_periodtype_title"
+                    android:textColor="#343434"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/activity_makeroom_periodtype_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1px"
+                    android:layout_marginTop="1dip"
+                    android:hint="@string/activity_makeroom_content_hint"
+                    android:textColor="#343434"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#b5b5b5" >
+            </LinearLayout>
+
+            <!-- 알림 설정 -->
+
+            <LinearLayout
+                android:id="@+id/activity_makeroom_alarm_get_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_selector"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:text="@string/activity_makeroom_alarm_title"
+                    android:textColor="#343434"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/activity_makeroom_alarm_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1px"
+                    android:layout_marginTop="1dip"
+                    android:hint="@string/activity_makeroom_content_hint"
+                    android:textColor="#343434"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#b5b5b5" >
+            </LinearLayout>
+
+            <!-- 알림 시간 설정 -->
+
+            <LinearLayout
+                android:id="@+id/activity_makeroom_alarmtime_get_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_selector"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:text="@string/activity_makeroom_alarmtime_title"
+                    android:textColor="#343434"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/activity_makeroom_alarmtime_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1px"
+                    android:layout_marginTop="1dip"
+                    android:hint="@string/activity_makeroom_content_hint"
+                    android:textColor="#343434"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#b5b5b5" >
+            </LinearLayout>
+
+            <!-- 공개여부 설정 -->
+
+            <LinearLayout
+                android:id="@+id/activity_makeroom_public_get_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_selector"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:text="@string/activity_makeroom_public_title"
+                    android:textColor="#343434"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/activity_makeroom_public_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1px"
+                    android:layout_marginTop="1dip"
+                    android:hint="@string/activity_makeroom_content_hint"
+                    android:textColor="#343434"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#b5b5b5" >
+            </LinearLayout>
+
+            <!-- 참여 인원 설정 -->
+
+            <LinearLayout
+                android:id="@+id/activity_makeroom_maxmember_get_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_selector"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:text="@string/activity_makeroom_maxmember_title"
+                    android:textColor="#343434"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/activity_makeroom_maxmember_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1px"
+                    android:layout_marginTop="1dip"
+                    android:hint="@string/activity_makeroom_content_hint"
+                    android:textColor="#343434"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#b5b5b5" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp" >
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

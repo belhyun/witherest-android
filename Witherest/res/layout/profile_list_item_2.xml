@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="56dp"
+    android:background="@drawable/list_selector"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+
+
+    <TextView
+        android:id="@+id/activity_pofile_email_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/profile_title"
+        android:textColor="#040404"
+        android:textSize="15dip"
+        android:textStyle="bold"
+        android:typeface="sans" />
+
+
+    <TextView
+        android:id="@+id/activity_profile_mycatefories"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activity_pofile_email_title"
+        android:layout_marginTop="1dip"
+        android:text="@string/profile_image_des"
+        android:textColor="#343434"
+        android:textSize="10dip" />
+
+</RelativeLayout>
